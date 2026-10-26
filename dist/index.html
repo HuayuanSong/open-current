@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#154b42" />
+    <meta
+      name="description"
+      content="Explore Europe's electricity: generation mixes, cross-border flows and wholesale prices. An independent atlas built entirely on open data."
+    />
+    <title>Grid in Motion — Europe’s electricity, connected</title>
+    <link rel="icon" href="icon.svg?v=6969a3192d60" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css?v=87325738a1b8" />
+    <script src="vendor/d3.v7.min.js" defer></script>
+    <script type="module" src="app.js?v=36464914e995"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#explorer">Skip to electricity explorer</a>
+    <header class="site-header shell">
+      <a class="brand" href="#country=dk" aria-label="Grid in Motion home"
+        ><img
+          src="icon.svg?v=6969a3192d60"
+          alt=""
+          width="36"
+          height="36"
+        /><span
+          >Grid in Motion<span class="brand-sub"
+            >AN OPEN ELECTRICITY ATLAS</span
+          ></span
+        ></a
+      >
+      <nav aria-label="Main navigation">
+        <a class="nav-active" href="#explorer">Explore the grid</a
+        ><button class="text-button" data-about>
+          About the data <span aria-hidden="true">↗</span></button
+        ><a
+          class="github-header"
+          href="https://github.com/HuayuanSong/grid-in-motion"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub <span aria-hidden="true">↗</span></a
+        >
+      </nav>
+    </header>
+    <main class="shell">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">
+            <span class="small-line"></span> EUROPE, CONNECTED
+          </p>
+          <h1 id="page-title">
+            Where our electricity<br /><em>comes together.</em>
+          </h1>
+        </div>
+        <div class="intro-copy">
+          <p>
+            Wind in the north. Sun in the south.<br />A grid that connects us
+            all.
+          </p>
+          <p class="muted">
+            Explore what powers each country, and the electricity<br
+              class="desktop-break"
+            />
+            flowing across its borders.
+          </p>
+          <div class="coverage">
+            <span class="status-dot"></span
+            ><span id="coverage">Loading public data…</span
+            ><span class="utc-label">All times UTC</span>
+          </div>
+        </div>
+      </section>
+      <div id="load-error" class="error-banner" role="alert" hidden></div>
+      <section
+        class="explorer"
+        id="explorer"
+        aria-label="European electricity explorer"
+      >
+        <div class="map-column">
+          <div class="map-toolbar">
+            <div
+              class="segmented"
+              id="metric-controls"
+              aria-label="Map measure"
+            >
+              <button data-metric="lowCarbon" aria-pressed="true">
+                Low-carbon</button
+              ><button data-metric="renewable" aria-pressed="false">
+                Renewables</button
+              ><button data-metric="net" aria-pressed="false">
+                Net imports
+              </button>
+            </div>
+            <label class="flow-toggle"
+              ><input type="checkbox" id="show-flows" checked /><span
+                >Show flows</span
+              ></label
+            >
+          </div>
+          <div class="map-stage" id="map-stage">
+            <svg
+              id="map"
+              role="img"
+              aria-label="Interactive map of European electricity. Use the country menu to select a country with a keyboard."
+            ></svg>
+            <div class="map-kicker">
+              <span id="map-title">Share of low-carbon generation</span
+              ><small id="map-subtitle"
+                >Latest available readings · storage excluded</small
+              >
+            </div>
+            <div class="map-buttons" aria-label="Map navigation">
+              <button id="zoom-in" aria-label="Zoom in">+</button
+              ><button id="zoom-out" aria-label="Zoom out">−</button
+              ><button
+                id="zoom-reset"
+                aria-label="Reset map view"
+                title="Reset map view"
+              >
+                ⌂
+              </button>
+            </div>
+            <div
+              id="map-tooltip"
+              class="map-tooltip"
+              role="status"
+              hidden
+            ></div>
+            <div class="map-legend">
+              <div class="legend-labels">
+                <span id="legend-low">0%</span
+                ><span id="legend-high">100%</span>
+              </div>
+              <div class="legend-ramp" id="legend-ramp"></div>
+              <div class="legend-note">
+                <i></i> No reading <span>Drag to move · scroll to zoom</span>
+              </div>
+            </div>
+            <span class="map-credit">Made with Natural Earth</span>
+          </div>
+          <div class="timeline">
+            <div class="timeline-top">
+              <button
+                id="play-time"
+                aria-label="Play historical map"
+                title="Play historical map"
+              >
+                ▶
+              </button>
+              <div>
+                <span class="eyebrow">TRAVEL THROUGH TIME</span
+                ><output id="time-label" for="time-slider"
+                  >Latest available</output
+                >
+              </div>
+              <button id="latest-time" class="small-button active">
+                Latest <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+            <label class="sr-only" for="time-slider">Historical map time</label
+            ><input
+              type="range"
+              id="time-slider"
+              min="0"
+              max="167"
+              value="167"
+              step="1"
+            />
+            <div class="timeline-labels">
+              <span id="time-start">Seven days ago</span
+              ><span id="time-end">Today</span>
+            </div>
+          </div>
+        </div>
+        <aside
+          class="country-panel"
+          aria-label="Selected country electricity details"
+        >
+          <div class="country-heading">
+            <span class="country-code" id="country-code">DK</span>
+            <div>
+              <label class="sr-only" for="country-select"
+                >Choose a country</label
+              ><select id="country-select">
+                <option value="dk">Denmark</option>
+              </select>
+              <p id="country-time" class="muted">Reading the grid…</p>
+            </div>
+            <button
+              class="icon-button"
+              id="share-link"
+              aria-label="Copy a link to this view"
+              title="Copy a link to this view"
+            >
+              ↗
+            </button>
+          </div>
+          <div class="country-main">
+            <div>
+              <span class="metric-label" id="detail-metric-label"
+                >Low-carbon generation</span
+              >
+              <div class="big-number" id="detail-value">—<span>%</span></div>
+            </div>
+            <div class="secondary-stat">
+              <span class="metric-label">Generation</span
+              ><strong id="generation-total">—</strong
+              ><span class="muted">excluding storage</span>
+            </div>
+          </div>
+          <p id="country-story" class="country-story">
+            A connected view of Europe’s electricity.
+          </p>
+          <div
+            id="mix-strip"
+            class="mix-strip"
+            aria-label="Generation mix"
+          ></div>
+          <div class="panel-tabs" aria-label="Country details">
+            <button data-panel="mix" aria-pressed="true">Generation mix</button
+            ><button data-panel="flows" aria-pressed="false">
+              Cross-border flows
+            </button>
+          </div>
+          <div id="mix-panel">
+            <div id="mix-list" class="mix-list"></div>
+            <p id="mix-note" class="fine-print"></p>
+          </div>
+          <div id="flows-panel" hidden>
+            <p id="flow-time" class="fine-print"></p>
+            <div id="flows-list" class="flows-list"></div>
+            <p class="fine-print">
+              Arrows show physical power flows at the reported time, not the
+              route of an individual electron.
+            </p>
+          </div>
+          <div class="price-peek" id="price-peek">
+            <div>
+              <span class="eyebrow">DAY-AHEAD MARKET</span
+              ><strong id="price-current">—</strong>
+            </div>
+            <div>
+              <label class="sr-only" for="price-zone">Price area</label
+              ><select id="price-zone"></select
+              ><span class="muted" id="price-time"></span>
+            </div>
+          </div>
+          <div class="panel-bottom">
+            <button class="text-button" data-about>
+              How to read these numbers <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </aside>
+      </section>
+      <section class="history-section" aria-labelledby="history-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">THE BIGGER PICTURE</p>
+            <h2 id="history-heading">
+              A week on the grid <span id="chart-country">/ Denmark</span>
+            </h2>
+          </div>
+          <div class="segmented chart-tabs" aria-label="Historical chart">
+            <button data-chart="power" aria-pressed="true">Power</button
+            ><button data-chart="share" aria-pressed="false">Mix</button
+            ><button data-chart="price" aria-pressed="false">Price</button>
+          </div>
+        </div>
+        <div class="chart-header">
+          <p id="chart-caption">Generation and demand, in gigawatts.</p>
+          <div id="chart-legend" class="chart-legend"></div>
+        </div>
+        <div class="chart-wrap" id="chart-wrap">
+          <svg
+            id="history-chart"
+            role="img"
+            aria-label="Historical electricity readings for the selected country"
+          ></svg>
+          <div id="chart-tooltip" class="map-tooltip" hidden></div>
+          <p id="chart-empty" hidden>No readings available for this view.</p>
+        </div>
+        <div class="chart-footer">
+          <span id="history-note">Gaps indicate unavailable readings.</span
+          ><button class="text-button" id="download-data">
+            Download country data ↓
+          </button>
+        </div>
+      </section>
+      <section
+        class="denmark-section"
+        id="denmark-section"
+        aria-labelledby="denmark-heading"
+      >
+        <div class="danish-intro">
+          <p class="eyebrow">A CLOSER LOOK</p>
+          <h2 id="denmark-heading">Denmark, in five minutes.</h2>
+          <p>
+            Energinet’s preliminary five-minute readings for the two sides of
+            the Great Belt.
+          </p>
+          <p class="fine-print">
+            Feed resolution: 5 min. Website collection: every 30 min.<br />CO₂
+            figures describe consumption and include imports.
+          </p>
+        </div>
+        <div id="danish-areas" class="danish-areas"></div>
+      </section>
+      <section class="compare-section" aria-labelledby="compare-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">DIFFERENT MIXES. ONE NETWORK.</p>
+            <h2 id="compare-heading">Across Europe</h2>
+          </div>
+          <label class="sort-label"
+            >Compare by
+            <select id="ranking-metric">
+              <option value="lowCarbon">Low-carbon share</option>
+              <option value="renewable">Renewable share</option>
+              <option value="total">Generation</option>
+              <option value="net">Net imports</option>
+            </select></label
+          >
+        </div>
+        <p class="muted" id="compare-note">
+          Latest reported readings. Reporting times vary by country.
+        </p>
+        <div class="ranking-grid" id="ranking-grid"></div>
+        <button class="small-button" id="show-all">Show all countries ↓</button>
+      </section>
+    </main>
+    <footer>
+      <div class="shell footer-inner">
+        <div>
+          <a class="brand" href="#country=dk"
+            ><img
+              src="icon.svg?v=6969a3192d60"
+              alt=""
+              width="32"
+              height="32"
+            /><span>Grid in Motion</span></a
+          >
+          <p>
+            An independent exploration of Europe’s electricity.<br />Built with
+            open data. Made to be explored.
+          </p>
+        </div>
+        <div class="footer-links">
+          <button class="text-button" data-about>
+            Sources & methodology ↗</button
+          ><a
+            href="https://github.com/HuayuanSong/grid-in-motion"
+            target="_blank"
+            rel="noopener noreferrer"
+            >View source on GitHub ↗</a
+          ><span id="collection-time">Snapshot loading…</span>
+        </div>
+        <div class="source-line">
+          Data:
+          <a
+            href="https://energy-charts.info/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Fraunhofer ISE / Energy-Charts</a
+          >
+          ·
+          <a
+            href="https://www.energidataservice.dk/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Energinet</a
+          >
+          · CC BY 4.0<br />Independent project; not affiliated with these
+          providers or Electricity Maps.
+        </div>
+      </div>
+    </footer>
+    <dialog id="about-dialog" aria-labelledby="about-title">
+      <button
+        id="close-about"
+        class="dialog-close"
+        aria-label="Close data information"
+      >
+        ×
+      </button>
+      <p class="eyebrow">OPEN DATA, EXPLAINED</p>
+      <h2 id="about-title">
+        A view of the grid.<br />With the details intact.
+      </h2>
+      <div class="about-content">
+        <h3>What does the map measure?</h3>
+        <p>
+          Renewable share is wind, solar, natural hydro, biomass, geothermal and
+          other reported renewables divided by reported generation. Low-carbon
+          share adds nuclear. Both exclude pumped-storage and battery discharge,
+          whose original energy mix is unknown. Mixed waste and unspecified
+          generation are counted in the denominator, not assumed renewable.
+        </p>
+        <p>
+          These are shares of <strong>domestic reported generation</strong>, not
+          the electricity consumed in a country. Imports can change the
+          consumption mix. Public-generation coverage varies by country,
+          including how rooftop solar and industrial self-generation are
+          reported.
+        </p>
+        <h3>Real readings, independent clocks</h3>
+        <p>
+          The site collects data every 30 minutes using GitHub Actions. The
+          schedule is best effort; providers may publish with longer delays.
+          Generation, border flows, prices and Danish CO₂ retain their own
+          timestamps. An old or incomplete reading is labelled, and missing
+          values are never turned into zero.
+        </p>
+        <p>
+          Historical map positions show the last reading within each UTC hour.
+          Detailed charts retain the source intervals; gaps are not
+          interpolated. All displayed times are UTC, avoiding ambiguity when
+          clocks change.
+        </p>
+        <h3>Cross-border flows</h3>
+        <p>
+          Physical exchanges come from Energy-Charts. Positive net exchange
+          means imports exceed exports. Arrows show a selected country’s
+          reported exchanges; countries may report different values at different
+          times. This is not a transmission-line map, and the app does not infer
+          the carbon intensity of imports from these flows.
+        </p>
+        <h3>Denmark’s CO₂ figures</h3>
+        <p>
+          Energinet’s CO2Emis feed estimates operational CO₂ intensity of
+          electricity consumption for DK1 and DK2, accounting for exchange.
+          These preliminary readings can contain uncorrected errors. They are
+          <strong>not lifecycle CO₂-equivalent estimates</strong> and should not
+          be compared directly with Electricity Maps’ carbon intensity. No
+          European consumption-carbon estimate is presented.
+        </p>
+        <p>
+          Great Belt exchange is included when estimating each Danish area’s
+          demand. Bornholm–Sweden exchange is already included in the Sweden
+          field and is not counted twice.
+        </p>
+        <h3>Prices are wholesale, not household bills</h3>
+        <p>
+          Prices are day-ahead prices in EUR/MWh, excluding retail charges and
+          taxes. Multiple bidding zones are shown separately. Only Energy-Charts
+          price zones explicitly licensed for public reuse under CC BY 4.0 are
+          included. Missing price coverage does not mean electricity is free.
+        </p>
+        <h3>Sources & licences</h3>
+        <ul>
+          <li>
+            <a
+              href="https://api.energy-charts.info/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Fraunhofer ISE / Energy-Charts API</a
+            >: reported public generation and physical flows; CC BY 4.0. Open
+            price series originate from Bundesnetzagentur / SMARD.de.
+          </li>
+          <li>
+            <a
+              href="https://www.energidataservice.dk/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Energinet / Energi Data Service</a
+            >: ElectricityProdex5MinRealtime and CO2Emis; CC BY 4.0.
+          </li>
+          <li>
+            <a
+              href="https://www.naturalearthdata.com/about/terms-of-use/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Natural Earth 5.1.2</a
+            >: public-domain geographic boundaries; cartographic boundaries do
+            not imply a political position.
+          </li>
+        </ul>
+        <p>
+          We normalize units, group generation types and calculate the displayed
+          shares. The source data have been transformed. Source providers do not
+          endorse this project.
+        </p>
+      </div>
+    </dialog>
+    <div class="toast" id="toast" role="status" hidden></div>
+    <noscript
+      ><p class="error-banner">
+        This interactive atlas needs JavaScript. The open data and scripts are
+        available in the GitHub repository.
+      </p></noscript
+    >
+  </body>
+</html>

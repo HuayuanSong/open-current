@@ -1,0 +1,66 @@
+name: Refresh electricity atlas
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "7,37 * * * *"
+  workflow_dispatch:
+    inputs:
+      refresh:
+        description: Fetch new readings before deployment
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: grid-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Restore the previous seven-day history
+        run: python scripts/restore.py
+        env:
+          SNAPSHOT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+      - name: Collect public readings (paced to provider limits)
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.refresh)
+        run: python -u scripts/fetch.py --days 1
+      - name: Normalize the refreshed readings
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.refresh)
+        run: python scripts/normalize.py
+      - name: Verify normalization and published data
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Verify browser data model
+        run: node --test tests/model.test.mjs
+      - name: Fingerprint assets
+        run: python scripts/version_assets.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+          retention-days: 1
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
