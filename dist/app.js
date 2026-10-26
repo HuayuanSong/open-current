@@ -688,7 +688,7 @@ function renderChart() {
         : `Day-ahead wholesale price${state.zone ? " · " + state.zone : ""}, in EUR/MWh.`;
   const series = chartSeries();
   $("#chart-legend").innerHTML = series
-    .map((s) => `<span style="color:${s.color}"><i></i>${esc(s.label)}</span>`)
+    .map((s) => `<span><i style="background:${s.color}"></i>${esc(s.label)}</span>`)
     .join("");
   $("#history-note").textContent =
     state.chart === "price"
