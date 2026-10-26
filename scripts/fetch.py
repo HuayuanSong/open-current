@@ -23,7 +23,7 @@ CACHE = ROOT / '.cache'
 def fetch_json(url, attempts=4):
     for attempt in range(attempts):
         request = urllib.request.Request(url, headers={
-            'User-Agent': 'GridInMotion/1.0 (public educational electricity atlas)',
+            'User-Agent': 'OpenCurrent/1.0 (public educational electricity explorer)',
             'Accept': 'application/json',
         })
         try:

@@ -1,4 +1,4 @@
-name: Refresh electricity atlas
+name: Refresh Open Current
 
 on:
   push:

@@ -83,7 +83,7 @@ def check():
         expect(page.locator('#chart-caption')).to_contain_text('DK2')
         with page.expect_download() as download:
             page.locator('#download-data').click()
-        assert download.value.suggested_filename=='grid-in-motion-dk.json'
+        assert download.value.suggested_filename=='open-current-dk.json'
 
         page.locator('[data-about]').first.click()
         expect(page.locator('#about-dialog')).to_be_visible()

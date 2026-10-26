@@ -244,15 +244,35 @@ function renderMapOverlay() {
     "at",
     "ch",
   ];
-  const codes = Object.keys(index.countries).filter(
+  // Keep text readable at a fixed screen size. Reveal additional labels as
+  // there is space, giving the selected country priority over its neighbours.
+  const codes = [
+    ...new Set([state.country, ...prominent, ...Object.keys(index.countries)]),
+  ].filter(
     (code) =>
       code === state.country || transform.k > 1.8 || prominent.includes(code),
   );
+  const overlaps = (a, b) =>
+    a.left < b.right &&
+    a.right > b.left &&
+    a.top < b.bottom &&
+    a.bottom > b.top;
+  const occupied = [
+    { left: 0, top: 0, right: Math.min(400, mapWidth - 65), bottom: 94 },
+    { left: mapWidth - 65, top: 0, right: mapWidth, bottom: 165 },
+    {
+      left: 0,
+      top: mapHeight - 95,
+      right: Math.min(290, mapWidth),
+      bottom: mapHeight,
+    },
+  ];
   const labels = labelLayer
     .selectAll("g")
     .data(codes, (d) => d)
     .join("g")
-    .attr("transform", (code) => `translate(${screenPoint(code)})`);
+    .attr("transform", (code) => `translate(${screenPoint(code)})`)
+    .style("display", null);
   labels.each(function (code) {
     const group = d3.select(this),
       c = selectedSummary(code),
@@ -263,7 +283,7 @@ function renderMapOverlay() {
       .data([0, 1])
       .join("text")
       .attr("class", (n) => (n ? "map-label map-label-value" : "map-label"))
-      .attr("y", (n) => (n ? 13 : 0))
+      .attr("y", (n) => (n ? 19 : 0))
       .style("font-weight", code === state.country ? 700 : 400)
       .text((n) =>
         n
@@ -276,6 +296,23 @@ function renderMapOverlay() {
             ? "UK"
             : countryName,
       );
+    const [x, y] = screenPoint(code),
+      box = this.getBBox();
+    const bounds = {
+      left: x + box.x - 6,
+      right: x + box.x + box.width + 6,
+      top: y + box.y - 4,
+      bottom: y + box.y + box.height + 4,
+    };
+    if (
+      bounds.left < 8 ||
+      bounds.right > mapWidth - 8 ||
+      bounds.top < 8 ||
+      bounds.bottom > mapHeight - 20 ||
+      occupied.some((other) => overlaps(bounds, other))
+    ) {
+      group.style("display", "none");
+    } else occupied.push(bounds);
   });
   flowLayer.selectAll("*").remove();
   if (!state.flows || !countryData || countryData.code !== state.country)
@@ -310,20 +347,31 @@ function renderMapOverlay() {
         "stroke-width",
         Math.max(1, Math.min(3, Math.sqrt(Math.abs(border.mw) / 600))),
       );
-    if (length > 70)
-      flowLayer
+    if (length > 100) {
+      const label = flowLayer
         .append("text")
         .attr("class", "flow-label")
         .attr("x", (from[0] + to[0]) / 2 + nx * (offset / 2 + 8))
         .attr("y", (from[1] + to[1]) / 2 + ny * (offset / 2 + 8))
         .text(powerText(Math.abs(border.mw)));
+      const box = label.node().getBBox();
+      const bounds = {
+        left: box.x - 5,
+        right: box.x + box.width + 5,
+        top: box.y - 4,
+        bottom: box.y + box.height + 4,
+      };
+      if (occupied.some((other) => overlaps(bounds, other))) label.remove();
+      else occupied.push(bounds);
+    }
   }
+  labelLayer.raise();
 }
 function mapTooltip(event, feature) {
   const c = index.countries[feature.properties.code],
     tip = $("#map-tooltip");
   if (!c)
-    tip.innerHTML = `<strong>${esc(feature.properties.name)}</strong><small>No feed included in this atlas.</small>`;
+    tip.innerHTML = `<strong>${esc(feature.properties.name)}</strong><small>No feed included in this explorer.</small>`;
   else {
     const s = summaryAt(c, state.time),
       t = timeFor(state.metric, s);
@@ -653,7 +701,7 @@ function renderChart() {
   if (!all.length) return;
   const width = $("#chart-wrap").clientWidth,
     height = $("#chart-wrap").clientHeight,
-    margin = { left: 40, right: 12, top: 16, bottom: 28 };
+    margin = { left: 52, right: 16, top: 18, bottom: 36 };
   chart.attr("viewBox", `0 0 ${width} ${height}`);
   const extent = d3.extent(all, (r) => r.t);
   if (extent[0] === extent[1]) extent[1] += hourMs;
@@ -936,7 +984,7 @@ function bindEvents() {
     );
     const a = document.createElement("a");
     a.href = url;
-    a.download = `grid-in-motion-${state.country}.json`;
+    a.download = `open-current-${state.country}.json`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };

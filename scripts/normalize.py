@@ -217,7 +217,7 @@ def main():
         countries[code]['history'] = [{'t': t, **v} for t, v in sorted(hourly.items())]
     normalize_danish(now_ms, cutoff)
     if not any(c['power'] for c in countries.values()):
-        raise SystemExit('No valid generation snapshots; refusing to publish an empty atlas')
+        raise SystemExit('No valid generation snapshots; refusing to publish an empty snapshot')
     write_json(DATA / 'index.json', {'schema': 1, 'generatedAt': now.isoformat(),
                                     'historyStart': cutoff, 'countries': countries,
                                     'coverage': sum(c['power'] is not None for c in countries.values()),

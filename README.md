@@ -1,8 +1,8 @@
-# Grid in Motion
+# Open Current
 
-**Europe’s electricity, connected.** An independent electricity atlas built from public, unauthenticated APIs, with a static website and a scheduled Python data pipeline.
+**Europe’s electricity, connected.** An independent electricity explorer built from public, unauthenticated APIs, with a static website and a scheduled Python data pipeline.
 
-[Explore the atlas](https://huayuansong.github.io/grid-in-motion/)
+[Explore Open Current](https://huayuansong.github.io/open-current/)
 
 ## What you can explore
 
@@ -76,7 +76,7 @@ The browser calls only this site's static assets. It never makes an upstream ele
 
 **Missingness:** one missing generation component makes the corresponding total and share unavailable. Missing storage alone does not invalidate the primary-generation share. Unknown new series fail normalization for that feed, retaining previous valid history. A genuine zero remains zero.
 
-**Exchanges:** Energy-Charts `v2/cbpf`, converted from GW to MW. Positive means imports. A selected country's physical-flow report is shown without combining it with a neighbour's potentially asynchronous report. Net imports are computed only if all reported border components are present. These arrows are schematic, not transmission-line geometries. Neighbours outside the configured atlas remain in the flow list and net total, even when no map arrow can be drawn.
+**Exchanges:** Energy-Charts `v2/cbpf`, converted from GW to MW. Positive means imports. A selected country's physical-flow report is shown without combining it with a neighbour's potentially asynchronous report. Net imports are computed only if all reported border components are present. These arrows are schematic, not transmission-line geometries. Neighbours outside the configured explorer remain in the flow list and net total, even when no map arrow can be drawn.
 
 **Time:** all displayed times are UTC. ISO offsets are respected during the autumn repeated hour. The timeline selects an hour and shows the last reading within it. It never carries a stale observation into a missing hour. Each feed retains its independent source timestamp. Generation and exchange observations in the future are rejected; published day-ahead prices may extend into tomorrow.
 

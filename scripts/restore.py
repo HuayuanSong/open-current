@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
-    base = os.environ.get('SNAPSHOT_URL', 'https://huayuansong.github.io/grid-in-motion/').rstrip('/') + '/data/'
+    base = os.environ.get('SNAPSHOT_URL', 'https://huayuansong.github.io/open-current/').rstrip('/') + '/data/'
     try:
         with urllib.request.urlopen(base + 'index.json', timeout=30) as response:
             previous = json.load(response)
