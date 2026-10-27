@@ -43,7 +43,7 @@ def main():
             sun=[i for i,n in enumerate(names['future']) if n.endswith('terrestrial_radiation')]
             daylight=arrays['future'][:,:,sun].mean(-1)>5
             record['daylight']={area:daylight[ai].tolist() for ai,area in enumerate(data.AREAS)}
-            record['ranges']=intervals.build(prediction,daylight,record['issuedAt'],state)
+            record['ranges']=intervals.build(prediction,daylight,record['issuedAt'],state,record['origin'])
             # A late source hour must not acquire retrospective prediction ranges.
             for i,stamp in enumerate(record['times']):
                 if pd.Timestamp(stamp)<=pd.Timestamp(record['issuedAt']):

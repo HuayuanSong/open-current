@@ -26,6 +26,12 @@ class PredictionRangesTests(unittest.TestCase):
     def test_too_little_calibration_fails_closed(self):
         with self.assertRaises(ValueError):intervals.mature_history(self.history()[:3],'DK1',pd.Timestamp('2026-10-27T12:00Z'),14)
 
+    def test_live_calibration_uses_the_audited_origin_cutoff(self):
+        band=intervals.build(np.full((2,48,3),100.),np.ones((2,48),bool),
+            '2026-10-15T12:30Z',{'rangeHistory':self.history()},'2026-10-15T12:00Z')
+        self.assertEqual(band['calibratedBefore'],'2026-10-15T11:45:00+00:00')
+        self.assertTrue(all(pd.Timestamp(s['lastLabel'])<pd.Timestamp(band['calibratedBefore']) for t in band['calibration'].values() for s in t.values()))
+
     def test_solar_nights_are_absent_and_new_truth_cannot_change_saved_ranges(self):
         state={'rangeHistory':self.history()};p=np.full((2,48,3),100.)
         day=np.tile(np.array(([True]*12+[False]*12)*2),(2,1));at='2026-10-27T12:30:00+00:00'

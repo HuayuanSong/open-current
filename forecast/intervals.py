@@ -78,9 +78,10 @@ def mature_history(history,area,at,days):
     if len(selected)<7:raise ValueError('Not enough mature daily calibration origins')
     return selected
 
-def build(prediction,daylight,issued_at,state):
+def build(prediction,daylight,issued_at,state,origin=None):
     calibration=json.loads(CALIBRATION.read_text())
-    areas={};counts={};at=pd.Timestamp(issued_at)
+    # Use the same conservative origin-based cutoff as the historical audit.
+    areas={};counts={};at=pd.Timestamp(origin or issued_at)
     for ai,area in enumerate(AREAS):
         areas[area]={};counts[area]={}
         for ti,target in enumerate(TARGETS):
@@ -99,7 +100,7 @@ def build(prediction,daylight,issued_at,state):
             effective=56 if any(pd.Timestamp(r['origin'])<at-pd.Timedelta(days=spec['windowDays']) for r in history) else spec['windowDays']
             counts[area][target]={'origins':len(history),'lastLabel':max(r['lastLabel'] for r in history),'windowDays':spec['windowDays'],'effectiveWindowDays':effective}
     return {'version':calibration['version'],'modelVersion':calibration['modelVersion'],
-            'nominalCoverage':.8,'issuedAt':issued_at,'calibratedBefore':issued_at,'calibration':counts,'areas':areas}
+            'nominalCoverage':.8,'issuedAt':issued_at,'calibratedBefore':(at-pd.Timedelta(minutes=15)).isoformat(),'calibration':counts,'areas':areas}
 
 def validation():
     if not CALIBRATION.exists():return None
