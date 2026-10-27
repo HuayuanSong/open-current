@@ -1,0 +1,10 @@
+[
+  {
+    "fold": "final",
+    "steps": 300,
+    "training_seconds": 399.45810654200613,
+    "warm_inference_seconds_two_areas": 0.3557068328373134,
+    "trainable_parameters": 1206912,
+    "peak_rss_bytes": 2897149952
+  }
+]

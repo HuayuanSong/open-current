@@ -1,0 +1,29 @@
+{
+  "model": "amazon/chronos-2",
+  "revision": "29ec3766d36d6f73f0696f85560a422f50e8498c",
+  "last_modified": "2026-06-05 11:55:42+00:00",
+  "license": "apache-2.0",
+  "device": "cpu",
+  "threads": 4,
+  "load_seconds": 0.2475986247882247,
+  "inference_seconds_two_areas": 0.09840345801785588,
+  "evaluation_seconds": 16.08119879104197,
+  "parameter_count": 119477664,
+  "peak_process_rss_bytes_macos": 1055145984,
+  "cross_learning": false,
+  "trained_locally": false,
+  "covariates": [
+    "wind",
+    "radiation",
+    "temperature",
+    "wind_spread",
+    "radiation_spread",
+    "hour_sin",
+    "hour_cos",
+    "weekend",
+    "holiday",
+    "year_sin",
+    "year_cos"
+  ],
+  "evaluated_area_origins": 366
+}

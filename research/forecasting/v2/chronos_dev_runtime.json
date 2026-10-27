@@ -1,0 +1,34 @@
+[
+  {
+    "fold": "june_july",
+    "steps": 100,
+    "training_seconds": 127.42408108292148,
+    "warm_inference_seconds_two_areas": 0.36396916676312685,
+    "trainable_parameters": 1206912,
+    "peak_rss_bytes": 3257155584
+  },
+  {
+    "fold": "june_july",
+    "steps": 300,
+    "training_seconds": 378.85811929171905,
+    "warm_inference_seconds_two_areas": 0.36004425026476383,
+    "trainable_parameters": 1206912,
+    "peak_rss_bytes": 3257155584
+  },
+  {
+    "fold": "august_september",
+    "steps": 100,
+    "training_seconds": 198.90993791585788,
+    "warm_inference_seconds_two_areas": 0.35524558275938034,
+    "trainable_parameters": 1206912,
+    "peak_rss_bytes": 3257155584
+  },
+  {
+    "fold": "august_september",
+    "steps": 300,
+    "training_seconds": 391.15280679101124,
+    "warm_inference_seconds_two_areas": 0.3604041668586433,
+    "trainable_parameters": 1206912,
+    "peak_rss_bytes": 3257155584
+  }
+]

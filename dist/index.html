@@ -10,9 +10,10 @@
     />
     <title>Open Current — Europe’s electricity, connected</title>
     <link rel="icon" href="icon.svg?v=6969a3192d60" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=a7abc78d3e5f" />
+    <link rel="stylesheet" href="style.css?v=ef8285dbafac" />
     <script src="vendor/d3.v7.min.js" defer></script>
     <script type="module" src="app.js?v=7ffec9f55511"></script>
+    <script type="module" src="forecasts.js?v=f11d0f2ba921"></script>
   </head>
   <body>
     <a class="skip-link" href="#explorer">Skip to electricity explorer</a>
@@ -29,7 +30,7 @@
       >
       <nav aria-label="Main navigation">
         <a class="nav-active" href="#explorer">Explore the grid</a
-        ><button class="text-button" data-about>
+        ><a href="#forecasts">Forecasts</a><button class="text-button" data-about>
           About the data <span aria-hidden="true">↗</span></button
         ><a
           class="github-header"
@@ -302,6 +303,51 @@
           </p>
         </div>
         <div id="danish-areas" class="danish-areas"></div>
+      </section>
+      <section id="forecasts" class="forecast-section" aria-labelledby="forecast-heading">
+        <div class="section-heading forecast-heading">
+          <div><p class="eyebrow">WEATHER, MEET THE GRID</p><h2 id="forecast-heading">Denmark, looking ahead.</h2>
+            <p class="forecast-intro">Wind, solar and electricity demand. An hourly outlook for the next 48 hours.</p></div>
+          <span class="forecast-badge">Experimental</span>
+        </div>
+        <div class="forecast-surface">
+          <div class="forecast-toolbar">
+            <div class="segmented forecast-regions" aria-label="Forecast region">
+              <button data-forecast-area="DK1" aria-pressed="true">West Denmark <span>DK1</span></button>
+              <button data-forecast-area="DK2" aria-pressed="false">East Denmark <span>DK2</span></button>
+            </div>
+            <div class="segmented" aria-label="Forecast measure">
+              <button data-forecast-target="wind" aria-pressed="true">Wind</button>
+              <button data-forecast-target="solar" aria-pressed="false">Solar</button>
+              <button data-forecast-target="load" aria-pressed="false">Demand</button>
+            </div>
+          </div>
+          <div class="forecast-status" id="forecast-status" role="status">Loading forecasts…</div>
+          <div class="forecast-chart-heading">
+            <div class="panel-tabs" aria-label="Forecast view">
+              <button data-forecast-view="outlook" aria-pressed="true">48-hour outlook</button>
+              <button data-forecast-view="comparison" aria-pressed="false">Forecast vs actual</button>
+            </div>
+            <div class="forecast-legend"><span><i class="forecast-observed-key"></i>Observed</span><span><i class="forecast-predicted-key"></i>Forecast</span></div>
+          </div>
+          <div class="forecast-chart-wrap" id="forecast-chart-wrap">
+            <svg id="forecast-chart" role="img" tabindex="0" aria-label="Danish electricity forecast. Use left and right arrow keys to inspect hourly values."></svg>
+            <p class="forecast-empty" id="forecast-empty" hidden></p>
+            <div class="forecast-tooltip" id="forecast-tooltip" role="status" hidden></div>
+          </div>
+          <div class="forecast-stats" id="forecast-stats"></div>
+          <div class="forecast-footer"><p id="forecast-timing">All times UTC. Values are hourly average power.</p><button class="text-button" id="forecast-download" disabled>Download forecast ↓</button></div>
+        </div>
+        <details class="forecast-methodology">
+          <summary>How these forecasts work</summary>
+          <div>
+            <p>These are experimental predictions for Denmark’s two electricity regions. A fixed ensemble combines tree models and pretrained time-series models using Energinet’s electricity readings and ECMWF weather forecasts supplied by Open-Meteo. Demand includes system losses.</p>
+            <p>Updates are attempted every 30 minutes. The models predict hourly averages and normally issue a new outlook when a new complete source hour is available. Every forecast keeps its original issue time and values, so later observations can be compared fairly.</p>
+            <p>Missing recent readings can delay an update. At most three older missing input hours per week may be filled using earlier observations; the panel reports when this happens. Larger gaps keep the last valid outlook visible with a delay notice.</p>
+            <p>The historical benchmark covered 13 October 2026 forecast dates per region, at one daily issue time with complete recent inputs. Live refreshes and occasional filled inputs are a broader operating test. The live errors above use only forecasts actually issued after launch; they are separate from that benchmark. Uncertainty intervals have not yet been validated.</p>
+            <p><a href="https://github.com/HuayuanSong/open-current/tree/main/research/forecasting/v2" target="_blank" rel="noopener noreferrer">Read the benchmark and methodology ↗</a> · <a href="https://www.energidataservice.dk/" target="_blank" rel="noopener noreferrer">Energinet</a> · <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Weather by Open-Meteo / ECMWF</a></p>
+          </div>
+        </details>
       </section>
       <section class="compare-section" aria-labelledby="compare-heading">
         <div class="section-heading">

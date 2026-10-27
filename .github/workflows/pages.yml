@@ -28,13 +28,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
+        id: python
         with:
           python-version: "3.12"
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Cache forecast dependencies and pinned model weights
+        id: forecast-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/forecast-serving/main-env
+            .cache/forecast-serving/ttm-env
+            .cache/forecast-serving/models
+            .cache/forecast-serving/huggingface
+          key: forecast-${{ runner.os }}-${{ runner.arch }}-${{ steps.python.outputs.python-version }}-${{ hashFiles('forecast/requirements-*.txt', 'forecast/model-release.json', 'forecast/setup.sh') }}
+      - name: Install CPU forecasting environments
+        if: steps.forecast-cache.outputs.cache-hit != 'true'
+        run: bash forecast/setup.sh
+      - name: Verify exported models against the original experiment
+        if: github.event_name != 'schedule'
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.score
+        env:
+          FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
       - name: Restore the previous seven-day history
         run: python scripts/restore.py
+        env:
+          SNAPSHOT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+      - name: Restore issued forecasts and long input history
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.restore
         env:
           SNAPSHOT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
       - name: Collect public readings (paced to provider limits)
@@ -43,18 +66,44 @@ jobs:
       - name: Normalize the refreshed readings
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.refresh)
         run: python scripts/normalize.py
+      - name: Issue forecasts and evaluate previously issued outlooks
+        id: forecast
+        continue-on-error: true
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.run --strict
+        env:
+          FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
+      - name: Require successful scoring during deployment validation
+        if: github.event_name != 'schedule'
+        run: test "${{ steps.forecast.outcome }}" = success
       - name: Verify normalization and published data
-        run: python -m unittest discover -s tests -p 'test_*.py' -v
+        run: .cache/forecast-serving/main-env/bin/python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Verify browser data model
-        run: node --test tests/model.test.mjs
+        run: node --test tests/*.test.mjs
       - name: Fingerprint assets
         run: python scripts/version_assets.py
+      - name: Check forecast panel in a browser
+        if: github.event_name != 'schedule'
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+          python tests/forecast_browser_check.py --serve
+      - name: Keep deployment validation evidence
+        if: github.event_name != 'schedule' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forecast-validation
+          path: |
+            test-results/forecasts-*.png
+            dist/data/forecasts.json
+            .cache/forecast-serving/run/*.json
+          retention-days: 3
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
           retention-days: 1
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:

@@ -1,0 +1,56 @@
+[
+  {
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 2.8039655000902712,
+    "warm_inference_seconds": 0.0004781666211783886
+  },
+  {
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 2.7177723748609424,
+    "warm_inference_seconds": 0.000476145651191473
+  },
+  {
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 2.701883082743734,
+    "warm_inference_seconds": 0.00044608418829739094
+  },
+  {
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 2.7974406252615154,
+    "warm_inference_seconds": 0.000497874803841114
+  },
+  {
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "fold": "final",
+    "seconds": 1.0449768328107893,
+    "warm_inference_seconds": 0.0002870208118110895
+  },
+  {
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "fold": "final",
+    "seconds": 1.0438342499546707,
+    "warm_inference_seconds": 0.00034477049484848976
+  }
+]

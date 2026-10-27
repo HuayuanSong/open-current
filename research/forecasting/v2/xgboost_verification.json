@@ -1,0 +1,6 @@
+{
+  "family": "xgboost",
+  "maximum_reload_difference_mw": 0.0,
+  "model_bytes": 6841248,
+  "warm_seconds_all_six_series": 0.0015347306616604328
+}

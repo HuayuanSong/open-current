@@ -1,0 +1,128 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "lead_start": 1,
+    "lead_end": 6,
+    "expansion_mw": 90.09136962890625
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "lead_start": 7,
+    "lead_end": 24,
+    "expansion_mw": 88.353759765625
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "lead_start": 25,
+    "lead_end": 48,
+    "expansion_mw": 143.339111328125
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "lead_start": 1,
+    "lead_end": 6,
+    "expansion_mw": 61.6356201171875
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "lead_start": 7,
+    "lead_end": 24,
+    "expansion_mw": 6.914112091064453
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "lead_start": 25,
+    "lead_end": 48,
+    "expansion_mw": 12.7724609375
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "lead_start": 1,
+    "lead_end": 6,
+    "expansion_mw": 199.175537109375
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "lead_start": 7,
+    "lead_end": 24,
+    "expansion_mw": 88.8740234375
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "lead_start": 25,
+    "lead_end": 48,
+    "expansion_mw": 114.2412109375
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "lead_start": 1,
+    "lead_end": 6,
+    "expansion_mw": 88.1935043334961
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "lead_start": 7,
+    "lead_end": 24,
+    "expansion_mw": 61.006446838378906
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "lead_start": 25,
+    "lead_end": 48,
+    "expansion_mw": 88.28993225097656
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "lead_start": 1,
+    "lead_end": 6,
+    "expansion_mw": 72.6973876953125
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "lead_start": 7,
+    "lead_end": 24,
+    "expansion_mw": 11.742446899414062
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "lead_start": 25,
+    "lead_end": 48,
+    "expansion_mw": 40.795318603515625
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "lead_start": 1,
+    "lead_end": 6,
+    "expansion_mw": 56.1544189453125
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "lead_start": 7,
+    "lead_end": 24,
+    "expansion_mw": 35.8609619140625
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "lead_start": 25,
+    "lead_end": 48,
+    "expansion_mw": 53.4014892578125
+  }
+]

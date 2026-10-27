@@ -1,0 +1,56 @@
+[
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "fold": "final",
+    "seconds": 0.020277750212699175,
+    "warm_inference_seconds": 0.0001199373509734869
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 0.011110249906778336,
+    "warm_inference_seconds": 0.00011733360588550568
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 0.010063915979117155,
+    "warm_inference_seconds": 0.00012493738904595375
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 0.010102958418428898,
+    "warm_inference_seconds": 0.00011958321556448936
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "fold": "final",
+    "seconds": 0.010017291642725468,
+    "warm_inference_seconds": 0.00011531193740665913
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "fold": "final",
+    "seconds": 0.010192791000008583,
+    "warm_inference_seconds": 0.00011804187670350075
+  }
+]

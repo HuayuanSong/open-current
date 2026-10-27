@@ -1,0 +1,386 @@
+[
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 0.621890458278358
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 0.6092299590818584
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 1.7042507911100984
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 1.6078920001164079
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 0.6821016669273376
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 0.7315524173900485
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 1.440242875367403
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 1.5717043746262789
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 0.6793246250599623
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 0.5708445832133293
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 1.3311910000629723
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 1.325265666935593
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 0.5287116249091923
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 0.5634918343275785
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 1.2879870422184467
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 1.278241999913007
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 0.5087347077205777
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 0.5110142920166254
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 1.1812781249172986
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 1.155483125243336
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 0.47114933282136917
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 0.48123387480154634
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 1.1262421673163772
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 1.082174832932651
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 0.4815174578689039
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 0.5561125418171287
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 1.2170224590227008
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 1.2505192500539124
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 0.49671687465161085
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 0.5866704173386097
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 1.1569825001060963
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 1.2793174996040761
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 0.511056374758482
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 0.5176510419696569
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 1.2369702910073102
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 1.2524705003015697
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 0.5038157911039889
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 0.5124738332815468
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 1.1740634576417506
+  },
+  {
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 1.2332893339917064
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 0.5127559159882367
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 0.5202310420572758
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 1.221763040870428
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 1.2507447502575815
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 0.5255292910151184
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 0.5275913747027516
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 1.2065204582177103
+  },
+  {
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 1.2137354579754174
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0001,
+    "epochs": 1,
+    "training_seconds": 0.12636000011116266,
+    "warm_inference_seconds_two_areas": 0.01164087513461709,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1348845568
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "path": "model.safetensors",
+    "size": 3240592,
+    "lfs": {
+      "oid": "a706726a7eb01bbcb42994b7dcb3c06ea9557898dbae8d480eb04fe8ccb89710",
+      "size": 3240592,
+      "pointerSize": 132
+    },
+    "lastCommit": {
+      "id": "defc940ce03f35e147ddd8b12a620b5caa6ff5e3",
+      "title": "512-96-r2",
+      "date": "2024-10-09T15:38:03.000Z"
+    }
+  }
+]

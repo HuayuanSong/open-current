@@ -1,0 +1,23 @@
+{
+  "started_at": "2026-10-27T00:16:06.895686+00:00",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "python": "3.12.14",
+  "threads": 4,
+  "source_sha256": {
+    "chronos_benchmark.py": "f8cf157fc9e9b76c33a535f52910219dc6948262757a7311c45f62c5979b812c",
+    "neural.py": "f2748b29a1be9b75b7231092b9efbcd653441747bf5c1f12d0b089cf9dfa98d0",
+    "data_audit.json": "4832126ed29ba7f036c6f9b8b3c1acf096080ef0f9cbf07ef7c411c1c1b4dc4f",
+    "config.json": "b9d292a03ddf386adb979667078746393a4f79adbb633290ed3e46be08c369fc",
+    "fetch_data.py": "fe3d3fd9c46d4838b4d559b0f5e6f85aaa2574b94e656482d9e40e688764563e",
+    "chronos_weights_audit.json": "9d65a1a99e5a8038956631ecd50d71c734ffaad5aa2de08047a20d3cc5363377",
+    "verify_artifacts.py": "d4a3c26594a32049edcf5f68d95eb4a08f44cc60fbfacd8f4ec2ce6a35befcdb",
+    "train.py": "f587945bf7b79acda657111e45b2fd49faa9e778bd59b0c48bc572d42410202b",
+    "test_forecasting.py": "0655510036a948b4cfc575da44ffb9b5f94ca1f55f015d85a7efb5f8b5900382",
+    "evaluate.py": "1b4008dd782ae2ee8f42cab72ac7d34e5ddafece050f731fc447a5f12b2c5086",
+    "build_data.py": "b13a88dd3c2850dad7f83a5489791c2caa5167bf2d31154d079013f2fecdea06",
+    "chronos_model.json": "0d9dda1cd4f372971fe0a7ff04d43573ce8984c05991785847807cf229882af6",
+    "PROTOCOL.md": "4f6b907f493b4b2904c2f18dec104fc9ad8fe2c1c366cc8bca1cff53057461ca"
+  },
+  "finished_at": "2026-10-27T00:17:17.531075+00:00",
+  "total_wall_seconds": 70.63487116573378
+}

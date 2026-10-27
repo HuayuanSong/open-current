@@ -1,0 +1,146 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "mae": 405.112548828125
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "mae": 418.0046081542969
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "setting": 2,
+    "mae": 411.4004211425781
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "setting": 3,
+    "mae": 414.8560485839844
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "mae": 124.31717681884766
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "mae": 126.36363220214844
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "setting": 2,
+    "mae": 123.9903564453125
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "setting": 3,
+    "mae": 128.6268310546875
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "setting": 0,
+    "mae": 136.1636199951172
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "mae": 132.06561279296875
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "setting": 2,
+    "mae": 142.60421752929688
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "setting": 3,
+    "mae": 138.0372314453125
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "setting": 0,
+    "mae": 40.4604377746582
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "mae": 39.92551040649414
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "setting": 2,
+    "mae": 41.85840606689453
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "setting": 3,
+    "mae": 40.013206481933594
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "mae": 188.72491455078125
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "setting": 1,
+    "mae": 178.8530731201172
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "setting": 2,
+    "mae": 187.6240234375
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "setting": 3,
+    "mae": 178.82139587402344
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "mae": 63.8150749206543
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "setting": 1,
+    "mae": 61.66386795043945
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "setting": 2,
+    "mae": 63.787078857421875
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "setting": 3,
+    "mae": 62.62786865234375
+  }
+]

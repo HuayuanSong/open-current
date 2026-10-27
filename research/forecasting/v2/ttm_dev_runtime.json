@@ -1,0 +1,122 @@
+[
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0001,
+    "epochs": 10,
+    "training_seconds": 57.62850229209289,
+    "warm_inference_seconds_two_areas": 0.01351525029167533,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0001,
+    "epochs": 20,
+    "training_seconds": 117.13342266716063,
+    "warm_inference_seconds_two_areas": 0.013397000264376402,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0001,
+    "epochs": 40,
+    "training_seconds": 235.11749966721982,
+    "warm_inference_seconds_two_areas": 0.013505625072866678,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0003,
+    "epochs": 10,
+    "training_seconds": 59.732908042147756,
+    "warm_inference_seconds_two_areas": 0.012498083058744669,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0003,
+    "epochs": 20,
+    "training_seconds": 118.19209400005639,
+    "warm_inference_seconds_two_areas": 0.012677125167101622,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0003,
+    "epochs": 40,
+    "training_seconds": 236.62134016724303,
+    "warm_inference_seconds_two_areas": 0.012562166899442673,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0001,
+    "epochs": 10,
+    "training_seconds": 63.02479191729799,
+    "warm_inference_seconds_two_areas": 0.012468792032450438,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0001,
+    "epochs": 20,
+    "training_seconds": 174.85657875007018,
+    "warm_inference_seconds_two_areas": 0.38252029102295637,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0001,
+    "epochs": 40,
+    "training_seconds": 333.27399158431217,
+    "warm_inference_seconds_two_areas": 0.013045916799455881,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0003,
+    "epochs": 10,
+    "training_seconds": 63.97374462476,
+    "warm_inference_seconds_two_areas": 0.016752874944359064,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0003,
+    "epochs": 20,
+    "training_seconds": 133.94804908288643,
+    "warm_inference_seconds_two_areas": 0.012657416053116322,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0003,
+    "epochs": 40,
+    "training_seconds": 260.8805480408482,
+    "warm_inference_seconds_two_areas": 0.012994165997952223,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1536966656
+  }
+]

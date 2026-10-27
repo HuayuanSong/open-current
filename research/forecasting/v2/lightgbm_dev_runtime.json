@@ -1,0 +1,386 @@
+[
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 1.111100375186652
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 1.1329923751764
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 3.0053317500278354
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 3.0181407909840345
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 1.4568547499366105
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 1.5182906659319997
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 3.8759345412254333
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 4.040892458055168
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 1.1098922500386834
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 1.2295914171263576
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 3.3395156250335276
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 3.4678938342258334
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 1.8257632497698069
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 1.6403971663676202
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 4.198898958973587
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 3.9397579170763493
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 1.0811949577182531
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 1.1112951249815524
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 3.033190708141774
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 3.044550708029419
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 1.4633562080562115
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 1.5630789170973003
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 4.110819541383535
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 4.086442583240569
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 1.0901130000129342
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 1.1784597500227392
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 3.0973028340376914
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 3.370493167079985
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 1.378094166982919
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 1.5266598341986537
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 3.725931417196989
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 3.9115172917954624
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 1.1195537499152124
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 1.286801832728088
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 3.348225415684283
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 3.3193164584226906
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 1.4297979581169784
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 1.4875772916711867
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 3.864710375200957
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 4.654922583606094
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "fold": "june_july",
+    "seconds": 1.414132125210017
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "fold": "august_september",
+    "seconds": 1.3439847500994802
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 1,
+    "fold": "june_july",
+    "seconds": 4.137813874986023
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 1,
+    "fold": "august_september",
+    "seconds": 4.236977542284876
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 2,
+    "fold": "june_july",
+    "seconds": 1.7116547501645982
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 2,
+    "fold": "august_september",
+    "seconds": 1.5939534166827798
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 3,
+    "fold": "june_july",
+    "seconds": 4.133299874607474
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 3,
+    "fold": "august_september",
+    "seconds": 4.103849249891937
+  }
+]

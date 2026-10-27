@@ -1,0 +1,6 @@
+{
+  "family": "lightgbm",
+  "maximum_reload_difference_mw": 0.00021652962823281996,
+  "model_bytes": 10941766,
+  "warm_seconds_all_six_series": 0.001630040118470788
+}

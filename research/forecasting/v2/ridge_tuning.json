@@ -1,0 +1,110 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "mae": 451.32037353515625
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "mae": 452.53045654296875
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "setting": 2,
+    "mae": 487.2265625
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "mae": 128.12588500976562
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "mae": 127.55170440673828
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "setting": 2,
+    "mae": 141.72747802734375
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "setting": 0,
+    "mae": 161.51516723632812
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "mae": 155.2059783935547
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "setting": 2,
+    "mae": 170.9390411376953
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "setting": 0,
+    "mae": 51.754722595214844
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "mae": 49.66741180419922
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "setting": 2,
+    "mae": 56.72364807128906
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "mae": 199.3815460205078
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "setting": 1,
+    "mae": 200.3917236328125
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "setting": 2,
+    "mae": 203.022216796875
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "mae": 67.00994873046875
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "setting": 1,
+    "mae": 67.2288818359375
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "setting": 2,
+    "mae": 72.2308349609375
+  }
+]

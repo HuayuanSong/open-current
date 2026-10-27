@@ -1,0 +1,13 @@
+[
+  {
+    "fold": "final",
+    "learning_rate": 0.0003,
+    "epochs": 40,
+    "training_seconds": 169.18598179193214,
+    "backbone_cache_seconds": 3.2204881249926984,
+    "warm_inference_seconds_two_areas": 0.007916208356618881,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 2126921728
+  }
+]

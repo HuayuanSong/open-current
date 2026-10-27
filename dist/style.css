@@ -2138,3 +2138,69 @@ body {
     animation: none !important;
   }
 }
+
+/* Forecasts share the explorer's typography and restrained green palette. */
+.forecast-section { margin: 64px 0; scroll-margin-top: 24px; }
+.forecast-heading { align-items: flex-start; gap: 20px; }
+.forecast-intro { font-size: 17px; line-height: 1.5; margin: 14px 0 24px; max-width: 680px; }
+.forecast-badge { padding: 8px 12px; border: 1px solid #b6c6a1; background: var(--lime); border-radius: 4px; font-size: 15px; white-space: nowrap; }
+.forecast-surface { border: 1px solid var(--line); background: var(--white); }
+.forecast-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 20px 24px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.forecast-toolbar .segmented button { font-size: 16px; padding: 10px 14px; }
+.forecast-regions span { font-size: 14px; opacity: .8; margin-left: 5px; }
+.forecast-status { padding: 14px 24px; font-size: 15px; line-height: 1.6; color: var(--muted); background: #f2f5ed; }
+.forecast-status[data-status="delayed"], .forecast-status[data-status="unavailable"] { background: #f8eedc; color: #805126; }
+.forecast-chart-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 24px 0; flex-wrap: wrap; }
+.forecast-chart-heading .panel-tabs { border-bottom: 0; margin: 0; padding: 0; }
+.forecast-chart-heading .panel-tabs button { font-size: 16px; padding: 12px 0; margin-right: 24px; }
+.forecast-chart-heading .panel-tabs button[aria-pressed="true"] { color: var(--green); box-shadow: inset 0 -2px var(--green); }
+.forecast-legend { display: flex; gap: 20px; font-size: 15px; }
+.forecast-legend span { display: flex; align-items: center; gap: 8px; }
+.forecast-legend i { width: 22px; border-top: 3px solid var(--ink); }
+.forecast-legend .forecast-predicted-key { border-top: 3px dashed var(--green); }
+.forecast-chart-wrap { position: relative; padding: 12px 12px 0; min-height: 300px; }
+#forecast-chart { width: 100%; display: block; overflow: visible; }
+.forecast-axis { font: 14px DDIN, Arial, sans-serif; color: var(--muted); }
+.forecast-axis text { font: 14px DDIN, Arial, sans-serif; }
+.forecast-axis .domain { stroke: var(--line); }
+.forecast-axis .tick line { stroke: var(--line); opacity: .65; }
+.forecast-unit { font: 14px DDIN, Arial, sans-serif; fill: var(--muted); }
+.forecast-line { fill: none; stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+.forecast-observed { stroke: var(--ink); }
+.forecast-predicted { stroke: var(--green); stroke-dasharray: 6 4; }
+.forecast-origin { stroke: #98ab9f; stroke-dasharray: 3 5; }
+.forecast-cursor { stroke: var(--orange); stroke-width: 1; stroke-dasharray: 3 3; pointer-events: none; }
+.forecast-tooltip { position: absolute; top: 40px; padding: 12px 16px; background: var(--ink); color: white; font-size: 15px; line-height: 1.7; min-width: 210px; border-radius: 4px; pointer-events: none; box-shadow: 0 5px 20px #183c3522; }
+.forecast-tooltip div:first-child { font-weight: bold; margin-bottom: 3px; }
+.forecast-empty { position: absolute; top: 30%; left: 10%; right: 10%; text-align: center; font-size: 17px; line-height: 1.7; color: var(--muted); }
+.forecast-stats { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid var(--line); }
+.forecast-stats>div { padding: 22px 24px; display: flex; flex-direction: column; gap: 8px; }
+.forecast-stats>div+div { border-left: 1px solid var(--line); }
+.forecast-stats .metric-label { font-size: 15px; }
+.forecast-stats strong { font-size: 29px; font-weight: 400; }
+.forecast-stats .muted { font-size: 14px; line-height: 1.5; }
+.forecast-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 24px; border-top: 1px solid var(--line); }
+.forecast-footer p { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0; max-width: 75%; }
+.forecast-footer button { font-size: 15px; white-space: nowrap; }
+.forecast-methodology { margin-top: 20px; font-size: 16px; line-height: 1.7; color: var(--muted); max-width: 980px; }
+.forecast-methodology summary { cursor: pointer; color: var(--ink); font-weight: 700; padding: 8px 0; }
+.forecast-methodology p { margin: 12px 0; }
+@media(max-width: 700px) {
+  .forecast-section { margin: 44px 0; }
+  .forecast-heading { flex-wrap: wrap; }
+  .forecast-badge { margin-bottom: 16px; }
+  .forecast-toolbar, .forecast-chart-heading { padding-left: 14px; padding-right: 14px; }
+  .forecast-toolbar { gap: 12px; }
+  .forecast-toolbar .segmented { width: 100%; }
+  .forecast-toolbar .segmented button { flex: 1; padding: 10px 8px; }
+  .forecast-regions span { display: block; margin-left: 0; margin-top: 3px; }
+  .forecast-status { padding: 12px 14px; }
+  .forecast-chart-wrap { padding: 8px 0 0; }
+  .forecast-chart-heading .panel-tabs button { font-size: 15px; margin-right: 18px; }
+  .forecast-stats { grid-template-columns: 1fr; }
+  .forecast-stats>div { padding: 15px 18px; gap: 5px; }
+  .forecast-stats>div+div { border-left: 0; border-top: 1px solid var(--line); }
+  .forecast-stats strong { font-size: 27px; }
+  .forecast-footer { padding: 16px 18px; align-items: flex-start; flex-direction: column; gap: 12px; }
+  .forecast-footer p { max-width: 100%; }
+}

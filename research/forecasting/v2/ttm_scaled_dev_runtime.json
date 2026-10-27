@@ -1,0 +1,134 @@
+[
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0001,
+    "epochs": 10,
+    "training_seconds": 42.87779524968937,
+    "backbone_cache_seconds": 2.5304690841585398,
+    "warm_inference_seconds_two_areas": 0.015100124757736921,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1723744256
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0001,
+    "epochs": 20,
+    "training_seconds": 86.66150158364326,
+    "backbone_cache_seconds": 2.5304690841585398,
+    "warm_inference_seconds_two_areas": 0.04501870833337307,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1723744256
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0001,
+    "epochs": 40,
+    "training_seconds": 169.2819084590301,
+    "backbone_cache_seconds": 2.5304690841585398,
+    "warm_inference_seconds_two_areas": 0.013032250106334686,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1723744256
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0003,
+    "epochs": 10,
+    "training_seconds": 40.290009832940996,
+    "backbone_cache_seconds": 2.257906749844551,
+    "warm_inference_seconds_two_areas": 0.012985666282474995,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1723744256
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0003,
+    "epochs": 20,
+    "training_seconds": 82.06029858300462,
+    "backbone_cache_seconds": 2.257906749844551,
+    "warm_inference_seconds_two_areas": 0.014646667055785656,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1723744256
+  },
+  {
+    "fold": "june_july",
+    "learning_rate": 0.0003,
+    "epochs": 40,
+    "training_seconds": 164.41864733304828,
+    "backbone_cache_seconds": 2.257906749844551,
+    "warm_inference_seconds_two_areas": 0.008446333929896355,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 1723744256
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0001,
+    "epochs": 10,
+    "training_seconds": 31.17362054111436,
+    "backbone_cache_seconds": 1.5642937906086445,
+    "warm_inference_seconds_two_areas": 0.008048499934375286,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 2081701888
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0001,
+    "epochs": 20,
+    "training_seconds": 63.19858524994925,
+    "backbone_cache_seconds": 1.5642937906086445,
+    "warm_inference_seconds_two_areas": 0.008564458228647709,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 2081701888
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0001,
+    "epochs": 40,
+    "training_seconds": 126.49597220821306,
+    "backbone_cache_seconds": 1.5642937906086445,
+    "warm_inference_seconds_two_areas": 0.008349833078682423,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 2081701888
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0003,
+    "epochs": 10,
+    "training_seconds": 31.34660629183054,
+    "backbone_cache_seconds": 1.546579624991864,
+    "warm_inference_seconds_two_areas": 0.008125333115458488,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 2081701888
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0003,
+    "epochs": 20,
+    "training_seconds": 66.21828841697425,
+    "backbone_cache_seconds": 1.546579624991864,
+    "warm_inference_seconds_two_areas": 0.01337629184126854,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 2081701888
+  },
+  {
+    "fold": "august_september",
+    "learning_rate": 0.0003,
+    "epochs": 40,
+    "training_seconds": 140.9376366250217,
+    "backbone_cache_seconds": 1.546579624991864,
+    "warm_inference_seconds_two_areas": 0.009374333079904318,
+    "parameters": 1032011,
+    "trainable_parameters": 516427,
+    "peak_rss_bytes": 2081701888
+  }
+]

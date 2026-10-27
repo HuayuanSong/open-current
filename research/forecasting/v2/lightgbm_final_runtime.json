@@ -1,0 +1,56 @@
+[
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 3.30557420803234,
+    "warm_inference_seconds": 0.0004348335787653923
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "fold": "final",
+    "seconds": 1.1712131248787045,
+    "warm_inference_seconds": 0.00025681196711957455
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 3.3173707500100136,
+    "warm_inference_seconds": 0.0004880409687757492
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "fold": "final",
+    "seconds": 3.747332917060703,
+    "warm_inference_seconds": 0.0005481869447976351
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 3,
+    "fold": "final",
+    "seconds": 4.491928708273917,
+    "warm_inference_seconds": 0.0005873125046491623
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "fold": "final",
+    "seconds": 1.2521733329631388,
+    "warm_inference_seconds": 0.0003443751484155655
+  }
+]

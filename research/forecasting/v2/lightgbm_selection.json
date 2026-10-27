@@ -1,0 +1,38 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "mae": 394.8154602050781
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "mae": 122.9739761352539
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "mae": 128.92886352539062
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "mae": 40.74654769897461
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "setting": 3,
+    "mae": 179.3108367919922
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "mae": 61.92490005493164
+  }
+]

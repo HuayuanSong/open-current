@@ -1,0 +1,21 @@
+{
+  "raw_records": 385194,
+  "hourly_records": 32206,
+  "samples": 912,
+  "sample_counts": {
+    "calibration/DK1": 28,
+    "calibration/DK2": 28,
+    "test/DK1": 88,
+    "test/DK2": 88,
+    "train/DK1": 273,
+    "train/DK2": 273,
+    "validation/DK1": 67,
+    "validation/DK2": 67
+  },
+  "excluded": {
+    "missing_or_invalid_electricity": 338,
+    "missing_weather": 2,
+    "purged": 16,
+    "unavailable_weather_run": 8
+  }
+}

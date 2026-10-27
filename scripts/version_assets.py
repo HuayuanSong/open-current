@@ -11,12 +11,14 @@ def digest(name):
 
 
 def main():
-    app = DIST / 'app.js'
-    text = re.sub(r"\./model\.js(?:\?v=[a-f0-9]+)?", './model.js?v=' + digest('model.js'), app.read_text())
-    app.write_text(text)
+    for script, dependency in [('app.js', 'model.js'), ('forecasts.js', 'forecast-model.js')]:
+        app = DIST / script
+        text = re.sub(r'\./' + re.escape(dependency) + r'(?:\?v=[a-f0-9]+)?',
+                      './' + dependency + '?v=' + digest(dependency), app.read_text())
+        app.write_text(text)
     page = DIST / 'index.html'
     text = page.read_text()
-    for name in ['style.css', 'app.js', 'icon.svg']:
+    for name in ['style.css', 'app.js', 'forecasts.js', 'icon.svg']:
         text = re.sub(re.escape(name) + r'(?:\?v=[a-f0-9]+)?', name + '?v=' + digest(name), text)
     page.write_text(text)
     print('Versioned app, stylesheet, icon and module imports.')

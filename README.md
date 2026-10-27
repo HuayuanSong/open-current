@@ -11,6 +11,7 @@
 - Seven days of country history, a historical map slider, playback, and generation/demand, generation-share and price charts.
 - Day-ahead wholesale prices for **15 explicitly open bidding zones**, including DK1 and DK2. Country subdivisions remain separate; a zone is never presented as a national average.
 - Energinet’s preliminary five-minute power and operational consumption-CO₂ readings for West and East Denmark.
+- Experimental 48-hour wind, solar and demand forecasts for DK1/DK2, with saved forecast-versus-observed comparisons and accuracy measured after issue.
 - Shareable views, downloadable country JSON, source attribution, and a full methodology panel.
 
 This is an open-data exploration, not a globally complete Electricity Maps replacement. It does **not** estimate European consumption-based carbon intensity or trace the carbon content of imports. Domestic low-carbon generation shares and Danish operational CO₂ have different meanings and are presented separately.
@@ -66,6 +67,8 @@ The browser calls only this site's static assets. It never makes an upstream ele
 - `scripts/restore.py`: recovers previous published rolling history before refreshes. Deployments do not commit every data update to Git history.
 - `dist/model.js`: testable time selection and missing-value rules.
 - `dist/app.js`: D3 geographic projection, continuous zoom/pan, country panels and charts.
+- `forecast/`: CPU inference of a fixed ensemble, issued-weather inputs, persistent forecast archive and prospective error scoring. See the [serving documentation](forecast/README.md) and [held-out research results](research/forecasting/v2/RESULTS.md).
+- `dist/forecasts.js`: the forecast panel, region/target controls, interactive outlook and comparisons.
 - `.github/workflows/pages.yml`: scheduled collection and Pages artifact deployment.
 
 ## Data semantics
@@ -86,7 +89,9 @@ The browser calls only this site's static assets. It never makes an upstream ele
 
 ## Automation and hosting
 
-GitHub Pages must be configured with **GitHub Actions** as the publishing source. The workflow publishes on pushes to `main`, refreshes at minutes 7 and 37 of each hour, and supports manual refreshes. Concurrent runs are serialized. A code-only push restores the latest deployed snapshot without a new upstream collection.
+GitHub Pages must be configured with **GitHub Actions** as the publishing source. The workflow publishes on pushes to `main`, refreshes at minutes 7 and 37 of each hour, and supports manual refreshes. Concurrent runs are serialized. A code-only push restores the latest deployed electricity snapshot and refreshes the forecast inputs.
+
+Forecast inference runs in GitHub Actions on CPU; Pages serves the resulting JSON. It uses the development-selected blend of tree, linear, weather MLP, Chronos-2 and TinyTimeMixer models, with frozen weights and no scheduled retraining. Two isolated Python 3.12 environments keep model dependencies compatible. An immutable, checksummed GitHub Release stores model weights, and the published site preserves 35 days of issued forecasts across runner cache eviction. Models refresh only when a new source hour or weather run is available. Failed updates keep the previous forecast and its original issue time.
 
 Standard hosted runners are free for public repositories within applicable GitHub terms. The app uses only the automatically provided GitHub deployment token; no third-party credentials are required. Artifacts expire after one day, the website retains seven days of data, and asset filenames in HTML are fingerprinted to prevent stale UI caching.
 
@@ -94,9 +99,11 @@ GitHub's scheduler is best effort, so collection can be delayed or skipped. Publ
 
 ## Validation
 
+The full Python suite needs the forecasting environment. On Linux with Python 3.12, install it with `bash forecast/setup.sh`; viewing the static site needs no ML dependencies.
+
 ```sh
-python3 -m unittest discover -s tests -p 'test_*.py' -v
-node --test tests/model.test.mjs
+.cache/forecast-serving/main-env/bin/python -m unittest discover -s tests -p 'test_*.py' -v
+node --test tests/*.test.mjs
 ```
 
 Browser checks (optional local dependency):
@@ -105,6 +112,7 @@ Browser checks (optional local dependency):
 python3 -m pip install playwright
 python3 -m playwright install chromium
 python3 tests/browser_check.py
+python3 tests/forecast_browser_check.py
 ```
 
 Set `GRID_TEST_URL` to test the deployed site. Checks cover the user journeys, desktop/mobile overflow, fractional zoom, panning, country and metric changes, historical time selection, price zones, chart interaction, accessible source dialog and downloads.
@@ -113,6 +121,8 @@ Set `GRID_TEST_URL` to test the deployed site. Checks cover the user journeys, d
 
 - [Fraunhofer ISE / Energy-Charts.info](https://api.energy-charts.info/): generation and flows, CC BY 4.0. Open price feeds originate from Bundesnetzagentur / SMARD.de under CC BY 4.0. Responses are transformed and aggregated.
 - [Energinet / Energi Data Service](https://www.energidataservice.dk/terms-and-conditions): Danish power and CO₂, CC BY 4.0. We normalize timestamps and derive wind shares and area demand.
+- [Open-Meteo / ECMWF IFS](https://open-meteo.com/en/docs/single-runs-api): issued weather forecasts, CC BY 4.0 data; the free endpoint is used within its non-commercial usage limits.
+- [Amazon Chronos-2](https://huggingface.co/amazon/chronos-2) and [IBM Granite TinyTimeMixer](https://huggingface.co/ibm-granite/granite-timeseries-ttm-r2): Apache-2.0 pretrained models, with locally trained adaptations. Licence and attribution notices are included in the model release.
 - [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/): public-domain 1:50m geographic boundaries, version 5.1.2. Boundaries do not imply a position on territorial disputes.
 - [D3 7.9.0](https://d3js.org/): ISC licence; vendored licence in `dist/vendor/d3-LICENSE`.
 - D-DIN: SIL Open Font License 1.1; font notices in `dist/fonts/`.

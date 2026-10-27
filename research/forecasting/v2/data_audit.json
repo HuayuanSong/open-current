@@ -1,0 +1,24 @@
+{
+  "raw_records": 398994,
+  "hourly_records": 33360,
+  "samples": 938,
+  "sample_counts": {
+    "calibration/DK1": 59,
+    "calibration/DK2": 59,
+    "test/DK1": 13,
+    "test/DK2": 13,
+    "train/DK1": 370,
+    "train/DK2": 370,
+    "validation/DK1": 27,
+    "validation/DK2": 27
+  },
+  "excluded": {
+    "missing_or_invalid_electricity": 364,
+    "missing_weather": 2,
+    "purged": 12,
+    "unavailable_weather_run": 8
+  },
+  "extended_history_missing_cells": 5370,
+  "extended_history_total_cells": 1440768,
+  "created_at": "2026-10-27T08:09:18.856201+00:00"
+}

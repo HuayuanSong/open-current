@@ -1,0 +1,733 @@
+{
+  "scope": "Local research artifacts; no deployment or live scoring endpoint",
+  "forecast_horizon_hours": 48,
+  "issue_hour_utc": 12,
+  "assumed_publication_buffer_minutes": 15,
+  "data_config": {
+    "version": 1,
+    "seed": 42,
+    "threads": 4,
+    "weather_model": "ecmwf_ifs",
+    "run_start": "2025-01-01",
+    "run_end": "2026-09-30",
+    "origin_hour_utc": 12,
+    "assumed_publication_buffer_minutes": 15,
+    "horizon": 48,
+    "lookback": 168,
+    "train_end": "2026-01-01",
+    "validation_end": "2026-04-01",
+    "calibration_end": "2026-06-01",
+    "test_end": "2026-10-01",
+    "variables": [
+      "temperature_2m",
+      "wind_speed_100m",
+      "wind_direction_100m",
+      "shortwave_radiation",
+      "cloud_cover",
+      "terrestrial_radiation"
+    ],
+    "locations": [
+      {
+        "id": "north_sea",
+        "area": "DK1",
+        "latitude": 55.7,
+        "longitude": 7.8
+      },
+      {
+        "id": "west_jutland",
+        "area": "DK1",
+        "latitude": 56.3,
+        "longitude": 8.6
+      },
+      {
+        "id": "funen",
+        "area": "DK1",
+        "latitude": 55.5,
+        "longitude": 10.4
+      },
+      {
+        "id": "zealand",
+        "area": "DK2",
+        "latitude": 55.7,
+        "longitude": 12.1
+      },
+      {
+        "id": "lolland",
+        "area": "DK2",
+        "latitude": 54.6,
+        "longitude": 11.7
+      },
+      {
+        "id": "baltic",
+        "area": "DK2",
+        "latitude": 55.0,
+        "longitude": 12.9
+      }
+    ]
+  },
+  "feature_order": {
+    "future": [
+      "wx_0_temperature_2m",
+      "wx_0_wind_speed_100m",
+      "wx_0_shortwave_radiation",
+      "wx_0_cloud_cover",
+      "wx_0_terrestrial_radiation",
+      "wx_0_wind_sin",
+      "wx_0_wind_cos",
+      "wx_0_power_curve",
+      "wx_0_heating",
+      "wx_0_cooling",
+      "wx_0_pv_temperature",
+      "wx_1_temperature_2m",
+      "wx_1_wind_speed_100m",
+      "wx_1_shortwave_radiation",
+      "wx_1_cloud_cover",
+      "wx_1_terrestrial_radiation",
+      "wx_1_wind_sin",
+      "wx_1_wind_cos",
+      "wx_1_power_curve",
+      "wx_1_heating",
+      "wx_1_cooling",
+      "wx_1_pv_temperature",
+      "wx_2_temperature_2m",
+      "wx_2_wind_speed_100m",
+      "wx_2_shortwave_radiation",
+      "wx_2_cloud_cover",
+      "wx_2_terrestrial_radiation",
+      "wx_2_wind_sin",
+      "wx_2_wind_cos",
+      "wx_2_power_curve",
+      "wx_2_heating",
+      "wx_2_cooling",
+      "wx_2_pv_temperature",
+      "wx_wind_spread",
+      "wx_radiation_spread",
+      "hour_sin",
+      "hour_cos",
+      "year_sin",
+      "year_cos",
+      "weekend",
+      "holiday",
+      "trend_years",
+      "weekday_0",
+      "weekday_1",
+      "weekday_2",
+      "weekday_3",
+      "weekday_4",
+      "weekday_5",
+      "weekday_6",
+      "hour_0",
+      "weekend_hour_0",
+      "hour_1",
+      "weekend_hour_1",
+      "hour_2",
+      "weekend_hour_2",
+      "hour_3",
+      "weekend_hour_3",
+      "hour_4",
+      "weekend_hour_4",
+      "hour_5",
+      "weekend_hour_5",
+      "hour_6",
+      "weekend_hour_6",
+      "hour_7",
+      "weekend_hour_7",
+      "hour_8",
+      "weekend_hour_8",
+      "hour_9",
+      "weekend_hour_9",
+      "hour_10",
+      "weekend_hour_10",
+      "hour_11",
+      "weekend_hour_11",
+      "hour_12",
+      "weekend_hour_12",
+      "hour_13",
+      "weekend_hour_13",
+      "hour_14",
+      "weekend_hour_14",
+      "hour_15",
+      "weekend_hour_15",
+      "hour_16",
+      "weekend_hour_16",
+      "hour_17",
+      "weekend_hour_17",
+      "hour_18",
+      "weekend_hour_18",
+      "hour_19",
+      "weekend_hour_19",
+      "hour_20",
+      "weekend_hour_20",
+      "hour_21",
+      "weekend_hour_21",
+      "hour_22",
+      "weekend_hour_22",
+      "hour_23",
+      "weekend_hour_23"
+    ],
+    "compact": [
+      "wind",
+      "radiation",
+      "temperature",
+      "wind_spread",
+      "radiation_spread",
+      "hour_sin",
+      "hour_cos",
+      "weekend",
+      "holiday",
+      "year_sin",
+      "year_cos"
+    ]
+  },
+  "selection": {
+    "frozen_at": "2026-10-27T08:47:15.913624+00:00",
+    "families": [
+      "frozen",
+      "tree_control",
+      "ridge",
+      "lightgbm",
+      "xgboost",
+      "chronos_zero",
+      "chronos",
+      "ttm",
+      "ttm_scaled"
+    ],
+    "bands": [
+      [
+        0,
+        6
+      ],
+      [
+        6,
+        24
+      ],
+      [
+        24,
+        48
+      ]
+    ],
+    "selection": [
+      {
+        "area": "DK1",
+        "target": "wind",
+        "best_single": "lightgbm",
+        "selected": "blend",
+        "single_mae": 394.8154602050781,
+        "blend_mae": 363.2041015625,
+        "weights": [
+          [
+            0.0638553710300824,
+            0.04555038893707893,
+            3.3987983451052645e-18,
+            0.1651013989707285,
+            1.1115697614073854e-18,
+            0.19287846939795417,
+            0.1870685491464797,
+            0.18314915403142948,
+            0.16239666848624681
+          ],
+          [
+            0.0904061723240166,
+            0.17682230406693047,
+            0.07535500956464805,
+            0.2261216945413977,
+            4.953358851756458e-20,
+            0.08737354049526144,
+            0.05641833379932771,
+            7.628241785488795e-20,
+            0.28750294520841807
+          ],
+          [
+            4.3133026535390037e-19,
+            0.2228942366459078,
+            0.09754793948321291,
+            0.22253041004645804,
+            0.07615327115429905,
+            4.179562402544543e-18,
+            0.07287918797114436,
+            2.2838319380175183e-19,
+            0.3079949546989778
+          ]
+        ]
+      },
+      {
+        "area": "DK1",
+        "target": "solar",
+        "best_single": "frozen",
+        "selected": "blend",
+        "single_mae": 128.86512756347656,
+        "blend_mae": 121.6274642944336,
+        "weights": [
+          [
+            0.018353661506182763,
+            1.5746309826826195e-18,
+            0.0,
+            0.15533588775281365,
+            2.979675665169775e-18,
+            0.23882666469405617,
+            0.2101091476278191,
+            0.12412007029897906,
+            0.2532545681201493
+          ],
+          [
+            0.3616342600016945,
+            0.18829029543209672,
+            2.188714245998354e-19,
+            0.23380000883124263,
+            0.11578496947905276,
+            0.04520341274987229,
+            0.05528705350604097,
+            1.893820937463762e-17,
+            0.0
+          ],
+          [
+            0.3092400283591618,
+            0.26997778816819745,
+            0.0,
+            0.2562175964609822,
+            0.1152366484656145,
+            0.02901299352503495,
+            0.020314945021008952,
+            6.300915528830954e-18,
+            5.845804041176579e-18
+          ]
+        ]
+      },
+      {
+        "area": "DK1",
+        "target": "load",
+        "best_single": "xgboost",
+        "selected": "blend",
+        "single_mae": 178.82139587402344,
+        "blend_mae": 165.70603942871094,
+        "weights": [
+          [
+            3.4573696727393273e-18,
+            0.02197805372821302,
+            0.022482168537280328,
+            0.11709578918102091,
+            0.03142223594017772,
+            0.08937346938201848,
+            0.07572756310344829,
+            0.3967837159982194,
+            0.2451370041296219
+          ],
+          [
+            9.708890791090105e-20,
+            0.22362452776994474,
+            0.059090488193530966,
+            0.16931860504166643,
+            0.18949310759886095,
+            0.04983340239324077,
+            0.04741316359054318,
+            0.15217756963555634,
+            0.10904913577665669
+          ],
+          [
+            1.381791513809853e-19,
+            0.178104334003402,
+            0.11864955367985829,
+            0.19439483526335197,
+            0.15763064073758415,
+            0.012875840775695018,
+            0.030170471270885034,
+            0.17127357232196092,
+            0.13690075194726267
+          ]
+        ]
+      },
+      {
+        "area": "DK2",
+        "target": "wind",
+        "best_single": "lightgbm",
+        "selected": "blend",
+        "single_mae": 122.9739761352539,
+        "blend_mae": 116.36746978759766,
+        "weights": [
+          [
+            6.871546362159683e-19,
+            4.634418588458139e-18,
+            0.010424962194336626,
+            0.21706614510694155,
+            1.347743502458563e-19,
+            0.2526908724680905,
+            0.19171970701558555,
+            0.0915637352411539,
+            0.23653457797389182
+          ],
+          [
+            0.0,
+            0.20973298892851472,
+            0.19298584654197976,
+            0.19282670836320623,
+            0.15884188734914326,
+            0.03363333580273825,
+            1.25625403258369e-19,
+            1.2269715717612523e-19,
+            0.21197923301441776
+          ],
+          [
+            2.019210210534991e-17,
+            0.06161397423602535,
+            0.160341937040387,
+            0.22521591903875787,
+            0.2752526074548779,
+            0.020071353961439595,
+            0.04326560347204989,
+            9.187503536227462e-19,
+            0.21423860479646248
+          ]
+        ]
+      },
+      {
+        "area": "DK2",
+        "target": "solar",
+        "best_single": "xgboost",
+        "selected": "blend",
+        "single_mae": 39.92551040649414,
+        "blend_mae": 39.0031852722168,
+        "weights": [
+          [
+            4.583269516069478e-18,
+            0.10743853981811222,
+            8.600417511862355e-18,
+            0.08463479975916646,
+            0.13540434431353923,
+            0.21218972393586158,
+            0.15587536387157455,
+            0.09657491129194079,
+            0.2078823170098052
+          ],
+          [
+            1.4283197666260123e-16,
+            0.23895634362594648,
+            0.0,
+            0.28182261974467276,
+            0.4792210366293806,
+            0.0,
+            0.0,
+            9.376736507646259e-17,
+            0.0
+          ],
+          [
+            0.10339706500512413,
+            0.25729992626633164,
+            2.3197791263622398e-17,
+            0.2556834508164923,
+            0.3578729964132814,
+            2.5129169960023348e-17,
+            3.5842604474175944e-17,
+            0.0,
+            0.02574656149877049
+          ]
+        ]
+      },
+      {
+        "area": "DK2",
+        "target": "load",
+        "best_single": "xgboost",
+        "selected": "blend",
+        "single_mae": 61.66386795043945,
+        "blend_mae": 58.54170608520508,
+        "weights": [
+          [
+            0.030047729336894508,
+            0.09504843446287764,
+            0.0826939771472325,
+            0.10639871281012692,
+            0.09371643674411836,
+            0.06667572862923057,
+            0.07303037946888796,
+            0.21718108140742928,
+            0.23520751999320233
+          ],
+          [
+            0.08167923895110511,
+            0.1498385728756366,
+            0.13113195148376308,
+            0.15768477405183953,
+            0.15254224998993393,
+            0.05396959996144087,
+            0.06389106751694333,
+            0.1043290504293299,
+            0.10493349474000774
+          ],
+          [
+            0.08418024165730875,
+            0.1326805905431759,
+            0.11416793869051382,
+            0.1642018914902136,
+            0.17815081542448752,
+            0.015106432510400102,
+            0.034131426494310946,
+            0.13720298420016966,
+            0.14017767898941966
+          ]
+        ]
+      }
+    ],
+    "source_sha256": {
+      "chronos_experiment.py": "094fb76fe9c0e29e2ee2e1ddd099f7ee06f81901d16142fd32cf5e1bb11a9848",
+      "test_ttm_preprocessing.py": "67033e35cd8aef38a9fe037ace2c28df1f469b6a4f6fd9255d45ee30e4c9f72e",
+      "test_integrity.py": "689ae53fbd345e9165ae315813cde68e22c7e045a3cf6825548cd0044579ce33",
+      "export_manifest.py": "3fb7cd63445b06fda17ebf25a5a7c5e8909030a4e883dad8b35276a445d0a417",
+      "verify_trees.py": "41322465566c2d80d2237106220662d4a03931d6199a750b46605436709fd80f",
+      "frozen_baseline.py": "ae4440512e3b9c05b184c07679e85ca1da7f136c89858ff8a083a482cb0c63fb",
+      "ttm_experiment.py": "f756b10733cb34bfb52547ab90b96a57e321a280c3a9cbdfdd872a8b940909e3",
+      "common.py": "36e789ddd81dc183dc163c9b1ea18998858dc04bc1796c33de3098ab1deef3ae",
+      "evaluate.py": "62d73c34366650338253c9a472d4fca3e41728fe99f1fdc286d9263fb3625f49",
+      "prepare.py": "754365cedfba2c22bf5a796f30998744567f4a5da5f759df7cd1098c5bf1c25c",
+      "trees.py": "fafa7abccf4a3a43f3b41f704124ba8a70d8d98dcfb015c3366c48fc02f17639"
+    },
+    "prediction_sha256": {
+      "frozen": "044d09b962c6a47e1e626111be260d35848bc013317e5440eaad6da78a4d6904",
+      "tree_control": "daa54bf73a753e2d0d43171cc210808812cf056b2fe583c33d52acf02583708e",
+      "ridge": "1b756c971456ffccc170c72f63cbd272b1f2d2254c3b6b3a62a2049ba89eeb51",
+      "lightgbm": "3fd3f177fa14c192e6bbc18b3904dfd397d1e8a55cda616dfe7fb6f9c0906e98",
+      "xgboost": "d38ed507e5b6508e180541b06f2d7063002dfad59a4e498a96ae3b479155e4cd",
+      "chronos_zero": "8d811ad7dd1f0b47f92ea7f5440707d7de926db15830e42fc65962369535f048",
+      "chronos": "7499bfabbb2dfff8f2a7195c640704cac8ccc9d003b9b435da17dee5ba3418a5",
+      "ttm": "06b681dd47db885c3a4ea5bae75df99b0e4cdbfd16d95b7de63148cc7fb5625d",
+      "ttm_scaled": "a09472566b9c23b94145ddde28104d83d75c733ee29c6116d792c0b14ba3891c"
+    }
+  },
+  "families": {
+    "tree_control": {
+      "environment": "requirements.lock.txt",
+      "files": [
+        {
+          "path": ".cache/forecasting/v2/models/tree_control_DK1_wind.txt",
+          "bytes": 2291080,
+          "sha256": "b4337394526268bff4d14c55fbcf5a898d268248fe660234ff5a22864e85fda7"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/tree_control_DK1_solar.txt",
+          "bytes": 2320804,
+          "sha256": "ab5189563c6bc35c27069a81a3080667dd4335b1940acee355d40539cf98564e"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/tree_control_DK1_load.txt",
+          "bytes": 604800,
+          "sha256": "a227e1d231d783f71d2d69ceada61f99f62c8387441a7bc2cfc890562f383238"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/tree_control_DK2_wind.txt",
+          "bytes": 2304857,
+          "sha256": "09368cb3a1bcd9318959877ebe7a2338efb113afe4c0c95e4fc134a3846de105"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/tree_control_DK2_solar.txt",
+          "bytes": 2345962,
+          "sha256": "b234d26fbcb92f7908f23ae2e31beccb8e5f0b8201cce1d18c5fd41d7e823edc"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/tree_control_DK2_load.txt",
+          "bytes": 607936,
+          "sha256": "a6b8b45fa189fd9ed599e6160abf1371c10c475cab02616870e7d5b9c8b1b15c"
+        }
+      ]
+    },
+    "ridge": {
+      "environment": "requirements.lock.txt",
+      "files": [
+        {
+          "path": ".cache/forecasting/v2/models/ridge_DK1_wind.joblib",
+          "bytes": 4793,
+          "sha256": "1f9da670a843500c945fec8e631530501933dc26dee781bc82c5b27bf47ec408"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/ridge_DK1_solar.joblib",
+          "bytes": 4793,
+          "sha256": "c77160c7774bfa8b5dbb5974f3180bc5f808161aeeda786585092e77fe613f13"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/ridge_DK1_load.joblib",
+          "bytes": 4793,
+          "sha256": "2d46ded9e5d31c0f9ce580dae0f00263178d66bd038a9a453a274de808dc8b6a"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/ridge_DK2_wind.joblib",
+          "bytes": 4793,
+          "sha256": "c14576eab343a6706ba17b6772df61470b053988949149e918dc9fc1f6dbf56e"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/ridge_DK2_solar.joblib",
+          "bytes": 4793,
+          "sha256": "a0d5618a85d38cfbc9ae2f0769137bb0dc8c87019b6468e4f250057400e940b0"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/ridge_DK2_load.joblib",
+          "bytes": 4793,
+          "sha256": "b84ce1bda17e0dcf4d197311a8af7c0d8bfa9c497bf4d89adaff259f231cdabd"
+        }
+      ]
+    },
+    "lightgbm": {
+      "environment": "requirements.lock.txt",
+      "files": [
+        {
+          "path": ".cache/forecasting/v2/models/lightgbm_DK1_wind.txt",
+          "bytes": 2294055,
+          "sha256": "e5524b1b6b740e14615c9584a6e20998a9de8273f9f4585e2b110c261ebcda9d"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/lightgbm_DK1_solar.txt",
+          "bytes": 2323095,
+          "sha256": "6448becf543438070b93cb5f6a4f75437fb078ca069ce608cffdc14554813bd6"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/lightgbm_DK1_load.txt",
+          "bytes": 2767037,
+          "sha256": "734b6cf9a16f2381ace93657e9abc30e8f8f508419cd65b40272688f5af70eb1"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/lightgbm_DK2_wind.txt",
+          "bytes": 603431,
+          "sha256": "f3afe676b9a1c2939af147e1eb89ea19d3114be0e72a771fff1a7ff6f45467e9"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/lightgbm_DK2_solar.txt",
+          "bytes": 2345860,
+          "sha256": "26640761adfad5a3376f325b0ac30e7e0efe1fdbc94d2eaf6329373a97c6bde5"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/lightgbm_DK2_load.txt",
+          "bytes": 608288,
+          "sha256": "04e99e40796588f675be47a9acc1ca73ada8ca2d914285f3c468269322390de6"
+        }
+      ]
+    },
+    "xgboost": {
+      "environment": "requirements.lock.txt",
+      "files": [
+        {
+          "path": ".cache/forecasting/v2/models/xgboost_DK1_wind.ubj",
+          "bytes": 606341,
+          "sha256": "8ec4a9dcbf8e8cd1967c0727b53d18701ddcd9efd87a43b466c126383ef28309"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/xgboost_DK1_solar.ubj",
+          "bytes": 1356941,
+          "sha256": "7ee56af9aa21c1d7364978d951d9aff3b2a63afa9e1dce26045970eb3e761a38"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/xgboost_DK1_load.ubj",
+          "bytes": 1376865,
+          "sha256": "7dff2ad247c78366341ea9d3a21dc9473b751693d3ecfe8e92092bcbe76848ea"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/xgboost_DK2_wind.ubj",
+          "bytes": 553776,
+          "sha256": "3b952e5fb32a474920d0b6960b97982c4de2911b4fe7c9c6c990d834ecf7f5f2"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/xgboost_DK2_solar.ubj",
+          "bytes": 1423648,
+          "sha256": "d4291f1542ecf165d3a4df39d311c241f5bc67b586acc5b351fb7ec67c8087ed"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/xgboost_DK2_load.ubj",
+          "bytes": 1523677,
+          "sha256": "93704a3e9d30437843c1fc9c6c3fb550c80de803b24345cb2efdb6d7f0a10e20"
+        }
+      ]
+    },
+    "chronos": {
+      "environment": "requirements.lock.txt",
+      "base_model": {
+        "model": "amazon/chronos-2",
+        "revision": "29ec3766d36d6f73f0696f85560a422f50e8498c",
+        "last_modified": "2026-06-05 11:55:42+00:00",
+        "license": "apache-2.0"
+      },
+      "files": [
+        {
+          "path": ".cache/forecasting/v2/models/chronos_final_300/finetuned-ckpt/adapter_model.safetensors",
+          "bytes": 4854584,
+          "sha256": "9f1f0cb8fa5039487bab15c696fedd7248def8e553b945e8852c3578b580ffce"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/chronos_final_300/finetuned-ckpt/README.md",
+          "bytes": 5156,
+          "sha256": "26d6a25262fd8710f89effbd868e8336ed6ead9472480b179e9bedb199d5ac62"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/chronos_final_300/finetuned-ckpt/adapter_config.json",
+          "bytes": 1324,
+          "sha256": "d35bffe7d7dd57426c9d87b9ed3d3398ce595cd0ac670b927980ce8dddc932fe"
+        }
+      ]
+    },
+    "ttm": {
+      "environment": "requirements-ttm.lock.txt",
+      "files": [
+        {
+          "path": ".cache/forecasting/v2/models/ttm_final_0.0003_40/model.safetensors",
+          "bytes": 4154452,
+          "sha256": "24e6f7020f131a107ee87d643b057b39f9e3470abf99862a3a71be642a86c880"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/ttm_final_0.0003_40/config.json",
+          "bytes": 3203,
+          "sha256": "1206b6392b189e651082d929d22614b63b09f0a13bb1f53e586e604a04907bb4"
+        }
+      ]
+    },
+    "ttm_scaled": {
+      "environment": "requirements-ttm.lock.txt",
+      "files": [
+        {
+          "path": ".cache/forecasting/v2/models/ttm_scaled_final_0.0003_40/model.safetensors",
+          "bytes": 4154452,
+          "sha256": "800f293cb0dc793ad5391da684ebab7a0644e89604c3ab3dc1d0ef54546c844d"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/ttm_scaled_final_0.0003_40/config.json",
+          "bytes": 3203,
+          "sha256": "1206b6392b189e651082d929d22614b63b09f0a13bb1f53e586e604a04907bb4"
+        },
+        {
+          "path": ".cache/forecasting/v2/models/ttm_scaled_final_0.0003_40/input_scalers.json",
+          "bytes": 4673,
+          "sha256": "4953fd492b327dc4f82677357dedf282734820d3a7a821b04e3e1d30e9cf7e9a"
+        }
+      ]
+    },
+    "chronos_zero": {
+      "base_model": {
+        "model": "amazon/chronos-2",
+        "revision": "29ec3766d36d6f73f0696f85560a422f50e8498c",
+        "last_modified": "2026-06-05 11:55:42+00:00",
+        "license": "apache-2.0"
+      }
+    },
+    "frozen": {
+      "selection": "research/forecasting/selected_models.csv",
+      "weights_directory": ".cache/forecasting/models",
+      "integrity_manifest": "research/forecasting/v2/original_artifacts.json"
+    }
+  },
+  "source_files": {
+    "chronos_experiment.py": "094fb76fe9c0e29e2ee2e1ddd099f7ee06f81901d16142fd32cf5e1bb11a9848",
+    "test_ttm_preprocessing.py": "67033e35cd8aef38a9fe037ace2c28df1f469b6a4f6fd9255d45ee30e4c9f72e",
+    "test_integrity.py": "689ae53fbd345e9165ae315813cde68e22c7e045a3cf6825548cd0044579ce33",
+    "export_manifest.py": "3fb7cd63445b06fda17ebf25a5a7c5e8909030a4e883dad8b35276a445d0a417",
+    "verify_trees.py": "41322465566c2d80d2237106220662d4a03931d6199a750b46605436709fd80f",
+    "frozen_baseline.py": "ae4440512e3b9c05b184c07679e85ca1da7f136c89858ff8a083a482cb0c63fb",
+    "ttm_experiment.py": "f756b10733cb34bfb52547ab90b96a57e321a280c3a9cbdfdd872a8b940909e3",
+    "common.py": "36e789ddd81dc183dc163c9b1ea18998858dc04bc1796c33de3098ab1deef3ae",
+    "evaluate.py": "62d73c34366650338253c9a472d4fca3e41728fe99f1fdc286d9263fb3625f49",
+    "prepare.py": "754365cedfba2c22bf5a796f30998744567f4a5da5f759df7cd1098c5bf1c25c",
+    "trees.py": "fafa7abccf4a3a43f3b41f704124ba8a70d8d98dcfb015c3366c48fc02f17639"
+  },
+  "protocol": {
+    "path": "research/forecasting/v2/PROTOCOL.md",
+    "bytes": 4151,
+    "sha256": "b6508f06fe8016fcb4b53968adb34a1197aedfb07e860a3e48e6b42876d90b44"
+  },
+  "data_manifest": {
+    "path": ".cache/forecasting/v2/manifest.json",
+    "bytes": 127017,
+    "sha256": "2774d862dc72b95788a4060495c483c00323da067520f8d7358aec0334389469"
+  }
+}

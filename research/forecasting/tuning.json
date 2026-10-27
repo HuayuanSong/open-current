@@ -1,0 +1,380 @@
+[
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1.0,
+    "validation_mae": 531.508752411625
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 100.0,
+    "validation_mae": 532.7979758356302
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 10000.0,
+    "validation_mae": 603.9615637195126
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "validation_mae": 417.48272105004133
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "validation_mae": 455.84362707030135
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "validation_mae": 1124.3742974101417
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "validation_mae": 1173.1719494660917
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1.0,
+    "validation_mae": 144.9913956476426
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 100.0,
+    "validation_mae": 143.33483405656077
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 10000.0,
+    "validation_mae": 161.4334019251073
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "validation_mae": 133.96237469011405
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "validation_mae": 128.297646601543
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "validation_mae": 403.34177394323206
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 1,
+    "validation_mae": 388.3811624100783
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 128,
+    "validation_mae": 483.19757080078125
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 128,
+    "validation_mae": 162.7702178955078
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 256,
+    "validation_mae": 475.5894775390625
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 256,
+    "validation_mae": 168.45803833007812
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1.0,
+    "validation_mae": 67.81701967690208
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 100.0,
+    "validation_mae": 73.93479819572737
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 10000.0,
+    "validation_mae": 78.48483135045562
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 0,
+    "validation_mae": 46.50374804517908
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "validation_mae": 45.99864290777399
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 0,
+    "validation_mae": 85.96947279529783
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 1,
+    "validation_mae": 87.42036679020707
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1.0,
+    "validation_mae": 22.203962770692467
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 100.0,
+    "validation_mae": 23.07624870952115
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 10000.0,
+    "validation_mae": 27.819050865953503
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 0,
+    "validation_mae": 21.265720155633527
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "validation_mae": 21.027391020502908
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 0,
+    "validation_mae": 31.4986100940317
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 1,
+    "validation_mae": 31.23422375127264
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 128,
+    "validation_mae": 57.58890914916992
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 128,
+    "validation_mae": 21.006847381591797
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK1",
+    "target": "solar",
+    "setting": 256,
+    "validation_mae": 59.68913269042969
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK2",
+    "target": "solar",
+    "setting": 256,
+    "validation_mae": 21.233715057373047
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "load",
+    "setting": 1.0,
+    "validation_mae": 288.94351426620926
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "load",
+    "setting": 100.0,
+    "validation_mae": 279.74171057598426
+  },
+  {
+    "family": "ridge",
+    "area": "DK1",
+    "target": "load",
+    "setting": 10000.0,
+    "validation_mae": 235.45733298034722
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "validation_mae": 346.3236708385874
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "setting": 1,
+    "validation_mae": 346.39506625568964
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK1",
+    "target": "load",
+    "setting": 0,
+    "validation_mae": 401.625928821639
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK1",
+    "target": "load",
+    "setting": 1,
+    "validation_mae": 399.938964513448
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "load",
+    "setting": 1.0,
+    "validation_mae": 71.38731835840545
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "load",
+    "setting": 100.0,
+    "validation_mae": 71.89982812383636
+  },
+  {
+    "family": "ridge",
+    "area": "DK2",
+    "target": "load",
+    "setting": 10000.0,
+    "validation_mae": 92.02685837641118
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "validation_mae": 101.7331880022142
+  },
+  {
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "setting": 1,
+    "validation_mae": 100.06640368654178
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK2",
+    "target": "load",
+    "setting": 0,
+    "validation_mae": 141.80899273193566
+  },
+  {
+    "family": "lightgbm_no_weather",
+    "area": "DK2",
+    "target": "load",
+    "setting": 1,
+    "validation_mae": 150.6139705349114
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK1",
+    "target": "load",
+    "setting": 128,
+    "validation_mae": 239.2166748046875
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK2",
+    "target": "load",
+    "setting": 128,
+    "validation_mae": 84.82649230957031
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK1",
+    "target": "load",
+    "setting": 256,
+    "validation_mae": 248.54183959960938
+  },
+  {
+    "family": "weather_mlp",
+    "area": "DK2",
+    "target": "load",
+    "setting": 256,
+    "validation_mae": 86.57669067382812
+  }
+]
