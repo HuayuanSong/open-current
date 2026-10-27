@@ -2166,6 +2166,33 @@ body {
 .forecast-axis .tick line { stroke: var(--line); opacity: .65; }
 .forecast-unit { font: 14px DDIN, Arial, sans-serif; fill: var(--muted); }
 .forecast-line { fill: none; stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+.forecast-range-band { fill: var(--green); fill-opacity: .16; stroke: none; pointer-events: none; }
+.forecast-legend .forecast-range-key { width: 22px; height: 12px; background: #21765e2b; border: 1px solid #21765e50; }
+.forecast-legend [hidden], #forecast-explanation[hidden] { display: none; }
+.forecast-legend { flex-wrap: wrap; }
+.forecast-options { padding: 12px 24px 0; }
+.forecast-options label { display: inline-flex; gap: 10px; align-items: center; font-size: 16px; cursor: pointer; flex-wrap: wrap; }
+.forecast-options input { width: 20px; height: 20px; accent-color: var(--green); margin: 0; cursor: pointer; }
+.forecast-options label span { color: var(--muted); }
+.forecast-range-note { padding: 0 24px 18px; margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.forecast-explanation { padding: 0 24px; border-top: 1px solid var(--line); }
+.forecast-explanation summary { padding: 18px 0; font-size: 17px; cursor: pointer; color: var(--ink); }
+.forecast-explanation-content { padding-bottom: 24px; font-size: 16px; line-height: 1.6; }
+.forecast-explanation-content>p { max-width: 860px; margin: 0 0 16px; }
+.forecast-explanation-picker { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+.forecast-explanation-picker select { font-size: 16px; border: 1px solid var(--line); padding: 8px 12px; color: var(--ink); background: var(--white); }
+.forecast-explanation-values { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.forecast-explanation-values>div { display: flex; flex-direction: column; margin: 0 0 18px; }
+.forecast-explanation-values strong { font-size: 24px; font-weight: 400; }
+.forecast-explanation-values .metric-label, .forecast-explanation-values .muted { font-size: 14px; }
+.forecast-explanation-caption { font-weight: bold; }
+.forecast-contribution { display: grid; grid-template-columns: 190px minmax(60px,1fr) 90px; gap: 20px; align-items: center; padding: 8px 0; }
+.forecast-contribution-track { position: relative; height: 22px; }
+.forecast-contribution-track:before { content: ''; position: absolute; left: 50%; height: 100%; border-left: 1px solid var(--muted); }
+.forecast-contribution-track i { position: absolute; height: 16px; top: 3px; background: var(--green); }
+.forecast-contribution-track .negative { background: #af7444; }
+.forecast-contribution strong { font-weight: 400; text-align: right; }
+.forecast-explanation-content .forecast-explanation-note { font-size: 14px; margin-top: 20px; color: var(--muted); }
 .forecast-observed { stroke: var(--ink); }
 .forecast-predicted { stroke: var(--green); stroke-dasharray: 6 4; }
 .forecast-origin { stroke: #98ab9f; stroke-dasharray: 3 5; }
@@ -2203,4 +2230,9 @@ body {
   .forecast-stats strong { font-size: 27px; }
   .forecast-footer { padding: 16px 18px; align-items: flex-start; flex-direction: column; gap: 12px; }
   .forecast-footer p { max-width: 100%; }
+  .forecast-options { padding: 14px 14px 0; }
+  .forecast-range-note { padding: 0 18px 16px; }
+  .forecast-explanation { padding: 0 18px; }
+  .forecast-explanation-values { grid-template-columns: 1fr; gap: 0; }
+  .forecast-contribution { grid-template-columns: minmax(110px,1.5fr) minmax(55px,1fr) 70px; gap: 10px; font-size: 15px; }
 }

@@ -1,0 +1,314 @@
+{
+  "version": "ranges-v2-2026-10-27",
+  "modelVersion": "ensemble-v2-2026-10-27",
+  "scope": "Daily 12 UTC October 2026 origins; complete recent inputs; descriptive audit, not guaranteed coverage. October was reused to diagnose the initial failed solar ranges.",
+  "protocolSha256": "8a969a48ac61b9d67a233c96a945434994186d2593c8254c3010558af85d86ae",
+  "series": {
+    "DK1": {
+      "wind": {
+        "area": "DK1",
+        "target": "wind",
+        "windowDays": 56,
+        "method": "absolute",
+        "intervalScore": 1814.2624360046818,
+        "floorMW": 316.69207763671875,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 325.90167236328125,
+              "high": 3906.197509765625,
+              "observations": 516
+            },
+            "2": {
+              "low": 306.7850036621094,
+              "high": 3517.818359375,
+              "observations": 1548
+            },
+            "4": {
+              "low": 299.9608459472656,
+              "high": 3640.473388671875,
+              "observations": 2064
+            }
+          }
+        },
+        "audit": {
+          "coverage": 0.8541666666666666,
+          "meanWidthMW": 1248.804119305733,
+          "intervalScore": 1629.9829267844175,
+          "climatologyScore": 4056.84619140625,
+          "origins": 13,
+          "forecastHours": 624,
+          "daylightCoverage": null,
+          "leadCoverage": [
+            0.8717948717948718,
+            0.8376068376068376,
+            0.8621794871794872
+          ]
+        },
+        "enabled": true,
+        "scope": "all-hours"
+      },
+      "solar": {
+        "area": "DK1",
+        "target": "solar",
+        "windowDays": 14,
+        "method": "scaled",
+        "intervalScore": 569.1722673611757,
+        "floorMW": 210.83917236328125,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 0.46166667342185974,
+              "high": 25.518333435058594,
+              "observations": 1533
+            },
+            "1": {
+              "low": 229.18167114257812,
+              "high": 1896.629150390625,
+              "observations": 511
+            },
+            "2": {
+              "low": 0.46666666865348816,
+              "high": 25.150833129882812,
+              "observations": 759
+            },
+            "3": {
+              "low": 47.17250061035156,
+              "high": 1952.3399658203125,
+              "observations": 789
+            },
+            "4": {
+              "low": 0.4516666531562805,
+              "high": 24.84666633605957,
+              "observations": 769
+            },
+            "5": {
+              "low": 79.461669921875,
+              "high": 1952.33251953125,
+              "observations": 1295
+            }
+          }
+        },
+        "audit": {
+          "coverage": 0.825938566552901,
+          "meanWidthMW": 528.5057756534418,
+          "intervalScore": 731.1716744058554,
+          "climatologyScore": 1962.6356201171875,
+          "origins": 13,
+          "forecastHours": 293,
+          "daylightCoverage": 0.825938566552901,
+          "leadCoverage": [
+            0.8225806451612904,
+            0.8,
+            0.8424657534246576
+          ],
+          "allHoursCoverage": 0.7019230769230769
+        },
+        "enabled": true,
+        "scope": "daylight"
+      },
+      "load": {
+        "area": "DK1",
+        "target": "load",
+        "windowDays": 56,
+        "method": "scaled",
+        "intervalScore": 883.0446560534841,
+        "floorMW": 615.7787475585938,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 2515.080078125,
+              "high": 3708.404052734375,
+              "observations": 516
+            },
+            "2": {
+              "low": 2093.125732421875,
+              "high": 3286.0224609375,
+              "observations": 1548
+            },
+            "4": {
+              "low": 2152.297607421875,
+              "high": 3432.745849609375,
+              "observations": 2064
+            }
+          }
+        },
+        "audit": {
+          "coverage": 0.7756410256410257,
+          "meanWidthMW": 490.06150753349937,
+          "intervalScore": 1043.0791812769726,
+          "climatologyScore": 1888.3709716796875,
+          "origins": 13,
+          "forecastHours": 624,
+          "daylightCoverage": null,
+          "leadCoverage": [
+            0.8333333333333334,
+            0.7692307692307693,
+            0.7660256410256411
+          ]
+        },
+        "enabled": true,
+        "scope": "all-hours"
+      }
+    },
+    "DK2": {
+      "wind": {
+        "area": "DK2",
+        "target": "wind",
+        "windowDays": 14,
+        "method": "absolute",
+        "intervalScore": 590.6352384945769,
+        "floorMW": 71.65458679199219,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 61.81333541870117,
+              "high": 1121.737548828125,
+              "observations": 516
+            },
+            "2": {
+              "low": 48.503334045410156,
+              "high": 1168.7432861328125,
+              "observations": 1548
+            },
+            "4": {
+              "low": 52.336666107177734,
+              "high": 1163.6925048828125,
+              "observations": 2064
+            }
+          }
+        },
+        "audit": {
+          "coverage": 0.8493589743589743,
+          "meanWidthMW": 314.71417436691434,
+          "intervalScore": 412.85837180033707,
+          "climatologyScore": 1424.999755859375,
+          "origins": 13,
+          "forecastHours": 624,
+          "daylightCoverage": null,
+          "leadCoverage": [
+            0.8076923076923077,
+            0.8888888888888888,
+            0.8301282051282052
+          ]
+        },
+        "enabled": true,
+        "scope": "all-hours"
+      },
+      "solar": {
+        "area": "DK2",
+        "target": "solar",
+        "windowDays": 14,
+        "method": "scaled",
+        "intervalScore": 196.56320620553922,
+        "floorMW": 79.26791381835938,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 0.0,
+              "high": 3.1433334350585938,
+              "observations": 1528
+            },
+            "1": {
+              "low": 71.11333465576172,
+              "high": 699.5924682617188,
+              "observations": 506
+            },
+            "2": {
+              "low": 0.0,
+              "high": 3.117500066757202,
+              "observations": 752
+            },
+            "3": {
+              "low": 14.33750057220459,
+              "high": 745.0075073242188,
+              "observations": 796
+            },
+            "4": {
+              "low": 0.0,
+              "high": 3.1433334350585938,
+              "observations": 766
+            },
+            "5": {
+              "low": 21.050832748413086,
+              "high": 734.9116821289062,
+              "observations": 1298
+            }
+          }
+        },
+        "audit": {
+          "coverage": 0.7866666666666666,
+          "meanWidthMW": 189.29220932876567,
+          "intervalScore": 304.3140350745583,
+          "climatologyScore": 721.5660400390625,
+          "origins": 13,
+          "forecastHours": 300,
+          "daylightCoverage": 0.7866666666666666,
+          "leadCoverage": [
+            0.7258064516129032,
+            0.875,
+            0.76
+          ],
+          "allHoursCoverage": 0.717948717948718
+        },
+        "enabled": true,
+        "scope": "daylight"
+      },
+      "load": {
+        "area": "DK2",
+        "target": "load",
+        "windowDays": 14,
+        "method": "scaled",
+        "intervalScore": 267.2189401643473,
+        "floorMW": 379.8324890136719,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 1590.7408447265625,
+              "high": 1945.572509765625,
+              "observations": 516
+            },
+            "2": {
+              "low": 1199.794189453125,
+              "high": 1874.0916748046875,
+              "observations": 1548
+            },
+            "4": {
+              "low": 1225.9100341796875,
+              "high": 1909.8441162109375,
+              "observations": 2064
+            }
+          }
+        },
+        "audit": {
+          "coverage": 0.7660256410256411,
+          "meanWidthMW": 185.2908150492191,
+          "intervalScore": 300.208835689615,
+          "climatologyScore": 1018.2821655273438,
+          "origins": 13,
+          "forecastHours": 624,
+          "daylightCoverage": null,
+          "leadCoverage": [
+            0.8333333333333334,
+            0.7478632478632479,
+            0.7628205128205128
+          ]
+        },
+        "enabled": true,
+        "scope": "all-hours"
+      }
+    }
+  }
+}

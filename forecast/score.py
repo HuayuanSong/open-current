@@ -23,14 +23,16 @@ def combine(predictions,area_ids,selection):
     if not np.isfinite(out).all():raise ValueError('Incomplete ensemble; no weight substitution is allowed')
     return out,predictions
 
-def run(input_path,work):
+def run(input_path,work,explain=False):
     bundle=ensure();work.mkdir(parents=True,exist_ok=True)
     python=os.environ.get('FORECAST_MAIN_PYTHON',sys.executable)
     ttm_python=os.environ.get('FORECAST_TTM_PYTHON',str(ROOT/'.cache/forecasting/v2/ttm-venv/bin/python'))
     predictions={};timings=[]
     for family,interpreter in [('trees',python),('neural',python),('ttm',ttm_python)]:
         output=work/f'{family}.npz'
-        subprocess.run([interpreter,'-m','forecast.worker',family,str(input_path),str(output)],cwd=ROOT,check=True,timeout=360)
+        command=[interpreter,'-m','forecast.worker',family,str(input_path),str(output)]
+        if explain and family=='trees':command.append('--explain')
+        subprocess.run(command,cwd=ROOT,check=True,timeout=360)
         predictions.update(dict(np.load(output)));timings.append(json.loads(output.with_suffix('.json').read_text()))
     ids=np.load(input_path)['area_ids'];selection=json.loads((bundle/'selection.json').read_text())
     out,all_predictions=combine(predictions,ids,selection)

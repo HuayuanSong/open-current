@@ -1,0 +1,301 @@
+{
+  "shapVersion": "0.54.1",
+  "component": "tree_control",
+  "groups": [
+    "Recent electricity",
+    "Wind outlook",
+    "Sunlight/cloud outlook",
+    "Temperature outlook",
+    "Calendar/horizon"
+  ],
+  "references": [
+    [
+      32,
+      13
+    ],
+    [
+      64,
+      13
+    ],
+    [
+      64,
+      42
+    ],
+    [
+      64,
+      79
+    ],
+    [
+      96,
+      42
+    ]
+  ],
+  "seconds": 41.2558455420658,
+  "series": [
+    {
+      "area": "DK1",
+      "target": "wind",
+      "examples": 65,
+      "informative": 64,
+      "rawNegative": 0,
+      "maxReconstructionErrorMW": 0.0001283024703297997,
+      "referenceStable": false,
+      "coherentAgreement": true,
+      "insufficientReferences": 0,
+      "publish": false,
+      "referenceComparisons": [
+        {
+          "signAgreement": 0.9736842105263158,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.20254444897547658,
+          "p90Change": 0.6130104157168736
+        },
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.09754554269921452,
+          "p90Change": 0.2976066386170158
+        },
+        {
+          "signAgreement": 0.9824561403508771,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.16233922588190058,
+          "p90Change": 0.45966416015490763
+        },
+        {
+          "signAgreement": 0.9912280701754386,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.11146441066946508,
+          "p90Change": 0.41937141917665044
+        }
+      ],
+      "coherentComparison": {
+        "signAgreement": 1.0,
+        "topTwoOverlap": 1.0,
+        "medianChange": 0.025423501170254457,
+        "p90Change": 0.05849759206332775
+      }
+    },
+    {
+      "area": "DK2",
+      "target": "wind",
+      "examples": 65,
+      "informative": 65,
+      "rawNegative": 0,
+      "maxReconstructionErrorMW": 3.169523222368298e-05,
+      "referenceStable": false,
+      "coherentAgreement": true,
+      "insufficientReferences": 0,
+      "publish": false,
+      "referenceComparisons": [
+        {
+          "signAgreement": 0.984,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.18952772929798392,
+          "p90Change": 0.5514095225236743
+        },
+        {
+          "signAgreement": 0.984,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.09183245251379119,
+          "p90Change": 0.25212590683020764
+        },
+        {
+          "signAgreement": 0.984,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.16498416133335564,
+          "p90Change": 0.3334885611173463
+        },
+        {
+          "signAgreement": 0.984,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.1220815937429157,
+          "p90Change": 0.29269052412427343
+        }
+      ],
+      "coherentComparison": {
+        "signAgreement": 1.0,
+        "topTwoOverlap": 1.0,
+        "medianChange": 0.028091120431646896,
+        "p90Change": 0.06050603348580199
+      }
+    },
+    {
+      "area": "DK1",
+      "target": "solar",
+      "examples": 65,
+      "informative": 39,
+      "rawNegative": 0,
+      "maxReconstructionErrorMW": 1.3396736903814599e-05,
+      "referenceStable": false,
+      "coherentAgreement": true,
+      "insufficientReferences": 13,
+      "publish": false,
+      "referenceComparisons": [
+        {
+          "signAgreement": 0.958904109589041,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.2807939849624726,
+          "p90Change": 0.5432047583345173
+        },
+        {
+          "signAgreement": 0.9931506849315068,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.15240814466352257,
+          "p90Change": 0.3760354698462967
+        },
+        {
+          "signAgreement": 0.9863013698630136,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.247747989006104,
+          "p90Change": 0.405382196962892
+        },
+        {
+          "signAgreement": 0.9863013698630136,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.19551556341364784,
+          "p90Change": 0.42712515563742004
+        }
+      ],
+      "coherentComparison": {
+        "signAgreement": 1.0,
+        "topTwoOverlap": 1.0,
+        "medianChange": 0.03201049843730348,
+        "p90Change": 0.07137309980524242
+      }
+    },
+    {
+      "area": "DK2",
+      "target": "solar",
+      "examples": 65,
+      "informative": 52,
+      "rawNegative": 0,
+      "maxReconstructionErrorMW": 2.432684709674504e-06,
+      "referenceStable": false,
+      "coherentAgreement": true,
+      "insufficientReferences": 13,
+      "publish": false,
+      "referenceComparisons": [
+        {
+          "signAgreement": 0.9813664596273292,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.21979318334020959,
+          "p90Change": 0.48433636241853195
+        },
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.09853746666367161,
+          "p90Change": 0.193966566007232
+        },
+        {
+          "signAgreement": 0.9937888198757764,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.18024533579382634,
+          "p90Change": 0.36889867005865873
+        },
+        {
+          "signAgreement": 0.9937888198757764,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.11073900836593166,
+          "p90Change": 0.22063517894129303
+        }
+      ],
+      "coherentComparison": {
+        "signAgreement": 1.0,
+        "topTwoOverlap": 1.0,
+        "medianChange": 0.024707185910944424,
+        "p90Change": 0.07328885751890779
+      }
+    },
+    {
+      "area": "DK1",
+      "target": "load",
+      "examples": 65,
+      "informative": 50,
+      "rawNegative": 0,
+      "maxReconstructionErrorMW": 0.00020123234980928828,
+      "referenceStable": true,
+      "coherentAgreement": true,
+      "insufficientReferences": 0,
+      "publish": true,
+      "referenceComparisons": [
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.12094260713551674,
+          "p90Change": 0.18535976056587294
+        },
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.04814795388001726,
+          "p90Change": 0.1540500981378619
+        },
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.07436091281255672,
+          "p90Change": 0.129297563415243
+        },
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.06369492308427938,
+          "p90Change": 0.11651712160267755
+        }
+      ],
+      "coherentComparison": {
+        "signAgreement": 1.0,
+        "topTwoOverlap": 1.0,
+        "medianChange": 0.015458380188729009,
+        "p90Change": 0.028126627551970356
+      }
+    },
+    {
+      "area": "DK2",
+      "target": "load",
+      "examples": 65,
+      "informative": 40,
+      "rawNegative": 0,
+      "maxReconstructionErrorMW": 6.958527683309512e-05,
+      "referenceStable": true,
+      "coherentAgreement": true,
+      "insufficientReferences": 0,
+      "publish": true,
+      "referenceComparisons": [
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.10471096917341949,
+          "p90Change": 0.1393246146521459
+        },
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.06145007534174487,
+          "p90Change": 0.10967344068465996
+        },
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.060090575732515944,
+          "p90Change": 0.16544238115563092
+        },
+        {
+          "signAgreement": 1.0,
+          "topTwoOverlap": 1.0,
+          "medianChange": 0.03604144071614941,
+          "p90Change": 0.11018850873845717
+        }
+      ],
+      "coherentComparison": {
+        "signAgreement": 1.0,
+        "topTwoOverlap": 1.0,
+        "medianChange": 0.008614888449038838,
+        "p90Change": 0.017378735803128684
+      }
+    }
+  ],
+  "publish": false
+}

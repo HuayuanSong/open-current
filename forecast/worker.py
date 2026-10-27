@@ -102,9 +102,17 @@ def ttm(a,bundle,names):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('family',choices=['trees','neural','ttm']);p.add_argument('input');p.add_argument('output')
+    p.add_argument('--explain',action='store_true')
     args=p.parse_args();begin=time.perf_counter();bundle=ensure()
     a=dict(np.load(args.input));names=json.loads((bundle/'feature_names.json').read_text())
     predictions=globals()[args.family](a,bundle,names)
+    if args.explain and args.family=='trees':
+        from .explanations import explain
+        try:explanation=explain(a,bundle,names)
+        except Exception as error:
+            explanation={'status':'unavailable'}
+            print(f'Explanation unavailable: {error}',file=sys.stderr,flush=True)
+        Path(args.output).with_suffix('.explanations.json').write_text(json.dumps(explanation,allow_nan=False))
     if not all(np.isfinite(v).all() for v in predictions.values()):raise ValueError('Non-finite forecast')
     np.savez_compressed(args.output,**predictions)
     info={'worker':args.family,'seconds':time.perf_counter()-begin,

@@ -69,6 +69,17 @@ def audit():
                 'origins':len(ids),'forecastHours':int(truth.size),'daylightCoverage':daylight,'leadCoverage':bands}
             spec.update(audit=audit,enabled=bool(.7<=coverage<=.9 and min(bands)>=.65 and (daylight is None or daylight>=.65) and score<baseline))
             rows.append(dict(area=area,target=target,method=spec['method'],windowDays=spec['windowDays'],enabled=spec['enabled'],**audit))
+            # Publication is restricted to daylight for BOTH solar regions.
+            # The whole-day failed/weak results above remain in the report.
+            # This is an explicit scope restriction after the diagnostic audit,
+            # not a new independent test or a retuned interval method.
+            spec['scope']='daylight' if target=='solar' else 'all-hours'
+            if target=='solar':
+                daylight_bands=[float(covered[:,l:r][day[:,l:r]].mean()) for l,r in BANDS]
+                day_score=float(interval_score(truth,lo,hi)[day].mean());day_baseline=float(interval_score(truth,clo,chi)[day].mean())
+                spec['enabled']=bool(.7<=daylight<=.9 and min(daylight_bands)>=.65 and day_score<day_baseline)
+                spec['audit']={**audit,'allHoursCoverage':coverage,'coverage':daylight,'leadCoverage':daylight_bands,
+                    'forecastHours':int(day.sum()),'meanWidthMW':float((hi-lo)[day].mean()),'intervalScore':day_score,'climatologyScore':day_baseline}
     pd.DataFrame(rows).to_csv(HERE/'rolling-audit.csv',index=False);pd.DataFrame(leadrows).to_csv(HERE/'rolling-leads.csv',index=False)
     pd.DataFrame(originrows).to_csv(HERE/'rolling-origin-audit.csv',index=False)
     (ROOT/'forecast/interval-calibration.json').write_text(json.dumps(selection,indent=2)+'\n')

@@ -26,7 +26,23 @@ error table scores only archived, actually issued forecasts against observed
 hours; missing values stay missing, genuine zero values stay zero. Overlapping
 forecasts contribute separate errors and the UI reports both forecasted-hour
 and origin counts. The seven-day live metrics are separate from the historical
-benchmark. No unvalidated confidence intervals are displayed.
+benchmark. Experimental prediction ranges target 80% pointwise coverage, with
+measured historical and prospective coverage reported separately. The toggle
+is remembered in the browser. Solar ranges are daylight-only because overnight
+coverage failed. See the [range and SHAP audit](../research/forecasting/uncertainty/README.md).
+
+`interval-history.json.gz` seeds rolling calibration from archived out-of-sample
+errors. `rangeHistory` in published state retains 64 days of daily calibration
+records, gradually replaced by actually issued forecasts. Only fully mature
+48-hour outcomes can enter calibration. Range version, cutoff and origin counts
+are frozen in each issued record; bounds are never retrofitted onto old outlooks.
+
+Demand-only TreeSHAP explanations passed the internal reference stability gate.
+The frontend labels them as the LightGBM component and shows its baseline,
+prediction and the different ensemble forecast. Five horizons are supported.
+Live explanations must also agree with a second reference sample. Wind/solar
+explanations failed the audit and are not published. Explanation references are
+versioned with model hashes; attribution is not a causal claim.
 
 ## Operational differences from the benchmark
 

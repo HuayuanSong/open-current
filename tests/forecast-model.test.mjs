@@ -18,3 +18,10 @@ test('zero solar generation is preserved and missing actuals remain missing',()=
   assert.equal(s.points[0].observed,0);assert.equal(s.points[0].predicted,0);
   assert.equal(s.points[1].observed,null);assert.equal(forecastStats(record,'DK1','solar').average,50);
 });
+test('ranges remain attached to their original forecast and missing nights stay missing',()=>{
+  const ranged={...record,ranges:{areas:{DK1:{solar:{lower:[null,80],upper:[null,140]}}}}};
+  const p={latest:ranged,comparison:record};
+  const points=chartSeries(p,'DK1','solar').points;
+  assert.equal(points[0].lower,null);assert.equal(points[1].lower,80);assert.equal(points[1].upper,140);
+  assert.ok(chartSeries(p,'DK1','solar','comparison').points.every(p=>p.lower===null&&p.upper===null));
+});

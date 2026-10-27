@@ -10,10 +10,10 @@
     />
     <title>Open Current — Europe’s electricity, connected</title>
     <link rel="icon" href="icon.svg?v=6969a3192d60" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=ef8285dbafac" />
+    <link rel="stylesheet" href="style.css?v=6e8784382c7d" />
     <script src="vendor/d3.v7.min.js" defer></script>
     <script type="module" src="app.js?v=7ffec9f55511"></script>
-    <script type="module" src="forecasts.js?v=f11d0f2ba921"></script>
+    <script type="module" src="forecasts.js?v=29820dbd15ba"></script>
   </head>
   <body>
     <a class="skip-link" href="#explorer">Skip to electricity explorer</a>
@@ -328,14 +328,29 @@
               <button data-forecast-view="outlook" aria-pressed="true">48-hour outlook</button>
               <button data-forecast-view="comparison" aria-pressed="false">Forecast vs actual</button>
             </div>
-            <div class="forecast-legend"><span><i class="forecast-observed-key"></i>Observed</span><span><i class="forecast-predicted-key"></i>Forecast</span></div>
+            <div class="forecast-legend"><span><i class="forecast-observed-key"></i>Observed</span><span><i class="forecast-predicted-key"></i>Forecast</span><span id="forecast-range-key" hidden><i class="forecast-range-key"></i>Prediction range</span></div>
           </div>
+          <div class="forecast-options"><label><input id="forecast-range-toggle" type="checkbox" checked aria-describedby="forecast-range-note" /> Show prediction range <span>(80% target)</span></label></div>
           <div class="forecast-chart-wrap" id="forecast-chart-wrap">
             <svg id="forecast-chart" role="img" tabindex="0" aria-label="Danish electricity forecast. Use left and right arrow keys to inspect hourly values."></svg>
             <p class="forecast-empty" id="forecast-empty" hidden></p>
             <div class="forecast-tooltip" id="forecast-tooltip" role="status" hidden></div>
           </div>
+          <p id="forecast-range-note" class="forecast-range-note" aria-live="polite"></p>
           <div class="forecast-stats" id="forecast-stats"></div>
+          <details id="forecast-explanation" class="forecast-explanation" hidden>
+            <summary>Explore the demand model’s explanation</summary>
+            <div class="forecast-explanation-content">
+              <p>This explains the LightGBM tree component’s demand prediction. The published forecast combines it with other models.</p>
+              <label class="forecast-explanation-picker">Forecast hour <select id="forecast-explanation-hour" aria-label="Hour to explain"></select></label>
+              <p id="forecast-explanation-status" role="status"></p>
+              <div id="forecast-explanation-values" class="forecast-explanation-values"></div>
+              <p class="forecast-explanation-caption">Contributions relative to the reference prediction</p>
+              <div id="forecast-explanation-bars" class="forecast-explanation-bars"></div>
+              <p class="forecast-explanation-note">Reference: August–September 2026 inputs from the same region and lead-time band. Contributions describe this model’s behaviour, not physical causes. Each explanation is checked against a second reference sample.</p>
+              <a href="https://github.com/HuayuanSong/open-current/tree/main/research/forecasting/uncertainty" target="_blank" rel="noopener noreferrer">Read the explanation and range checks ↗</a>
+            </div>
+          </details>
           <div class="forecast-footer"><p id="forecast-timing">All times UTC. Values are hourly average power.</p><button class="text-button" id="forecast-download" disabled>Download forecast ↓</button></div>
         </div>
         <details class="forecast-methodology">
@@ -344,7 +359,9 @@
             <p>These are experimental predictions for Denmark’s two electricity regions. A fixed ensemble combines tree models and pretrained time-series models using Energinet’s electricity readings and ECMWF weather forecasts supplied by Open-Meteo. Demand includes system losses.</p>
             <p>Updates are attempted every 30 minutes. The models predict hourly averages and normally issue a new outlook when a new complete source hour is available. Every forecast keeps its original issue time and values, so later observations can be compared fairly.</p>
             <p>Missing recent readings can delay an update. At most three older missing input hours per week may be filled using earlier observations; the panel reports when this happens. Larger gaps keep the last valid outlook visible with a delay notice.</p>
-            <p>The historical benchmark covered 13 October 2026 forecast dates per region, at one daily issue time with complete recent inputs. Live refreshes and occasional filled inputs are a broader operating test. The live errors above compare saved forecasts with observations arriving after issue; they are separate from that benchmark. Uncertainty intervals have not yet been validated.</p>
+            <p>The historical benchmark covered 13 October 2026 forecast dates per region, at one daily issue time with complete recent inputs. Live refreshes and occasional filled inputs are a broader operating test. The live errors above compare saved forecasts with observations arriving after issue; they are separate from that benchmark.</p>
+            <p>Prediction ranges target 80% coverage for individual hours, not the whole 48-hour path. Rolling calibration uses only completed past forecasts and observations. The range audit reused 13 October dates and does not establish guaranteed or year-round coverage. Solar ranges are shown only in daylight: overnight source readings failed the coverage checks. A range is saved when issued and is never added retrospectively to an old forecast.</p>
+            <p>Demand explanations passed reference-sample stability checks for the tree component. Wind and solar explanations failed and are not published. The explanation does not represent the full ensemble or establish causal effects.</p>
             <p><a href="https://github.com/HuayuanSong/open-current/tree/main/research/forecasting/v2" target="_blank" rel="noopener noreferrer">Read the benchmark and methodology ↗</a> · <a href="https://www.energidataservice.dk/" target="_blank" rel="noopener noreferrer">Energinet</a> · <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Weather by Open-Meteo / ECMWF</a></p>
           </div>
         </details>

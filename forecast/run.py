@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from . import data
+from . import intervals
 from .artifacts import ensure,CONFIG,ROOT
 from .publish import write_public
 from .score import run as score
@@ -21,14 +22,16 @@ def main():
     try:
         if not args.offline:
             data.electricity(state,at);data.weather(state,at)
+        intervals.refresh_history(state,at)
         arrays,meta=data.inputs(state,at)
         bundle=ensure();names=json.loads((bundle/'feature_names.json').read_text())
         if meta.pop('featureNames')!=names['future']:raise ValueError('Feature schema differs from trained models')
-        identifier=f'{version}/{meta["origin"]}/{meta["weatherRun"]}'
+        range_version=json.loads(intervals.CALIBRATION.read_text())['version']
+        identifier=f'{version}/{meta["origin"]}/{meta["weatherRun"]}/{range_version}'
         if not any(r['id']==identifier for r in state['forecasts']):
             work=ROOT/'.cache/forecast-serving/run';work.mkdir(parents=True,exist_ok=True)
             path=work/'inputs.npz';np.savez_compressed(path,**arrays)
-            prediction,families,timings=score(path,work)
+            prediction,families,timings=score(path,work,explain=True)
             # An operational plausibility guard, not a correction to predictions.
             limits=np.array([[15000,15000,20000],[10000,10000,15000]])
             if (prediction<0).any() or (prediction>limits[:,None,:]).any():
@@ -37,6 +40,16 @@ def main():
                 'areas':{area:{target:prediction[ai,:,ti].astype(float).tolist() for ti,target in enumerate(data.TARGETS)} for ai,area in enumerate(data.AREAS)},
                 'treeControl':{area:{target:families['tree_control'][ai,:,ti].astype(float).tolist() for ti,target in enumerate(data.TARGETS)} for ai,area in enumerate(data.AREAS)},
                 'runtime':timings}
+            sun=[i for i,n in enumerate(names['future']) if n.endswith('terrestrial_radiation')]
+            daylight=arrays['future'][:,:,sun].mean(-1)>5
+            record['daylight']={area:daylight[ai].tolist() for ai,area in enumerate(data.AREAS)}
+            record['ranges']=intervals.build(prediction,daylight,record['issuedAt'],state)
+            # A late source hour must not acquire retrospective prediction ranges.
+            for i,stamp in enumerate(record['times']):
+                if pd.Timestamp(stamp)<=pd.Timestamp(record['issuedAt']):
+                    for targets in record['ranges']['areas'].values():
+                        for bounds in targets.values():bounds['lower'][i]=None;bounds['upper'][i]=None
+            record['explanations']=json.loads((work/'trees.explanations.json').read_text())
             state['forecasts'].append(record)
             print(f'Issued {identifier}',flush=True)
         else:

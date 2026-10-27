@@ -12,6 +12,7 @@
 - Day-ahead wholesale prices for **15 explicitly open bidding zones**, including DK1 and DK2. Country subdivisions remain separate; a zone is never presented as a national average.
 - Energinet’s preliminary five-minute power and operational consumption-CO₂ readings for West and East Denmark.
 - Experimental 48-hour wind, solar and demand forecasts for DK1/DK2, with saved forecast-versus-observed comparisons and accuracy measured after issue.
+- Optional 80%-target prediction ranges with measured coverage (solar: daylight only), plus internally audited demand explanations for the LightGBM component. See the [range and SHAP checks](research/forecasting/uncertainty/README.md).
 - Shareable views, downloadable country JSON, source attribution, and a full methodology panel.
 
 This is an open-data exploration, not a globally complete Electricity Maps replacement. It does **not** estimate European consumption-based carbon intensity or trace the carbon content of imports. Domestic low-carbon generation shares and Danish operational CO₂ have different meanings and are presented separately.
