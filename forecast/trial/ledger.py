@@ -23,6 +23,11 @@ def initialize(state,protocol):
 def dates(protocol):
     return pd.date_range(protocol['originStart'],pd.Timestamp(protocol['originEndExclusive'])-pd.Timedelta(days=1),freq='D',tz='UTC')
 
+def bind_inference(trial,fingerprint):
+    previous=trial.get('inferenceLockHash')
+    if previous is None and not trial['records']:trial['inferenceLockHash']=fingerprint
+    elif previous!=fingerprint:raise ValueError('Frozen inference lock changed during the trial')
+
 def review_after(protocol):
     return dates(protocol)[-1]+pd.Timedelta(hours=protocol['originHourUTC']+protocol['horizonHours']+protocol['observationMaxAgeHours'])
 

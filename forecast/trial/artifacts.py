@@ -9,6 +9,9 @@ ROOT=Path(__file__).resolve().parents[2]
 def digest(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 def ensure():
+    locked=json.loads((ROOT/'forecast/trial/inference-lock.json').read_text())
+    for name,expected in locked.items():
+        if digest(ROOT/name)!=expected:raise ValueError(f'Frozen trial inference changed: {name}')
     config=json.loads((ROOT/'forecast/trial/model-release.json').read_text())
     directory=ROOT/'.cache/forecast-serving/trial-models'/config['version']
     if not (directory/'manifest.json').exists():

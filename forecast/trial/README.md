@@ -40,6 +40,10 @@ or source revisions do not trigger a hidden refit during the trial. No tuning,
 retraining, conditional ensemble weights or recent-error correction is added
 to the primary recipe.
 
+The inference source and dependency files are also checksummed in
+`inference-lock.json`. The ledger remembers that lock; changing it mid-trial
+requires a new trial rather than silently changing a competitor.
+
 ## How evidence is retained
 
 - Each day's predictions, exact issue time, model version, source-run metadata,

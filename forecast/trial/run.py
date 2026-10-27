@@ -11,7 +11,7 @@ from forecast.artifacts import CONFIG as BASELINE
 from forecast.score import run as baseline_score
 from forecast.features import AREAS,TARGETS
 from .artifacts import ROOT,ensure,digest
-from .ledger import initialize,eligible_origin,append,freeze_observations,attempt
+from .ledger import initialize,bind_inference,eligible_origin,append,freeze_observations,attempt
 from .evaluate import metrics
 from .sources import inputs as weather_inputs
 from .score import predict
@@ -53,6 +53,7 @@ def issue(state,trial,at):
         daylight={area:daylight[ai].tolist() for ai,area in enumerate(AREAS)},
         sources=source_meta,sourceErrors=errors,inputSha256=digest(WORK/'inputs.npz'),sourceSnapshotSha256=digest(WORK/'sources.json.gz'),
         modelRelease=json.loads((ROOT/'forecast/trial/model-release.json').read_text()),baselineRuntime=timings,
+        inferenceLockHash=digest(ROOT/'forecast/trial/inference-lock.json'),
         githubRunId=os.environ.get('GITHUB_RUN_ID'),codeRevision=os.environ.get('GITHUB_SHA'))
     # Preserve the full baseline 00-run weather used to build past/future inputs
     # in a separate audit file. All values are public weather/electricity data.
@@ -67,7 +68,8 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--strict',action='store_true');args=parser.parse_args()
     protocol=json.loads(PROTOCOL.read_text());state=data.read_state()
     if not state.get('updatedAt') or not state.get('hourly'):raise ValueError('Restore and refresh the production state before running the trial')
-    trial=initialize(state,protocol);at=data.now();added=False;error=None
+    trial=initialize(state,protocol);bind_inference(trial,digest(ROOT/'forecast/trial/inference-lock.json'))
+    at=data.now();added=False;error=None
     freeze_observations(trial,state['hourly'],at)
     try:
         added=issue(state,trial,at)

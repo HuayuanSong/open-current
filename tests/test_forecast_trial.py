@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from forecast.features import AREAS,TARGETS
-from forecast.trial.ledger import initialize,eligible_origin,append,freeze_observations,review_after
+from forecast.trial.ledger import initialize,bind_inference,eligible_origin,append,freeze_observations,review_after
 from forecast.trial.evaluate import metrics
 from forecast.trial.features import regional_tail,fleet_array
 from forecast.data import restore
@@ -52,6 +52,10 @@ class TrialTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'protocol'):initialize(state,changed)
         t['records'][0]['predictions']['primary']['DK1']['wind'][0]=999
         with self.assertRaisesRegex(ValueError,'modified'):initialize(state,PROTOCOL)
+
+    def test_inference_lock_is_frozen_with_the_trial(self):
+        bind_inference(self.trial,'original');bind_inference(self.trial,'original')
+        with self.assertRaisesRegex(ValueError,'inference lock'):bind_inference(self.trial,'changed')
 
     def test_invalid_horizon_or_baseline_rejected(self):
         r=record();r['times'][0]=r['origin']
