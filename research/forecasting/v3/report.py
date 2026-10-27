@@ -220,5 +220,7 @@ def plot(frame):
     fig.supxlabel('MAE reduction versus the deployed ensemble (%) — positive values mean lower error')
     fig.suptitle('Exploratory comparison on 13 previously inspected October dates',fontsize=14)
     fig.savefig(HERE/'comparison.png',dpi=160);fig.savefig(HERE/'comparison.svg');plt.close(fig)
+    svg=HERE/'comparison.svg'
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
 
 if __name__=='__main__':main()
