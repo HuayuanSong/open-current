@@ -1,0 +1,360 @@
+{
+  "version": "ranges-v1-2026-10-27",
+  "modelVersion": "ensemble-v2-2026-10-27",
+  "scope": "Daily 12 UTC October 2026 origins; complete recent inputs; descriptive audit, not guaranteed coverage.",
+  "protocolSha256": "c91b622101a42b2dfd2b34c980b88e26e0b15271cae246716bd47a3d5adccea4",
+  "series": {
+    "DK1": {
+      "wind": {
+        "method": "absolute",
+        "floorMW": 316.69207763671875,
+        "cells": {
+          "0": {
+            "low": -431.029541015625,
+            "high": 431.029541015625,
+            "observations": 516
+          },
+          "2": {
+            "low": -536.29736328125,
+            "high": 536.29736328125,
+            "observations": 1548
+          },
+          "4": {
+            "low": -661.869873046875,
+            "high": 661.869873046875,
+            "observations": 2064
+          }
+        },
+        "developmentScores": {
+          "absolute": 1814.9298073612363,
+          "scaled": 2154.381216665934,
+          "signed": 1872.9009807231062
+        },
+        "calibrationOrigins": 86,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 325.90167236328125,
+              "high": 3906.197509765625,
+              "observations": 516
+            },
+            "2": {
+              "low": 306.7850036621094,
+              "high": 3517.818359375,
+              "observations": 1548
+            },
+            "4": {
+              "low": 299.9608459472656,
+              "high": 3640.473388671875,
+              "observations": 2064
+            }
+          }
+        }
+      },
+      "solar": {
+        "method": "scaled",
+        "floorMW": 210.83917236328125,
+        "cells": {
+          "0": {
+            "low": -0.039106101686868504,
+            "high": 0.039106101686868504,
+            "observations": 1533
+          },
+          "1": {
+            "low": -0.2702781290118578,
+            "high": 0.2702781290118578,
+            "observations": 511
+          },
+          "2": {
+            "low": -0.03930867911807269,
+            "high": 0.03930867911807269,
+            "observations": 759
+          },
+          "3": {
+            "low": -0.334526851202919,
+            "high": 0.334526851202919,
+            "observations": 789
+          },
+          "4": {
+            "low": -0.038602521314188995,
+            "high": 0.038602521314188995,
+            "observations": 769
+          },
+          "5": {
+            "low": -0.374821838811611,
+            "high": 0.374821838811611,
+            "observations": 1295
+          }
+        },
+        "developmentScores": {
+          "absolute": 614.4937638774904,
+          "scaled": 570.4500727201221,
+          "signed": 614.7926655662186
+        },
+        "calibrationOrigins": 86,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 0.46166667342185974,
+              "high": 25.518333435058594,
+              "observations": 1533
+            },
+            "1": {
+              "low": 229.18167114257812,
+              "high": 1896.629150390625,
+              "observations": 511
+            },
+            "2": {
+              "low": 0.46666666865348816,
+              "high": 25.150833129882812,
+              "observations": 759
+            },
+            "3": {
+              "low": 47.17250061035156,
+              "high": 1952.3399658203125,
+              "observations": 789
+            },
+            "4": {
+              "low": 0.4516666531562805,
+              "high": 24.84666633605957,
+              "observations": 769
+            },
+            "5": {
+              "low": 79.461669921875,
+              "high": 1952.33251953125,
+              "observations": 1295
+            }
+          }
+        }
+      },
+      "load": {
+        "method": "scaled",
+        "floorMW": 615.7787475585938,
+        "cells": {
+          "0": {
+            "low": -0.07228060536320231,
+            "high": 0.07228060536320231,
+            "observations": 516
+          },
+          "2": {
+            "low": -0.08832483195017625,
+            "high": 0.08832483195017625,
+            "observations": 1548
+          },
+          "4": {
+            "low": -0.10144828316386023,
+            "high": 0.10144828316386023,
+            "observations": 2064
+          }
+        },
+        "developmentScores": {
+          "absolute": 925.6372426350911,
+          "scaled": 876.1610416182874,
+          "signed": 921.9318624377925
+        },
+        "calibrationOrigins": 86,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 2515.080078125,
+              "high": 3708.404052734375,
+              "observations": 516
+            },
+            "2": {
+              "low": 2093.125732421875,
+              "high": 3286.0224609375,
+              "observations": 1548
+            },
+            "4": {
+              "low": 2152.297607421875,
+              "high": 3432.745849609375,
+              "observations": 2064
+            }
+          }
+        }
+      }
+    },
+    "DK2": {
+      "wind": {
+        "method": "absolute",
+        "floorMW": 71.65458679199219,
+        "cells": {
+          "0": {
+            "low": -142.15040588378906,
+            "high": 142.15040588378906,
+            "observations": 516
+          },
+          "2": {
+            "low": -165.96646118164062,
+            "high": 165.96646118164062,
+            "observations": 1548
+          },
+          "4": {
+            "low": -205.242919921875,
+            "high": 205.242919921875,
+            "observations": 2064
+          }
+        },
+        "developmentScores": {
+          "absolute": 590.5031691984943,
+          "scaled": 655.8490513851996,
+          "signed": 612.4052923924505
+        },
+        "calibrationOrigins": 86,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 61.81333541870117,
+              "high": 1121.737548828125,
+              "observations": 516
+            },
+            "2": {
+              "low": 48.503334045410156,
+              "high": 1168.7432861328125,
+              "observations": 1548
+            },
+            "4": {
+              "low": 52.336666107177734,
+              "high": 1163.6925048828125,
+              "observations": 2064
+            }
+          }
+        }
+      },
+      "solar": {
+        "method": "scaled",
+        "floorMW": 79.26791381835938,
+        "cells": {
+          "0": {
+            "low": -0.02563038003411778,
+            "high": 0.02563038003411778,
+            "observations": 1528
+          },
+          "1": {
+            "low": -0.265253083627713,
+            "high": 0.265253083627713,
+            "observations": 506
+          },
+          "2": {
+            "low": -0.022421442274079474,
+            "high": 0.022421442274079474,
+            "observations": 752
+          },
+          "3": {
+            "low": -0.27989952469707385,
+            "high": 0.27989952469707385,
+            "observations": 796
+          },
+          "4": {
+            "low": -0.0280739492369755,
+            "high": 0.0280739492369755,
+            "observations": 766
+          },
+          "5": {
+            "low": -0.32888917782588645,
+            "high": 0.32888917782588645,
+            "observations": 1298
+          }
+        },
+        "developmentScores": {
+          "absolute": 213.92592764232856,
+          "scaled": 199.90493346917145,
+          "signed": 217.16380873819432
+        },
+        "calibrationOrigins": 86,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 0.0,
+              "high": 3.1433334350585938,
+              "observations": 1528
+            },
+            "1": {
+              "low": 71.11333465576172,
+              "high": 699.5924682617188,
+              "observations": 506
+            },
+            "2": {
+              "low": 0.0,
+              "high": 3.117500066757202,
+              "observations": 752
+            },
+            "3": {
+              "low": 14.33750057220459,
+              "high": 745.0075073242188,
+              "observations": 796
+            },
+            "4": {
+              "low": 0.0,
+              "high": 3.1433334350585938,
+              "observations": 766
+            },
+            "5": {
+              "low": 21.050832748413086,
+              "high": 734.9116821289062,
+              "observations": 1298
+            }
+          }
+        }
+      },
+      "load": {
+        "method": "scaled",
+        "floorMW": 379.8324890136719,
+        "cells": {
+          "0": {
+            "low": -0.050904837338223805,
+            "high": 0.050904837338223805,
+            "observations": 516
+          },
+          "2": {
+            "low": -0.05450176581954801,
+            "high": 0.05450176581954801,
+            "observations": 1548
+          },
+          "4": {
+            "low": -0.06037599537118434,
+            "high": 0.06037599537118434,
+            "observations": 2064
+          }
+        },
+        "developmentScores": {
+          "absolute": 278.04026656501037,
+          "scaled": 267.54413456575736,
+          "signed": 278.74079007078694
+        },
+        "calibrationOrigins": 86,
+        "climatology": {
+          "method": "signed",
+          "floorMW": 1.0,
+          "cells": {
+            "0": {
+              "low": 1590.7408447265625,
+              "high": 1945.572509765625,
+              "observations": 516
+            },
+            "2": {
+              "low": 1199.794189453125,
+              "high": 1874.0916748046875,
+              "observations": 1548
+            },
+            "4": {
+              "low": 1225.9100341796875,
+              "high": 1909.8441162109375,
+              "observations": 2064
+            }
+          }
+        }
+      }
+    }
+  }
+}
