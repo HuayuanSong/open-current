@@ -56,6 +56,9 @@ jobs:
         run: python scripts/restore.py
         env:
           SNAPSHOT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+      - name: Verify demand explanations on the CPU runner
+        if: github.event_name != 'schedule'
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.verify_explanations
       - name: Restore issued forecasts and long input history
         run: .cache/forecast-serving/main-env/bin/python -m forecast.restore
         env:
