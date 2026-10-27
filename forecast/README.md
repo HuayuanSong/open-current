@@ -6,6 +6,11 @@ to the development-selected research ensemble. There is no training in the
 scheduled scoring job. `model-release.json` pins a checksummed GitHub Release;
 the Chronos base checkpoint is pinned separately to its Hugging Face revision.
 
+A separate [prospective weather trial](trial/README.md) records daily challengers
+and paired outcomes in the background. It uses frozen models and never replaces
+the dashboard's forecasts automatically. Its ledger persists inside the same
+published state archive, independently of the production ledger's retention.
+
 ## Serving and storage
 
 `python -m forecast.run --restore --strict` restores the previous public state,

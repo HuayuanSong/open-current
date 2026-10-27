@@ -36,11 +36,13 @@ def write_state(state,path=STATE_PATH):
     with gzip.open(temporary,'wt') as f:json.dump(state,f,separators=(',',':'),allow_nan=False)
     temporary.replace(path)
 
-def restore(base):
+def restore(base,require_existing=True):
     """State is published with the site, not dependent on an evictable cache."""
     local=read_state();url=base.rstrip('/')+'/data/forecast-state.json.gz'
     response=requests.get(url,timeout=60)
-    if response.status_code==404:return local
+    if response.status_code==404:
+        if require_existing:raise ValueError('Published forecast archive is missing; refusing to replace issued forecasts')
+        return local
     response.raise_for_status();remote=json.loads(gzip.decompress(response.content))
     if remote.get('schema')!=1:raise ValueError('Unrecognized deployed forecast history')
     if (remote.get('updatedAt') or '')>(local.get('updatedAt') or ''):

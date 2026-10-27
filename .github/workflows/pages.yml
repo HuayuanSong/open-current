@@ -47,6 +47,14 @@ jobs:
       - name: Install CPU forecasting environments
         if: steps.forecast-cache.outputs.cache-hit != 'true'
         run: bash forecast/setup.sh
+      - name: Cache frozen prospective trial models
+        uses: actions/cache@v4
+        with:
+          path: .cache/forecast-serving/trial-models
+          key: weather-trial-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('forecast/trial/model-release.json', 'forecast/trial/protocol.json') }}
+      - name: Verify prospective trial model exports
+        if: github.event_name != 'schedule'
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.trial.verify
       - name: Verify exported models against the original experiment
         if: github.event_name != 'schedule'
         run: .cache/forecast-serving/main-env/bin/python -m forecast.score
@@ -78,6 +86,28 @@ jobs:
       - name: Require successful scoring during deployment validation
         if: github.event_name != 'schedule'
         run: test "${{ steps.forecast.outcome }}" = success
+      - name: Record prospective challengers and score matured outcomes
+        id: trial
+        continue-on-error: true
+        timeout-minutes: 10
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.trial.run --strict
+        env:
+          FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
+      - name: Require successful trial validation during deployment
+        if: github.event_name != 'schedule'
+        run: test "${{ steps.trial.outcome }}" = success
+      - name: Preserve prospective issue evidence
+        if: steps.trial.outputs.issued == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: weather-trial-${{ github.run_id }}
+          include-hidden-files: true
+          path: |
+            .cache/forecast-serving/trial/inputs.npz
+            .cache/forecast-serving/trial/sources.json.gz
+            .cache/forecast-serving/trial/baseline-context.json.gz
+            .cache/forecast-serving/trial/record.json
+          retention-days: 90
       - name: Verify normalization and published data
         run: .cache/forecast-serving/main-env/bin/python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Verify browser data model
@@ -99,6 +129,7 @@ jobs:
           path: |
             test-results/forecasts-*.png
             dist/data/forecasts.json
+            dist/data/forecast-trial.json
             .cache/forecast-serving/run/*.json
           retention-days: 3
       - uses: actions/configure-pages@v5
