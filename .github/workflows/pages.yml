@@ -86,9 +86,10 @@ jobs:
         run: python scripts/version_assets.py
       - name: Check forecast panel in a browser
         if: github.event_name != 'schedule'
+        timeout-minutes: 5
         run: |
           python -m pip install playwright
-          python -m playwright install --with-deps chromium
+          python -m playwright install chromium
           python tests/forecast_browser_check.py --serve
       - name: Keep deployment validation evidence
         if: github.event_name != 'schedule' && always()
