@@ -24,7 +24,8 @@ was retained instead of replacing it with these after-the-fact winners.
 **Validation:** 23 temporal, artifact-integrity and existing pipeline checks,
 plus three TTM preprocessing checks passed. Model save/reload and neural
 future-target leakage checks also passed during the experiment. Both charts
-were visually inspected. Models and results remain local.
+were visually inspected. This describes the completed local experiment; the
+selected ensemble's subsequent deployment is documented in [the serving guide](../../../forecast/README.md).
 
 ## Fresh October holdout
 

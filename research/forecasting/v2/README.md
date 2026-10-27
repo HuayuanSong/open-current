@@ -1,5 +1,10 @@
 # Local forecasting improvement experiment
 
+The selected ensemble now has a separate [production scoring pipeline](../../../forecast/README.md)
+and a [public forecast panel](https://huayuansong.github.io/open-current/#forecasts).
+The experiment and historical results below are preserved; serving uses pinned
+weights from a GitHub Release and measures live accuracy separately.
+
 Read [RESULTS.md](RESULTS.md) for measured outcomes, [PROTOCOL.md](PROTOCOL.md)
 for the frozen experiment design and [IMPLEMENTATION_NOTES.md](IMPLEMENTATION_NOTES.md)
 for runtime adjustments. The original experiment is preserved in the parent folder.
