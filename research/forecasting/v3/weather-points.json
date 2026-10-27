@@ -1,0 +1,44 @@
+[
+  {
+    "id": "DK1_land_0",
+    "area": "DK1",
+    "kind": "land",
+    "latitude": 56.773229419103004,
+    "longitude": 9.391243794395653
+  },
+  {
+    "id": "DK1_land_1",
+    "area": "DK1",
+    "kind": "land",
+    "latitude": 55.589326816216015,
+    "longitude": 9.03639344114316
+  },
+  {
+    "id": "DK1_sea_0",
+    "area": "DK1",
+    "kind": "sea",
+    "latitude": 56.05717301625384,
+    "longitude": 7.953637601324656
+  },
+  {
+    "id": "DK2_land_0",
+    "area": "DK2",
+    "kind": "land",
+    "latitude": 55.19056915087548,
+    "longitude": 11.587841420759029
+  },
+  {
+    "id": "DK2_sea_0",
+    "area": "DK2",
+    "kind": "sea",
+    "latitude": 55.076983253994285,
+    "longitude": 12.922350672936561
+  },
+  {
+    "id": "DK2_sea_1",
+    "area": "DK2",
+    "kind": "sea",
+    "latitude": 54.56489390643971,
+    "longitude": 11.5729377568981
+  }
+]

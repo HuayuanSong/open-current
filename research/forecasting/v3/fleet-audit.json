@@ -1,0 +1,28 @@
+{
+  "source": "https://ens.dk/media/8748/download",
+  "sha256": "79a614dda56598969892d35e585045d0d25382d72fb1dcf6edf7b3832490ecef",
+  "rows": 7179,
+  "usable_rows": 4922,
+  "duplicate_technical_rows": 7,
+  "excluded_rows": 2250,
+  "excluded_known_mw": 35.783,
+  "header_repair": "Kommune and Type af placering are reversed in the source",
+  "offshore_area_rule": "Municipality 0, North Sea west of 9E -> DK1; any other code-0 record fails for inspection",
+  "vintage": "September 2026 revised register; historical release vintages unavailable",
+  "active_mw": {
+    "2025-01-01": {
+      "DK1/land": 4000.496,
+      "DK1/sea": 1592.0000400000001,
+      "DK2/land": 736.052,
+      "DK2/sea": 1044.6
+    },
+    "2026-09-30": {
+      "DK1/land": 4045.358,
+      "DK1/sea": 2606.30004,
+      "DK2/land": 730.472,
+      "DK2/sea": 1044.6
+    }
+  },
+  "municipality_zero_rows": 55,
+  "mapped_north_sea_rows": 51
+}

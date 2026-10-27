@@ -1,0 +1,28 @@
+{
+  "datasets": {
+    "12": {
+      "origins_per_area": {
+        "DK1": 469,
+        "DK2": 469
+      },
+      "regional_complete_rows": 0,
+      "regional_native_hours_per_complete_row": []
+    },
+    "18": {
+      "origins_per_area": {
+        "DK1": 466,
+        "DK2": 466
+      },
+      "regional_complete_rows": 250,
+      "regional_native_hours_per_complete_row": [
+        47
+      ]
+    }
+  },
+  "excluded": 6,
+  "original_dataset_sha256": "7dbcfd92fe3383d9611a4c44dc69c0c3fa3e56c439af76a547a8172de2bb8b82",
+  "protocol_sha256": "79718c29df31bc19194a67cb1a4c23cb9e591ebde84cdcceab11e11369ee0c41",
+  "fleet_sha256": "60da230b398a5a5f76df4990d03cade782058ac5b571e580800e03c531f355bc",
+  "weather_points_sha256": "e4b4343748acb5d5cb9f18fa0af21a841ab503c33ef96a1cf28ffec562fdd0e8",
+  "regional_addendum_sha256": "3e5c1428e1f185fd7ff612dfc81b9a8c43224d51c9238ff74cdd53582be5bc72"
+}

@@ -1,0 +1,254 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 439.8291443258288
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 434.7125990418519
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 133.50063949794279
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 133.82637166522971
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": 531.8415760945753
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "regional",
+    "setting": 1,
+    "development_mae": 550.5532280298407
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": 163.13845199404173
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "regional",
+    "setting": 1,
+    "development_mae": 165.372826544285
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "multi_weather",
+    "setting": 0,
+    "development_mae": 410.83118575865507
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "multi_weather",
+    "setting": 1,
+    "development_mae": 411.085506190493
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "multi_weather",
+    "setting": 0,
+    "development_mae": 128.43652090919204
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "multi_weather",
+    "setting": 1,
+    "development_mae": 129.5254730820108
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 156.94774663752503
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 161.82150110032
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 45.61282505146061
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 46.372222016791966
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": 156.6329576650498
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "regional",
+    "setting": 1,
+    "development_mae": 165.139543214238
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": 47.62212807369016
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "regional",
+    "setting": 1,
+    "development_mae": 48.584642467389884
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "multi_weather",
+    "setting": 0,
+    "development_mae": 150.37227838296744
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "multi_weather",
+    "setting": 1,
+    "development_mae": 155.11741529155123
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "multi_weather",
+    "setting": 0,
+    "development_mae": 43.86073625886435
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "multi_weather",
+    "setting": 1,
+    "development_mae": 43.70776025840522
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 260.5223949570784
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 251.75943278458385
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 83.20949408859038
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 82.65944926832627
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": 257.9061427995395
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "regional",
+    "setting": 1,
+    "development_mae": 249.94375788194907
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": 82.67206282635046
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "regional",
+    "setting": 1,
+    "development_mae": 81.04269512027587
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "multi_weather",
+    "setting": 0,
+    "development_mae": 259.168497907628
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "multi_weather",
+    "setting": 1,
+    "development_mae": 256.41368639780137
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "multi_weather",
+    "setting": 0,
+    "development_mae": 82.39034944705053
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "multi_weather",
+    "setting": 1,
+    "development_mae": 81.31497327004313
+  }
+]

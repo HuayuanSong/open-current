@@ -1,0 +1,100 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "fresh_fleet",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "fresh_fleet",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "fresh",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "fresh",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": null
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "worker": "trees",
+    "seconds": 0.6808186671696603,
+    "peakRssBytes": 250839040
+  },
+  {
+    "worker": "neural",
+    "seconds": 11.99948091711849,
+    "peakRssBytes": 1186152448
+  },
+  {
+    "worker": "ttm",
+    "seconds": 3.78702550008893,
+    "peakRssBytes": 627408896
+  }
+]

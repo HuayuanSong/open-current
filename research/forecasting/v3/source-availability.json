@@ -1,0 +1,28 @@
+{
+  "counts": {
+    "fleet": {
+      "cached_runs": 469,
+      "available_runs": 469
+    },
+    "fresh": {
+      "cached_runs": 469,
+      "available_runs": 469
+    },
+    "regional": {
+      "cached_runs": 129,
+      "available_runs": 127
+    }
+  },
+  "missing": [
+    {
+      "source": "regional",
+      "run": "2026-09-01T06:00:00+00:00",
+      "reason": "{\"error\":true,\"reason\":\"The requested model run is not available. Model: dmi_harmonie_arome_europe, run: 2026-09-01T06:00Z\"}"
+    },
+    {
+      "source": "regional",
+      "run": "2026-09-07T06:00:00+00:00",
+      "reason": "{\"reason\":\"The requested model run is not available. Model: dmi_harmonie_arome_europe, run: 2026-09-07T06:00Z\",\"error\":true}"
+    }
+  ]
+}

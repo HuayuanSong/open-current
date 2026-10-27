@@ -1,0 +1,32 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "seconds": 0.10272083338350058
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "seconds": 0.10041966615244746
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "seconds": 0.11077012494206429
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "seconds": 0.10193187510594726
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "seconds": 0.10603475011885166
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "seconds": 0.10634070821106434
+  }
+]

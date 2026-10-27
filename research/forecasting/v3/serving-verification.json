@@ -1,0 +1,75 @@
+[
+  {
+    "study": "fleet",
+    "variant": "control",
+    "max_delta_mw": 0.00021652962823281996,
+    "seconds": 0.01878170808777213
+  },
+  {
+    "study": "fleet",
+    "variant": "fleet",
+    "max_delta_mw": 0.00020732032862724736,
+    "seconds": 0.006879457738250494
+  },
+  {
+    "study": "evening",
+    "variant": "control",
+    "max_delta_mw": 0.00021108983037265716,
+    "seconds": 0.02491379203274846
+  },
+  {
+    "study": "evening",
+    "variant": "fresh",
+    "max_delta_mw": 0.00023943032920215046,
+    "seconds": 0.029242167249321938
+  },
+  {
+    "study": "evening",
+    "variant": "fresh_fleet",
+    "max_delta_mw": 0.00012185783680251916,
+    "seconds": 0.03435333305969834
+  },
+  {
+    "study": "regional",
+    "variant": "control",
+    "max_delta_mw": 0.0002394987322986708,
+    "seconds": 0.043701292015612125
+  },
+  {
+    "study": "regional",
+    "variant": "regional",
+    "max_delta_mw": 0.00016494449937454192,
+    "seconds": 0.03542254073545337
+  },
+  {
+    "study": "regional",
+    "variant": "multi_weather",
+    "max_delta_mw": 0.00020006454633403337,
+    "seconds": 0.044728999957442284
+  },
+  {
+    "study": "adapt",
+    "variant": "fixed",
+    "max_delta_mw": 0.0002311070829819073
+  },
+  {
+    "study": "adapt",
+    "variant": "gate",
+    "max_delta_mw": 0.0002285507998749381
+  },
+  {
+    "study": "adapt",
+    "variant": "corrected",
+    "max_delta_mw": 0.0002311070829819073
+  },
+  {
+    "study": "adapt",
+    "variant": "combined",
+    "max_delta_mw": 0.0002285507998749381
+  },
+  {
+    "study": "adapt",
+    "operation": "all historical replay + saved scoring",
+    "seconds": 0.5923567088320851
+  }
+]

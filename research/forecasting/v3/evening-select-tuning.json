@@ -1,0 +1,198 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 417.6991257928947
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 420.56341542146953
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 130.12408860904551
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 132.1490057732931
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": 407.20426417228487
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "fresh",
+    "setting": 1,
+    "development_mae": 413.06157586557515
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": 121.21907439125964
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "fresh",
+    "setting": 1,
+    "development_mae": 122.76729132279156
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "fresh_fleet",
+    "setting": 0,
+    "development_mae": 360.2550167035441
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "fresh_fleet",
+    "setting": 1,
+    "development_mae": 367.1781154508294
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "fresh_fleet",
+    "setting": 0,
+    "development_mae": 119.96601150314775
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "fresh_fleet",
+    "setting": 1,
+    "development_mae": 119.82453624306888
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 141.58512563099427
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 136.97424650672716
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 44.56699544072799
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 44.86346838098958
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": 137.1440049772763
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "fresh",
+    "setting": 1,
+    "development_mae": 133.0972826017077
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": 42.492160957814576
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "fresh",
+    "setting": 1,
+    "development_mae": 43.10705697907014
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 181.9617636280144
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 186.13204267474484
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 62.11955083556465
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 62.30665243983936
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": 186.9425193595323
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "fresh",
+    "setting": 1,
+    "development_mae": 183.43577003259367
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "fresh",
+    "setting": 0,
+    "development_mae": 61.52871679891463
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "fresh",
+    "setting": 1,
+    "development_mae": 61.963874132455715
+  }
+]

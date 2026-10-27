@@ -1,0 +1,30 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "fleet",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "fleet",
+    "setting": 0,
+    "development_mae": null
+  }
+]

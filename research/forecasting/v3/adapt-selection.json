@@ -1,0 +1,42 @@
+{
+  "selection": [
+    {
+      "area": "DK1",
+      "target": "wind",
+      "correction": "none",
+      "penalty": 1.0
+    },
+    {
+      "area": "DK1",
+      "target": "solar",
+      "correction": "none",
+      "penalty": 1.0
+    },
+    {
+      "area": "DK1",
+      "target": "load",
+      "correction": "ridge10",
+      "penalty": 1.0
+    },
+    {
+      "area": "DK2",
+      "target": "wind",
+      "correction": "ewma7",
+      "penalty": 0.1
+    },
+    {
+      "area": "DK2",
+      "target": "solar",
+      "correction": "none",
+      "penalty": 0.1
+    },
+    {
+      "area": "DK2",
+      "target": "load",
+      "correction": "ridge100",
+      "penalty": 0.1
+    }
+  ],
+  "protocol_sha256": "79718c29df31bc19194a67cb1a4c23cb9e591ebde84cdcceab11e11369ee0c41",
+  "frozen_at": "2026-10-27T14:57:18.249077+00:00"
+}

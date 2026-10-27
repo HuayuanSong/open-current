@@ -1,0 +1,58 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 401.21921221612064
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 394.8154726062033
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": 122.97396787759067
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": 126.84146379826161
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "fleet",
+    "setting": 0,
+    "development_mae": 357.0452731409449
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "fleet",
+    "setting": 1,
+    "development_mae": 357.96266592570237
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "fleet",
+    "setting": 0,
+    "development_mae": 121.20655465417147
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "fleet",
+    "setting": 1,
+    "development_mae": 123.26009962493106
+  }
+]

@@ -1,13 +1,16 @@
 # Open Current forecasting lab
 
 Local research, training and evaluation of weather-informed wind, solar and system
-load forecasts for DK1 and DK2. Nothing in this directory is wired to the live
-website or its deployment workflow.
+load forecasts for DK1 and DK2. The selected v2 ensemble has a separate
+[production scoring pipeline](../../forecast/README.md); experimental candidates
+remain local until evaluated for release.
 
 - [Findings and model rationale](RESEARCH.md)
 - [Experimental protocol](PROTOCOL.md)
 - [Measured results](RESULTS.md)
 - [Exact data/feature/split configuration](config.json)
+- [Deployed ensemble experiment](v2/RESULTS.md)
+- [Weather inputs and adaptive forecasting experiments](v3/RESULTS.md)
 
 ## Reproduce
 

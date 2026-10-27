@@ -1,0 +1,240 @@
+{
+  "files": {
+    "weather-models/evening_control_DK1_load.txt": {
+      "bytes": 604731,
+      "sha256": "f378f8596e331fb6dca18200da6108226c9944215b49fdbb88f37ad6b33d9085"
+    },
+    "weather-models/evening_control_DK1_solar.txt": {
+      "bytes": 2323551,
+      "sha256": "638d8d92fb0dc5a4da074f2ada0bf9c3052aabf7751ddbd0ea4175bb324b9522"
+    },
+    "weather-models/evening_control_DK1_wind.txt": {
+      "bytes": 600801,
+      "sha256": "e9ec144a93572cda511f7c44af8b678fda314a3338d05118f4d2bcec48a04178"
+    },
+    "weather-models/evening_control_DK2_load.txt": {
+      "bytes": 608529,
+      "sha256": "14f2440a3d0853cb86bc20c297ce55ff0dbf711f7c6709b467f739353d883c01"
+    },
+    "weather-models/evening_control_DK2_solar.txt": {
+      "bytes": 614705,
+      "sha256": "b528af19c688639ead1e616522f91294250c02ffb02d1c0464f02a3879c98f43"
+    },
+    "weather-models/evening_control_DK2_wind.txt": {
+      "bytes": 602505,
+      "sha256": "ba15d155ff61313d01943fbf2722f658973ad672b5109c2ac98224be701a09cc"
+    },
+    "weather-models/evening_fresh_DK1_load.txt": {
+      "bytes": 2307991,
+      "sha256": "6ba4ee1d40bd7ef421b07e4ed2de2d04e1ddc82ce379c1f5c89d1c891afae59a"
+    },
+    "weather-models/evening_fresh_DK1_solar.txt": {
+      "bytes": 2320503,
+      "sha256": "07f6a8b9b865a0f7cd5026a86ac8508965ba22e1fb1dbdecb758373354f2580d"
+    },
+    "weather-models/evening_fresh_DK1_wind.txt": {
+      "bytes": 601019,
+      "sha256": "c1673119633bf9274cdc9d74c0561a5f8c2824c8e5e3534224a326b6df7eb55d"
+    },
+    "weather-models/evening_fresh_DK2_load.txt": {
+      "bytes": 608440,
+      "sha256": "5aadee3240d5f98eed6956ffa2d5c851c782d50a2f2e0347242a82530b07d90f"
+    },
+    "weather-models/evening_fresh_DK2_solar.txt": {
+      "bytes": 614662,
+      "sha256": "61801ac8db89f569410ba2ce15b0f247778109ec95e2727ed14cb5ac630edeaf"
+    },
+    "weather-models/evening_fresh_DK2_wind.txt": {
+      "bytes": 602033,
+      "sha256": "e1561cfa49c8fc00874e037f7c67c0c06bfa38638950d9f57456939c3ab83d71"
+    },
+    "weather-models/evening_fresh_fleet_DK1_wind.txt": {
+      "bytes": 602047,
+      "sha256": "f5fca33373574258f48d7cafb21632fb2eeb1a6a1529a04027c14496994c8db8"
+    },
+    "weather-models/evening_fresh_fleet_DK2_wind.txt": {
+      "bytes": 2310438,
+      "sha256": "63a52653309674d02f315b062f7391a05a802cf7b409215067f61e6a3c8116c4"
+    },
+    "weather-models/fleet_control_DK1_wind.txt": {
+      "bytes": 2294055,
+      "sha256": "e5524b1b6b740e14615c9584a6e20998a9de8273f9f4585e2b110c261ebcda9d"
+    },
+    "weather-models/fleet_control_DK2_wind.txt": {
+      "bytes": 603431,
+      "sha256": "f3afe676b9a1c2939af147e1eb89ea19d3114be0e72a771fff1a7ff6f45467e9"
+    },
+    "weather-models/fleet_fleet_DK1_wind.txt": {
+      "bytes": 602490,
+      "sha256": "3e237e555a1b03111765ba3168fd43e2cf273d70d220f725c4ad0bffa0995699"
+    },
+    "weather-models/fleet_fleet_DK2_wind.txt": {
+      "bytes": 604728,
+      "sha256": "3bb3300d4a815b10e7f272ae1aa471707b40a8a7e1d099431e4c55101450f925"
+    },
+    "weather-models/regional_control_DK1_load.txt": {
+      "bytes": 2289011,
+      "sha256": "de9e14ba5af0a58be347f0268794caa2ca4b8ce5d6c409de52202d7eca520e34"
+    },
+    "weather-models/regional_control_DK1_solar.txt": {
+      "bytes": 592710,
+      "sha256": "4a5cb7abab8778f26792591f8ebcd3bb04bc22f5078aeb6ee627a8cbd77a357e"
+    },
+    "weather-models/regional_control_DK1_wind.txt": {
+      "bytes": 2279766,
+      "sha256": "b81269fb11c16c629a3fe8b42cdb32c4f0db3b114435b3a668397ffef85c83d9"
+    },
+    "weather-models/regional_control_DK2_load.txt": {
+      "bytes": 2291509,
+      "sha256": "7e4bb052befe2091ff14aadae9a7d4c079a14c990545fb371c4b98ce5cb2a583"
+    },
+    "weather-models/regional_control_DK2_solar.txt": {
+      "bytes": 598125,
+      "sha256": "e39c4ef8fa63b10cc06d5784e0727dde3763bddc3b485d0dadf019cef902f864"
+    },
+    "weather-models/regional_control_DK2_wind.txt": {
+      "bytes": 597170,
+      "sha256": "a2bdf694a4fa60fc76bfbbac7600224881cb1255c18cacde718869e36934ee77"
+    },
+    "weather-models/regional_multi_weather_DK1_load.txt": {
+      "bytes": 2298789,
+      "sha256": "8997446a0094ee92767b458c3c587cdee45ebba2990cacd5ea1c657f25af9fbe"
+    },
+    "weather-models/regional_multi_weather_DK1_solar.txt": {
+      "bytes": 594799,
+      "sha256": "a4ede836489b19b925b6979de0ee40c78dfe0e1178fe37a94399cf3718068cc2"
+    },
+    "weather-models/regional_multi_weather_DK1_wind.txt": {
+      "bytes": 596452,
+      "sha256": "90d839a85abc4eb90607e6ec6d42ff2c54b8ec6f29ac7e410370dff6c5d01ba1"
+    },
+    "weather-models/regional_multi_weather_DK2_load.txt": {
+      "bytes": 2298983,
+      "sha256": "4689702198b06f578035dd6a55d43a54786918d3d3ed53aa925b5034aee8066e"
+    },
+    "weather-models/regional_multi_weather_DK2_solar.txt": {
+      "bytes": 2296677,
+      "sha256": "52e5ea69f5789b56db50fe8bfbae24a388169db31161e45f3bfabc00e7e87d69"
+    },
+    "weather-models/regional_multi_weather_DK2_wind.txt": {
+      "bytes": 598711,
+      "sha256": "d6f3e8bd8704d17b1cde99f212852390171c47e4a17db54ba4ef1096fa054b5b"
+    },
+    "weather-models/regional_regional_DK1_load.txt": {
+      "bytes": 2287345,
+      "sha256": "d0487f0da5bdb3eb25219f7e0ea786601fb77af4ac001ef961aec00d17515da9"
+    },
+    "weather-models/regional_regional_DK1_solar.txt": {
+      "bytes": 591312,
+      "sha256": "5eeb272ca4f573c141ad8acf246df28aea8a318574ccb4bf61b4f56ddc7d2f84"
+    },
+    "weather-models/regional_regional_DK1_wind.txt": {
+      "bytes": 593186,
+      "sha256": "6e8246583249b42f3c0956035b9d463766df51eaa4b5a40e207d8558ebbd0929"
+    },
+    "weather-models/regional_regional_DK2_load.txt": {
+      "bytes": 2288680,
+      "sha256": "0ea20e766987ff69c856634c6b8030bc418c7f0c31d9561b89341e0681249cb0"
+    },
+    "weather-models/regional_regional_DK2_solar.txt": {
+      "bytes": 598530,
+      "sha256": "91752be5d6a72c1049538171f1999505d11ea09de159df67e47625ac6d8f81ce"
+    },
+    "weather-models/regional_regional_DK2_wind.txt": {
+      "bytes": 596326,
+      "sha256": "a8c12346494765c6a2d2f80c1d8e1a2cf6b61f48dbe0c2023ff86d3354d1494f"
+    },
+    "adapt-models/DK1_load_combined.joblib": {
+      "bytes": 1137,
+      "sha256": "f58c8bd3bf319be47d0f36de95ec8a46f047b26f937e5409198561c0edce1670"
+    },
+    "adapt-models/DK1_load_correction.joblib": {
+      "bytes": 1137,
+      "sha256": "a597fbcc8e775a56ab917108cdd5f7e5766941fc9b37a1e7a98b5616f70a08ae"
+    },
+    "adapt-models/DK1_load_gate.json": {
+      "bytes": 3025,
+      "sha256": "7f35d9e7390ed26624dbedeb396e7d5702966fa2c29f75538d105aa288300c5b"
+    },
+    "adapt-models/DK1_solar_combined.joblib": {
+      "bytes": 4,
+      "sha256": "9c298d589a2158eb513cb52191144518a2acab2cb0c04f1df14fca0f712fa4a1"
+    },
+    "adapt-models/DK1_solar_correction.joblib": {
+      "bytes": 4,
+      "sha256": "9c298d589a2158eb513cb52191144518a2acab2cb0c04f1df14fca0f712fa4a1"
+    },
+    "adapt-models/DK1_solar_gate.json": {
+      "bytes": 2984,
+      "sha256": "36eacf8cfcfa22ea171d3d755151126f805c518f1eb35aaf652c20c1f61d300f"
+    },
+    "adapt-models/DK1_wind_combined.joblib": {
+      "bytes": 4,
+      "sha256": "9c298d589a2158eb513cb52191144518a2acab2cb0c04f1df14fca0f712fa4a1"
+    },
+    "adapt-models/DK1_wind_correction.joblib": {
+      "bytes": 4,
+      "sha256": "9c298d589a2158eb513cb52191144518a2acab2cb0c04f1df14fca0f712fa4a1"
+    },
+    "adapt-models/DK1_wind_gate.json": {
+      "bytes": 3003,
+      "sha256": "7ba093df9ea10693b1e1eeb24c184ff0dab5a390c2fa8d4a945ba982704137b3"
+    },
+    "adapt-models/DK2_load_combined.joblib": {
+      "bytes": 1137,
+      "sha256": "77040eed8defa4cc374a7e896dc1c8fd57519f26289c7743276a4c015ec3c0e9"
+    },
+    "adapt-models/DK2_load_correction.joblib": {
+      "bytes": 1137,
+      "sha256": "6a8971177a48ad74e9b526b53f99b4ce70cd54015f4f108206f242dfefbe24ea"
+    },
+    "adapt-models/DK2_load_gate.json": {
+      "bytes": 2991,
+      "sha256": "9e2834491c5f0106de91facb944fbab7a65a3d495f6d1dac58f1bf4dc180d144"
+    },
+    "adapt-models/DK2_solar_combined.joblib": {
+      "bytes": 4,
+      "sha256": "9c298d589a2158eb513cb52191144518a2acab2cb0c04f1df14fca0f712fa4a1"
+    },
+    "adapt-models/DK2_solar_correction.joblib": {
+      "bytes": 4,
+      "sha256": "9c298d589a2158eb513cb52191144518a2acab2cb0c04f1df14fca0f712fa4a1"
+    },
+    "adapt-models/DK2_solar_gate.json": {
+      "bytes": 2907,
+      "sha256": "a45fa8a3e57ef277500b40a08f150ac401f5322754ed6e3514334915fe78f159"
+    },
+    "adapt-models/DK2_wind_combined.joblib": {
+      "bytes": 4,
+      "sha256": "9c298d589a2158eb513cb52191144518a2acab2cb0c04f1df14fca0f712fa4a1"
+    },
+    "adapt-models/DK2_wind_correction.joblib": {
+      "bytes": 4,
+      "sha256": "9c298d589a2158eb513cb52191144518a2acab2cb0c04f1df14fca0f712fa4a1"
+    },
+    "adapt-models/DK2_wind_gate.json": {
+      "bytes": 2965,
+      "sha256": "ca343337e8f2b74c276ca8048a11cd2c87fa0ddbe677991af4de52b71fbfc13e"
+    }
+  },
+  "protocol_sha256": "79718c29df31bc19194a67cb1a4c23cb9e591ebde84cdcceab11e11369ee0c41",
+  "feature_names_sha256": "367fc5434ea22e6687fc0e3d999b9c1dc1a462b302f5804813fbe40ca08d3c8d",
+  "regional_addendum_sha256": "3e5c1428e1f185fd7ff612dfc81b9a8c43224d51c9238ff74cdd53582be5bc72",
+  "source_sha256": {
+    "fleet.py": "a9bb594cec23b239c93c1412301d70db27d6e490d71466198d38fae20d3858d5",
+    "train_weather.py": "dd66188996d73de7d95dae520f53e15313d5ede12e9314c4eaad84172f2a99d4",
+    "adapt_experiment.py": "79de72d2e6b158039ecd567255b17d633c8f8da7c469cc3e16a59be2ecd87fa8",
+    "predict.py": "2ccdfe230fd8abc54344c539a1ffafd66088f7fa4fb5a7fdb9b6c956ee7b1a87",
+    "weather.py": "63dd54999b82044e63a7de224733aaf3243725c795ff27c8e7147f87261220d1",
+    "baseline_evening.py": "b46cd329b597a41c6a5e458f64d80deac987968ec510ee0fd98a504f49451879",
+    "common.py": "d86d50358cfd33a0cce0ca81c35abfe6cd2985815aab677657aa398b44078ae6",
+    "test_v3.py": "41a6698dde757d13e880b3439261e029efc3df9167f66f560c6a2b2802c3f6aa",
+    "verify.py": "b5e629dcdf6d4957526323b65ae751d1906a12e9cc590ca35d0891b525d0ebfc",
+    "run_experiment.py": "2de4bc5e1d5b8f842f8837b2676c8554b4dd6daf445b6ccab7d98fbdda4871bf",
+    "adaptation.py": "b42b5d989b6234459b906d57c6e853270cd4df1e444ed3f1595cfde623abb048",
+    "report.py": "b52eafdb23c42b3d4d0ecd18e938badb31cafc7e0175ea785dd0fc417b7c34b8",
+    "prepare.py": "e2507e799bad5864ae6f84e3949cb6694f01747634a36f6a6b1d5f690e70e1b6"
+  },
+  "weather_manifest_sha256": "297bc7bc682f6a013bff52d3c3f20111382c398141c3dfad2aaa65670fcc1983",
+  "status": "research challengers; not deployed; no independent prospective score yet"
+}

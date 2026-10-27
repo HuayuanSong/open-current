@@ -1,0 +1,50 @@
+[
+  {
+    "study": "fleet",
+    "variant": "control",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 1,
+    "fold": "october",
+    "train_origins": 456,
+    "test_origins": 13,
+    "train_seconds": 5.461173041258007,
+    "inference_seconds": 0.00426104199141264
+  },
+  {
+    "study": "fleet",
+    "variant": "control",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "fold": "october",
+    "train_origins": 456,
+    "test_origins": 13,
+    "train_seconds": 1.7661596252582967,
+    "inference_seconds": 0.0017596250399947166
+  },
+  {
+    "study": "fleet",
+    "variant": "fleet",
+    "area": "DK1",
+    "target": "wind",
+    "setting": 0,
+    "fold": "october",
+    "train_origins": 456,
+    "test_origins": 13,
+    "train_seconds": 1.9692854168824852,
+    "inference_seconds": 0.0021241670474410057
+  },
+  {
+    "study": "fleet",
+    "variant": "fleet",
+    "area": "DK2",
+    "target": "wind",
+    "setting": 0,
+    "fold": "october",
+    "train_origins": 456,
+    "test_origins": 13,
+    "train_seconds": 1.857896332629025,
+    "inference_seconds": 0.002057124860584736
+  }
+]

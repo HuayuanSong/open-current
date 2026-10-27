@@ -1,0 +1,128 @@
+[
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "wind",
+    "variant": "multi_weather",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "wind",
+    "variant": "multi_weather",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "control",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "regional",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "solar",
+    "variant": "multi_weather",
+    "setting": 0,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "solar",
+    "variant": "multi_weather",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "control",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "regional",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "regional",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK1",
+    "target": "load",
+    "variant": "multi_weather",
+    "setting": 1,
+    "development_mae": null
+  },
+  {
+    "area": "DK2",
+    "target": "load",
+    "variant": "multi_weather",
+    "setting": 1,
+    "development_mae": null
+  }
+]

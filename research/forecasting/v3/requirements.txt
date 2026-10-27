@@ -1,0 +1,4 @@
+-r ../v2/requirements.lock.txt
+openpyxl==3.1.5
+et-xmlfile==2.0.0
+pyproj==3.7.2
