@@ -18,7 +18,7 @@ OUT=ROOT/'test-results'
 def check():
     OUT.mkdir(exist_ok=True)
     with sync_playwright() as p:
-        browser=p.chromium.launch()
+        browser=p.chromium.launch(executable_path=os.environ.get('PLAYWRIGHT_EXECUTABLE_PATH'))
         page=browser.new_page(viewport={'width':1440,'height':1050},reduced_motion='reduce')
         errors=[];external=[]
         page.on('pageerror',lambda error:errors.append(str(error)))

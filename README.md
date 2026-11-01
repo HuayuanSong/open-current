@@ -45,23 +45,56 @@ All upstream requests are unauthenticated. No source API keys, tile-server keys 
 
 ## Architecture
 
-```text
-Energy-Charts + Energinet
-          │
-          ▼
-Paced Python collection in GitHub Actions
-          │
-          ▼
-Validation, UTC normalization, generation grouping
-          │
-          ▼
-Small JSON snapshot + rolling seven-day country files
-          │
-          ▼
-GitHub Pages → D3 map and charts in the browser
+```mermaid
+flowchart TB
+    energy["Energy-Charts API<br/>Generation, flows, open prices"]
+    energinet["Energinet API<br/>DK electricity and operational CO₂"]
+    weather["Open-Meteo Single Runs API<br/>Issued ECMWF weather"]
+    weights["Pinned model artifacts<br/>GitHub Release + Hugging Face"]
+
+    subgraph actions["GitHub Actions · scheduled Python jobs"]
+        collect["Collect and normalize electricity<br/>Validate units, missing data and UTC"]
+        inputs["Prepare DK1/DK2 forecast inputs<br/>Causal history + issued weather"]
+        models["Isolated CPU model inference<br/>LightGBM · XGBoost · ridge<br/>Weather MLP · Chronos-2 · TinyTimeMixer"]
+        blend["Fixed nine-family ensemble<br/>Wind, solar and demand · 48 hours"]
+        evaluate["Archive forecasts and ranges<br/>Score against later observations"]
+    end
+
+    archive["Static JSON + forecast archive<br/>Readings, predictions and retained history"]
+    pages["GitHub Pages<br/>Static frontend and JSON hosting"]
+    browser["D3 browser application<br/>Map, history, forecasts and downloads"]
+    user["User controls<br/>Country, time, metric, region and target"]
+
+    energy --> collect
+    energinet --> collect
+    energinet --> inputs
+    weather --> inputs
+    weights --> models
+    inputs --> models
+    models --> blend
+    blend --> evaluate
+    inputs -->|Observations| evaluate
+    collect --> archive
+    evaluate --> archive
+    archive -.->|Restore history| inputs
+    archive --> pages
+    pages -->|Static files only| browser
+    user --> browser
 ```
 
 The browser calls only this site's static assets. It never makes an upstream electricity API request. This respects [Energinet's shared-collection guidance](https://www.energidataservice.dk/guides/api-guides) and avoids multiplying API traffic by visitor count.
+
+The ensemble forecasts **wind, solar and demand for DK1/DK2**, hourly for 48 hours.
+Its nine candidates are the frozen original baseline, LightGBM tree control,
+ridge, improved LightGBM, XGBoost, zero-shot and adapted Chronos-2, and two
+TinyTimeMixer variants. The original baseline includes weather-MLP blends for
+DK1 wind and DK2 solar. Frozen weights vary across the six region/target series
+and leads **1–6, 7–24 and 25–48 hours**. Scheduled jobs perform inference, not training.
+
+Prediction ranges use mature out-of-sample errors; issued values and bounds are
+saved rather than recalculated retrospectively. The separate
+[prospective trial](forecast/trial/README.md) records challengers and outcomes in
+its own ledger without automatically replacing this production ensemble.
 
 - `scripts/fetch.py`: three independent queues (generation, physical flows, licensed prices), followed by the faster Energinet feeds; requests paced at least 31 seconds apart per Energy-Charts endpoint; retries honour `Retry-After`.
 - `scripts/normalize.py`: source-unit checks, explicit generation classification, missing-value preservation, historical revision merging, sorted UTC timestamps, compact map summaries.
@@ -112,11 +145,19 @@ Browser checks (optional local dependency):
 ```sh
 python3 -m pip install playwright
 python3 -m playwright install chromium
-python3 tests/browser_check.py
-python3 tests/forecast_browser_check.py
+python3 tests/browser_suite.py
 ```
 
 Set `GRID_TEST_URL` to test the deployed site. Checks cover the user journeys, desktop/mobile overflow, fractional zoom, panning, country and metric changes, historical time selection, price zones, chart interaction, accessible source dialog and downloads.
+
+The suite starts a local server and runs the main explorer, forecast panel and
+fixture-based regressions for interrupted loads, refresh recovery, price expiry
+and empty forecast comparisons. Set
+`PLAYWRIGHT_EXECUTABLE_PATH` to use an existing Chrome/Chromium executable.
+
+The [November 2026 code review](docs/code-review-2026-11-01.md) records the fixes,
+before/after parity checks and a deferred observation-provenance issue in the
+separate prospective trial.
 
 ## Attribution and licences
 

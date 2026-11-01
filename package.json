@@ -6,7 +6,7 @@
   "description": "An open-data explorer of Europe's electricity",
   "scripts": {
     "start": "python3 -m http.server 4322 --bind 127.0.0.1 --directory dist",
-    "test": "node --test tests/model.test.mjs",
+    "test": "node --test tests/*.test.mjs",
     "build": "python3 scripts/version_assets.py"
   }
 }

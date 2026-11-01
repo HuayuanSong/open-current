@@ -13,7 +13,7 @@ URL = os.environ.get('GRID_TEST_URL', 'http://127.0.0.1:4322/')
 def check():
     OUT.mkdir(exist_ok=True)
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(executable_path=os.environ.get('PLAYWRIGHT_EXECUTABLE_PATH'))
         context = browser.new_context(viewport={'width': 1440, 'height': 1050}, reduced_motion='reduce')
         page = context.new_page()
         errors, external = [], []

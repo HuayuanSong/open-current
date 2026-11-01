@@ -38,6 +38,7 @@ let index,
   hours = [],
   playTimer,
   toastTimer,
+  priceTimer,
   countryRequest = 0;
 const countryCache = new Map();
 const svg = d3.select("#map");
@@ -456,27 +457,34 @@ async function selectCountry(code, writeHash = true) {
   $("#country-code").textContent = code.toUpperCase();
   $("#country-time").textContent = "Loading readings…";
   $("#chart-country").textContent = "/ " + index.countries[code].name;
-  if (!countryCache.has(code)) {
-    $("#mix-list").innerHTML =
-      '<p class="empty-note">Loading country readings…</p>';
-    $("#detail-value").textContent = "—";
-    $("#generation-total").textContent = "—";
-    $("#country-story").textContent = "";
-    $("#mix-strip").replaceChildren();
-    $("#flows-list").replaceChildren();
-  }
+  countryData = null;
+  $("#download-data").disabled = true;
+  $("#mix-list").innerHTML =
+    '<p class="empty-note">Loading country readings…</p>';
+  $("#detail-value").textContent = "—";
+  $("#generation-total").textContent = "—";
+  $("#country-story").textContent = "";
+  $("#mix-note").textContent = "";
+  $("#flow-time").textContent = "Waiting for country readings…";
+  $("#mix-strip").replaceChildren();
+  $("#flows-list").replaceChildren();
+  renderPrice();
+  renderChart();
+  renderDanish();
   renderMap();
   renderRanking();
   try {
     const data =
       countryCache.get(code) || (await getJSON(`data/countries/${code}.json`));
-    countryCache.set(code, data);
     if (request !== countryRequest) return;
+    if (data.code !== code)
+      throw new Error("Country response does not match selection");
+    countryCache.set(code, data);
     countryData = data;
     renderCountry();
     renderMapOverlay();
-    renderChart();
     renderDanish();
+    $("#download-data").disabled = false;
   } catch (error) {
     if (request !== countryRequest) return;
     countryData = null;
@@ -571,6 +579,15 @@ function renderPanel() {
   );
 }
 function renderPrice() {
+  clearTimeout(priceTimer);
+  if (!countryData || countryData.code !== state.country) {
+    $("#price-zone").innerHTML =
+      "<option>Waiting for country readings</option>";
+    $("#price-zone").disabled = true;
+    $("#price-current").textContent = "—";
+    $("#price-time").textContent = "Country price data unavailable";
+    return;
+  }
   const zones = Object.keys(countryData?.prices || {});
   if (!zones.includes(state.zone)) state.zone = zones[0] || null;
   $("#price-zone").innerHTML = zones.length
@@ -583,18 +600,30 @@ function renderPrice() {
     : "<option>No open price feed</option>";
   $("#price-zone").disabled = !zones.length;
   if (state.zone) $("#price-zone").value = state.zone;
-  const row = priceAt(
-    countryData?.prices[state.zone],
-    state.time === null ? Date.now() : state.time,
-  );
+  renderCurrentPrice();
+}
+function renderCurrentPrice() {
+  clearTimeout(priceTimer);
+  if (!countryData || countryData.code !== state.country) return;
+  const series = countryData.prices[state.zone];
+  const time = state.time === null ? Date.now() : state.time;
+  const row = priceAt(series, time);
   $("#price-current").innerHTML = row
     ? `${fmt(row.value, 2)}<small>€/MWh</small>`
     : "—";
   $("#price-time").textContent = row
     ? new Date(row.t).toISOString().slice(11, 16) + " UTC · wholesale"
-    : zones.length
+    : Object.keys(countryData.prices).length
       ? "No price for this interval"
       : "Coverage varies by bidding zone";
+  if (state.time === null) {
+    // Advance or expire the displayed interval locally, even during source outages.
+    const boundary = row
+      ? row.t + series.intervalMinutes * 60000
+      : series?.rows.find((reading) => reading.t > time)?.t;
+    if (valid(boundary) && boundary > time)
+      priceTimer = setTimeout(renderCurrentPrice, boundary - time);
+  }
 }
 
 function chartSeries() {
@@ -675,7 +704,16 @@ function withGaps(rows) {
   return output;
 }
 function renderChart() {
-  if (!countryData) return;
+  const chart = d3.select("#history-chart");
+  chart.selectAll("*").remove();
+  $("#chart-tooltip").hidden = true;
+  if (!countryData || countryData.code !== state.country) {
+    $("#chart-legend").replaceChildren();
+    $("#chart-caption").textContent = "Country readings unavailable.";
+    $("#history-note").textContent = "";
+    $("#chart-empty").hidden = false;
+    return;
+  }
   $$("[data-chart]").forEach((b) =>
     b.setAttribute("aria-pressed", b.dataset.chart === state.chart),
   );
@@ -688,14 +726,15 @@ function renderChart() {
         : `Day-ahead wholesale price${state.zone ? " · " + state.zone : ""}, in EUR/MWh.`;
   const series = chartSeries();
   $("#chart-legend").innerHTML = series
-    .map((s) => `<span><i style="background:${s.color}"></i>${esc(s.label)}</span>`)
+    .map(
+      (s) =>
+        `<span><i style="background:${s.color}"></i>${esc(s.label)}</span>`,
+    )
     .join("");
   $("#history-note").textContent =
     state.chart === "price"
       ? "Includes published day-ahead prices. Excludes retail charges and taxes."
       : "Gaps mean unavailable readings. Generation excludes storage discharge.";
-  const chart = d3.select("#history-chart");
-  chart.selectAll("*").remove();
   const all = series.flatMap((s) => s.rows.filter((r) => valid(r.v)));
   $("#chart-empty").hidden = all.length > 0;
   if (!all.length) return;
@@ -976,7 +1015,7 @@ function bindEvents() {
     }
   });
   $("#download-data").onclick = () => {
-    if (!countryData) return;
+    if (!countryData || countryData.code !== state.country) return;
     const url = URL.createObjectURL(
       new Blob([JSON.stringify(countryData, null, 2)], {
         type: "application/json",
@@ -1005,6 +1044,7 @@ function bindEvents() {
   }).observe($("#chart-wrap"));
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stopPlaying();
+    else renderCurrentPrice();
   });
 }
 function renderCollection() {
@@ -1028,11 +1068,13 @@ async function refresh() {
     const next = await getJSON("data/index.json");
     if (next.generatedAt === index.generatedAt) {
       renderCollection();
+      if (!countryData) await selectCountry(state.country, false);
       return;
     }
+    const nextDanish = await getJSON("data/denmark.json");
     index = next;
     countryCache.clear();
-    danish = await getJSON("data/denmark.json");
+    danish = nextDanish;
     initTimeline();
     renderCollection();
     await selectCountry(state.country, false);
