@@ -1,6 +1,24 @@
 export const HOUR = 3600000;
 export const usable = (value) => typeof value === "number" && Number.isFinite(value);
 
+export function forecastTransition(points, origin) {
+  const start = Date.parse(origin);
+  const observed = points.find((point) => point.time === start);
+  const forecast = points.find((point) => point.time === start + HOUR);
+  if (
+    !usable(observed?.observed) ||
+    !usable(forecast?.predicted) ||
+    usable(observed.predicted) ||
+    points.some((point) => point.time > start && usable(point.observed))
+  ) {
+    return null;
+  }
+  return [
+    { time: start, value: observed.observed },
+    { time: start + HOUR, value: forecast.predicted },
+  ];
+}
+
 export function forecastState(payload, now = Date.now()) {
   if (!payload?.latest) return "unavailable";
   if (payload.status !== "ready" || now - Date.parse(payload.latest.issuedAt) > 2 * HOUR) return "delayed";

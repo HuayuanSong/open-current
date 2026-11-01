@@ -21,6 +21,33 @@ def fixture(name):
     return json.loads((ROOT / "dist/data" / name).read_text())
 
 
+def transition_fixture():
+    data = fixture("forecasts.json")
+    record = data["latest"]
+    origin = dt.datetime(2026, 11, 1, 23, tzinfo=dt.timezone.utc)
+    record["origin"] = origin.isoformat()
+    record["issuedAt"] = (origin + dt.timedelta(minutes=20)).isoformat()
+    record["times"] = [
+        (origin + dt.timedelta(hours=hour)).isoformat() for hour in range(1, 49)
+    ]
+    record["ranges"]["issuedAt"] = record["issuedAt"]
+    data["comparison"] = None
+    data["observations"] = {
+        area: [
+            {
+                "time": (origin - dt.timedelta(hours=offset)).isoformat(),
+                "area": area,
+                "wind": 250,
+                "solar": 0,
+                "load": 2000,
+            }
+            for offset in [1, 0]
+        ]
+        for area in ["DK1", "DK2"]
+    }
+    return data
+
+
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, message, *args):
         pass
@@ -306,6 +333,100 @@ class BrowserRegressions(unittest.TestCase):
         chart.focus()
         self.page.keyboard.press("ArrowRight")
         expect(self.page.locator("#forecast-tooltip")).to_be_visible()
+
+    def test_forecast_transition_labels_hour_intervals_and_preserves_download(self):
+        data = transition_fixture()
+        self.page.route(
+            "**/data/forecasts.json", lambda route: route.fulfill(json=data)
+        )
+        self.load()
+        expect(self.page.locator(".forecast-transition")).to_have_count(1)
+        expect(self.page.locator("#forecast-transition-key")).to_be_visible()
+        expect(self.page.locator(".forecast-transition title")).to_contain_text(
+            "Visual transition"
+        )
+        chart = self.page.locator("#forecast-chart")
+        tooltip = self.page.locator("#forecast-tooltip")
+        chart.focus()
+        self.page.keyboard.press("ArrowRight")
+        expect(tooltip).to_contain_text("22:00")
+        expect(tooltip).to_contain_text("23:00")
+        expect(tooltip).to_contain_text("hourly average")
+        expect(tooltip).to_contain_text("Observed: 250 MW")
+        expect(tooltip).to_contain_text("Forecast: —")
+        expect(tooltip).to_contain_text("visual transition only")
+        self.page.keyboard.press("ArrowRight")
+        expect(tooltip).to_contain_text("00:00")
+        label = "".join(tooltip.locator("div").first.inner_text().split())
+        self.assertIn("1Nov", label)
+        self.assertIn("2Nov", label)
+        with self.page.expect_download() as captured:
+            self.page.locator("#forecast-download").click()
+        self.assertEqual(
+            json.loads(Path(captured.value.path()).read_text()), data["latest"]
+        )
+        for width in [320, 390, 1440]:
+            self.page.set_viewport_size({"width": width, "height": 1050})
+            self.page.wait_for_function(
+                'Math.abs(document.querySelector("#forecast-chart").viewBox.baseVal.width - document.querySelector("#forecast-chart-wrap").clientWidth) < 1'
+            )
+            chart.focus()
+            self.page.keyboard.press("ArrowLeft")
+            self.page.keyboard.press("ArrowRight")
+            expect(tooltip).to_be_visible()
+            box = tooltip.bounding_box()
+            self.assertGreaterEqual(box["x"], 0)
+            self.assertLessEqual(box["x"] + box["width"], width)
+            self.assertFalse(
+                self.page.evaluate("document.documentElement.scrollWidth > innerWidth")
+            )
+        self.page.locator("#forecast-range-toggle").uncheck()
+        expect(self.page.locator(".forecast-transition")).to_have_count(1)
+        self.page.locator('[data-forecast-view="comparison"]').click()
+        expect(self.page.locator(".forecast-transition")).to_have_count(0)
+        expect(self.page.locator("#forecast-transition-key")).to_be_hidden()
+
+    def test_forecast_transition_does_not_bridge_gaps_or_overlapping_readings(self):
+        data = transition_fixture()
+        self.page.route(
+            "**/data/forecasts.json", lambda route: route.fulfill(json=data)
+        )
+        for case in ["missing", "unknown", "missing prediction", "overlap"]:
+            with self.subTest(case=case):
+                data = transition_fixture()
+                rows = data["observations"]["DK1"]
+                if case == "missing":
+                    rows.pop()
+                elif case == "unknown":
+                    rows[-1]["wind"] = None
+                elif case == "missing prediction":
+                    data["latest"]["areas"]["DK1"]["wind"][0] = None
+                else:
+                    rows.append(
+                        {**rows[-1], "time": data["latest"]["times"][0], "wind": 0}
+                    )
+                self.page.goto(self.url, wait_until="networkidle")
+                expect(self.page.locator(".forecast-predicted")).to_have_count(1)
+                expect(self.page.locator(".forecast-transition")).to_have_count(0)
+                expect(self.page.locator("#forecast-transition-key")).to_be_hidden()
+
+    def test_forecast_still_renders_with_cached_html_without_transition_legend(self):
+        data = transition_fixture()
+        self.page.route(
+            "**/data/forecasts.json", lambda route: route.fulfill(json=data)
+        )
+        # An older cached page can load newer script contents during deployment.
+        self.page.add_init_script(
+            "document.addEventListener('readystatechange', () => {"
+            "if (document.readyState === 'interactive') "
+            "document.querySelector('#forecast-transition-key')?.remove();"
+            "});"
+        )
+        self.load()
+        expect(self.page.locator("#forecast-transition-key")).to_have_count(0)
+        expect(self.page.locator(".forecast-predicted")).to_have_count(1)
+        expect(self.page.locator(".forecast-range-band")).to_have_count(1)
+        expect(self.page.locator("#forecast-download")).to_be_enabled()
 
 
 if __name__ == "__main__":

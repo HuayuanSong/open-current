@@ -2195,9 +2195,11 @@ body {
 .forecast-explanation-content .forecast-explanation-note { font-size: 14px; margin-top: 20px; color: var(--muted); }
 .forecast-observed { stroke: var(--ink); }
 .forecast-predicted { stroke: var(--green); stroke-dasharray: 6 4; }
+.forecast-transition { fill: none; stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 1 4; stroke-linecap: round; opacity: .7; }
+.forecast-legend .forecast-transition-key { border-top: 2px dotted var(--muted); opacity: .7; }
 .forecast-origin { stroke: #98ab9f; stroke-dasharray: 3 5; }
 .forecast-cursor { stroke: var(--orange); stroke-width: 1; stroke-dasharray: 3 3; pointer-events: none; }
-.forecast-tooltip { position: absolute; top: 40px; padding: 12px 16px; background: var(--ink); color: white; font-size: 15px; line-height: 1.7; min-width: 210px; border-radius: 4px; pointer-events: none; box-shadow: 0 5px 20px #183c3522; }
+.forecast-tooltip { position: absolute; top: 40px; padding: 12px 16px; background: var(--ink); color: white; font-size: 15px; line-height: 1.7; min-width: min(210px, calc(100% - 16px)); max-width: min(320px, calc(100% - 16px)); border-radius: 4px; pointer-events: none; box-shadow: 0 5px 20px #183c3522; }
 .forecast-tooltip div:first-child { font-weight: bold; margin-bottom: 3px; }
 .forecast-empty { position: absolute; top: 30%; left: 10%; right: 10%; text-align: center; font-size: 17px; line-height: 1.7; color: var(--muted); }
 .forecast-stats { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid var(--line); }

@@ -2,8 +2,10 @@ import {
   forecastState,
   chartSeries,
   forecastStats,
+  forecastTransition,
+  HOUR,
   usable,
-} from "./forecast-model.js?v=1d5cbcf81d1a";
+} from "./forecast-model.js?v=b0ffa21872d5";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -35,6 +37,12 @@ const utcFormatter = new Intl.DateTimeFormat("en-GB", {
 
 function utc(value) {
   return utcFormatter.format(new Date(value)) + " UTC";
+}
+
+function hourInterval(value) {
+  const end = new Date(value);
+  const start = new Date(+end - HOUR);
+  return utcFormatter.formatRange(start, end) + " UTC · hourly average";
 }
 
 function power(value) {
@@ -134,8 +142,8 @@ function render() {
   text(
     "#forecast-timing",
     record
-      ? `${state.view === "comparison" ? `Comparing the forecast issued ${utc(record.issuedAt)}. ` : ""}Hourly average power · all times UTC. Weather run: ${utc(record.weatherRun)}.`
-      : "Hourly average power · all times UTC.",
+      ? `${state.view === "comparison" ? `Comparing the forecast issued ${utc(record.issuedAt)}. ` : ""}Hourly average power · points mark hour ends · all times UTC. Weather run: ${utc(record.weatherRun)}.`
+      : "Hourly average power · points mark hour ends · all times UTC.",
   );
   $("#forecast-download").disabled = !record;
   const hasRange = points.some(hasPredictionRange);
@@ -230,6 +238,12 @@ function draw(record, points) {
   svg.selectAll("*").remove();
   $("#forecast-tooltip").hidden = true;
   svg.on("pointermove", null).on("pointerleave", null).on("keydown", null);
+  const transition =
+    record && state.view === "outlook"
+      ? forecastTransition(points, record.origin)
+      : null;
+  const transitionKey = $("#forecast-transition-key");
+  if (transitionKey) transitionKey.hidden = !transition;
   const width = $("#forecast-chart-wrap").clientWidth;
   const height = width < 600 ? 300 : 360;
   svg.attr("viewBox", `0 0 ${width} ${height}`);
@@ -243,7 +257,7 @@ function draw(record, points) {
   svg
     .append("desc")
     .text(
-      `Solid line shows recorded readings. Dashed green line shows predictions.${state.range ? " Shading shows the experimental 80%-target hourly prediction range, where available." : ""} Use arrow keys to inspect each hour.`,
+      `Solid line shows recorded readings. Dashed green line shows predictions.${transition ? " The faint dotted line is a visual transition between consecutive observed and forecast hours." : ""}${state.range ? " Shading shows the experimental 80%-target hourly prediction range, where available." : ""} Points mark hour ends. Use arrow keys to inspect each hourly average.`,
     );
   const margin = { top: 24, right: 24, bottom: 48, left: 58 };
   const x = d3
@@ -330,6 +344,23 @@ function draw(record, points) {
       .attr("d", line)
       .attr("class", `forecast-line forecast-${key}`);
   }
+  if (transition) {
+    svg
+      .append("path")
+      .datum(transition)
+      .attr("class", "forecast-transition")
+      .attr(
+        "d",
+        d3
+          .line()
+          .x((point) => x(point.time))
+          .y((point) => y(point.value / 1000)),
+      )
+      .append("title")
+      .text(
+        "Visual transition between consecutive observed and forecast hours",
+      );
+  }
   const cursor = svg
     .append("line")
     .attr("class", "forecast-cursor")
@@ -346,7 +377,7 @@ function draw(record, points) {
     const tooltip = $("#forecast-tooltip");
     tooltip.replaceChildren();
     const lines = [
-      utc(point.time),
+      hourInterval(point.time),
       `Observed: ${power(point.observed)}`,
       `Forecast: ${power(point.predicted)}`,
     ];
@@ -355,13 +386,16 @@ function draw(record, points) {
         `80% target range: ${power(point.lower)} – ${power(point.upper)}`,
       );
     }
+    if (transition?.some((endpoint) => endpoint.time === point.time)) {
+      lines.push("Dotted link: visual transition only.");
+    }
     for (const content of lines) {
       const row = document.createElement("div");
       row.textContent = content;
       tooltip.append(row);
     }
     tooltip.hidden = false;
-    tooltip.style.left = `${Math.max(8, Math.min(width - 230, x(point.time) + 12))}px`;
+    tooltip.style.left = `${Math.max(8, Math.min(width - tooltip.offsetWidth - 8, x(point.time) + 12))}px`;
   }
   svg.on("pointermove", (event) => {
     const [px] = d3.pointer(event);

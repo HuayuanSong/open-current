@@ -91,6 +91,11 @@ TinyTimeMixer variants. The original baseline includes weather-MLP blends for
 DK1 wind and DK2 solar. Frozen weights vary across the six region/target series
 and leads **1–6, 7–24 and 25–48 hours**. Scheduled jobs perform inference, not training.
 
+Forecast charts plot hourly averages at the end of each hour; tooltips show the
+covered interval. A faint dotted transition guide joins consecutive observed
+and forecast hours only when both values are available. It adds no forecast
+values or prediction ranges and leaves missing-data gaps open.
+
 Prediction ranges use mature out-of-sample errors; issued values and bounds are
 saved rather than recalculated retrospectively. The separate
 [prospective trial](forecast/trial/README.md) records challengers and outcomes in
