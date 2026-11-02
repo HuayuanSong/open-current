@@ -5,6 +5,10 @@ A Cloudflare Worker independently checks the published electricity snapshot ever
 over 60 minutes old and no refresh is active. Models, source collection and Pages
 hosting continue to run in the existing pipeline.
 
+Live monitoring: [status](https://open-current-watchdog.naermad.workers.dev/status),
+[health](https://open-current-watchdog.naermad.workers.dev/health) and
+[check history](https://open-current-watchdog.naermad.workers.dev/history).
+
 ## Recovery and monitoring
 
 - Checks run at minutes **11, 26, 41 and 56 UTC**.
@@ -78,7 +82,7 @@ deploy this Worker. `watchdog-tests.yml` validates the Worker on GitHub.
 ## Review after 48 hours
 
 ```sh
-python3 watchdog/report.py https://YOUR-WATCHDOG.workers.dev
+python3 watchdog/report.py https://open-current-watchdog.naermad.workers.dev
 ```
 
 Review the report and `/history` for polling gaps, publication ages, dispatches,
@@ -87,3 +91,9 @@ forecast/source delays and failed recovery. The report explicitly states whether
 intermediate publication. The independent schedule reduces reliance on GitHub's
 cron scheduler; GitHub API/runner availability and upstream reporting delays
 still affect recovery.
+
+Monitoring began on **2 November 2026 at 18:08 UTC**. The first full 48-hour
+review is possible after **4 November at 18:08 UTC** (19:08 Copenhagen).
+The initial deployment passed an authenticated live check; this alone does not
+establish scheduled recovery reliability. The current GitHub credential expires
+on **30 January 2027 at 23:00 UTC** and must be renewed before then.

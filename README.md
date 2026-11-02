@@ -137,7 +137,7 @@ GitHub Pages must be configured with **GitHub Actions** as the publishing source
 
 Forecast inference runs in GitHub Actions on CPU; Pages serves the resulting JSON. It uses the development-selected blend of tree, linear, weather MLP, Chronos-2 and TinyTimeMixer models, with frozen weights and no scheduled retraining. Two isolated Python 3.12 environments keep model dependencies compatible. An immutable, checksummed GitHub Release stores model weights, and the published site preserves 35 days of issued forecasts across runner cache eviction. Models refresh only when a new source hour or weather run is available. Failed updates keep the previous forecast and its original issue time.
 
-Standard hosted runners are free for public repositories within applicable GitHub terms. The app uses only the automatically provided GitHub deployment token; no third-party credentials are required. Artifacts expire after one day, the website retains seven days of data, and asset filenames in HTML are fingerprinted to prevent stale UI caching.
+Standard hosted runners are free for public repositories within applicable GitHub terms. The data pipeline uses the automatically provided GitHub deployment token; source APIs require no credentials. Artifacts expire after one day, the website retains seven days of data, and asset filenames in HTML are fingerprinted to prevent stale UI caching.
 
 GitHub's scheduler is best effort, so collection can be delayed or skipped. Public-repository schedules can be disabled after **60 days of repository inactivity**; if this happens, re-enable the workflow in Actions. The site marks delayed readings and warns when the prepared snapshot is over two hours old. It remains readable during upstream outages. Keep an eye on failed runs: this is not a guaranteed real-time service.
 
@@ -148,6 +148,9 @@ limits retries, and reports forecast and upstream freshness separately. Freshnes
 alerts appear as failed GitHub Actions runs; email delivery follows your GitHub
 notification settings. It needs its own deployment and a repository-scoped
 GitHub token. The original half-hourly GitHub schedule remains enabled.
+The [live monitoring status](https://open-current-watchdog.naermad.workers.dev/status)
+and [check history](https://open-current-watchdog.naermad.workers.dev/history)
+are public; recovery controls require authentication.
 
 ## Validation
 

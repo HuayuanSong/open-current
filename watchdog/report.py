@@ -38,7 +38,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("url", help="Watchdog workers.dev URL")
     args = parser.parse_args()
-    request = urllib.request.Request(args.url.rstrip("/") + "/history", headers={"Cache-Control": "no-cache"})
+    request = urllib.request.Request(
+        args.url.rstrip("/") + "/history",
+        headers={"Cache-Control": "no-cache", "User-Agent": "OpenCurrent-Watchdog-Report/1.0"},
+    )
     with urllib.request.urlopen(request, timeout=20) as response:
         records = json.load(response)
     print(json.dumps(summarize(records), indent=2))
