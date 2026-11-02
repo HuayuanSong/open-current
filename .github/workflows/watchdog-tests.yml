@@ -1,0 +1,30 @@
+name: Validate freshness watchdog
+
+on:
+  push:
+    branches: [main]
+    paths: ["watchdog/**", "scripts/health.py", "tests/test_health.py", ".github/workflows/watchdog-tests.yml"]
+  pull_request:
+    paths: ["watchdog/**", "scripts/health.py", "tests/test_health.py", ".github/workflows/watchdog-tests.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26.12.0"
+          cache: npm
+          cache-dependency-path: watchdog/package-lock.json
+      - run: npm ci
+        working-directory: watchdog
+      - run: npm test
+        working-directory: watchdog
+      - run: npm run build
+        working-directory: watchdog
+      - run: python3 -m unittest discover -s tests -p test_health.py -v

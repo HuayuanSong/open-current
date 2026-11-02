@@ -1,0 +1,52 @@
+name: Open Current freshness alert
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: Freshness check that needs attention
+        required: true
+        type: choice
+        options:
+          - publication_stale
+          - forecast_stale
+          - source_delayed
+          - health_unavailable
+          - recovery_exhausted
+      checked_at:
+        description: UTC time of the watchdog check
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: open-current-freshness-alert
+  cancel-in-progress: false
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Report the freshness failure
+        env:
+          ALERT_REASON: ${{ inputs.reason }}
+          CHECKED_AT: ${{ inputs.checked_at }}
+        run: |
+          python3 - <<'PY'
+          import os
+          reasons = {
+              "publication_stale": "No electricity snapshot has been published for over two hours.",
+              "forecast_stale": "The latest forecast was issued over three hours ago or its horizon has expired.",
+              "source_delayed": "A recent collection still contains delayed Danish source readings.",
+              "health_unavailable": "The watchdog could not validate published freshness metadata in consecutive checks.",
+              "recovery_exhausted": "Three automatic recovery attempts did not restore fresh publication.",
+          }
+          reason = reasons.get(os.environ["ALERT_REASON"], "Unknown freshness failure.")
+          print("::error title=Open Current freshness alert::" + reason)
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as out:
+              out.write("# Open Current needs attention\n\n" + reason + "\n\n")
+              out.write("Inspect the [refresh runs](https://github.com/HuayuanSong/open-current/actions/workflows/pages.yml) and the watchdog status linked in the repository README.\n")
+          raise SystemExit(1)
+          PY

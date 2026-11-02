@@ -110,6 +110,8 @@ jobs:
           retention-days: 90
       - name: Verify normalization and published data
         run: .cache/forecast-serving/main-env/bin/python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Publish freshness metadata
+        run: python scripts/health.py
       - name: Verify browser data model
         run: node --test tests/*.test.mjs
       - name: Fingerprint assets

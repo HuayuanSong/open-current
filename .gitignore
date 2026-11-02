@@ -3,4 +3,9 @@ __pycache__/
 .venv/
 test-results/
 .DS_Store
+node_modules/
+.cloudflare/
+.dev.vars*
+.env*
+!.env.example
 

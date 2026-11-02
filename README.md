@@ -51,6 +51,8 @@ flowchart TB
     energinet["Energinet API<br/>DK electricity and operational CO₂"]
     weather["Open-Meteo Single Runs API<br/>Issued ECMWF weather"]
     weights["Pinned model artifacts<br/>GitHub Release + Hugging Face"]
+    watchdog["Cloudflare freshness watchdog<br/>15-minute checks · bounded recovery"]
+    health["Small freshness metadata<br/>Publication, forecast and source times"]
 
     subgraph actions["GitHub Actions · scheduled Python jobs"]
         collect["Collect and normalize electricity<br/>Validate units, missing data and UTC"]
@@ -80,6 +82,9 @@ flowchart TB
     archive --> pages
     pages -->|Static files only| browser
     user --> browser
+    archive --> health
+    health --> watchdog
+    watchdog -->|Dispatch overdue refresh| collect
 ```
 
 The browser calls only this site's static assets. It never makes an upstream electricity API request. This respects [Energinet's shared-collection guidance](https://www.energidataservice.dk/guides/api-guides) and avoids multiplying API traffic by visitor count.
@@ -135,6 +140,14 @@ Forecast inference runs in GitHub Actions on CPU; Pages serves the resulting JSO
 Standard hosted runners are free for public repositories within applicable GitHub terms. The app uses only the automatically provided GitHub deployment token; no third-party credentials are required. Artifacts expire after one day, the website retains seven days of data, and asset filenames in HTML are fingerprinted to prevent stale UI caching.
 
 GitHub's scheduler is best effort, so collection can be delayed or skipped. Public-repository schedules can be disabled after **60 days of repository inactivity**; if this happens, re-enable the workflow in Actions. The site marks delayed readings and warns when the prepared snapshot is over two hours old. It remains readable during upstream outages. Keep an eye on failed runs: this is not a guaranteed real-time service.
+
+An independent [Cloudflare watchdog](watchdog/README.md) checks publication every
+15 minutes and can dispatch the existing refresh when the snapshot is over an
+hour old. It preserves a seven-day check history, prevents duplicate launches,
+limits retries, and reports forecast and upstream freshness separately. Freshness
+alerts appear as failed GitHub Actions runs; email delivery follows your GitHub
+notification settings. It needs its own deployment and a repository-scoped
+GitHub token. The original half-hourly GitHub schedule remains enabled.
 
 ## Validation
 
