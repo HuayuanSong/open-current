@@ -21,6 +21,9 @@ Live monitoring: [status](https://open-current-watchdog.naermad.workers.dev/stat
 - Recovery has a 45-minute cooldown and at most three attempts per outage.
   A fresh snapshot resets the budget. Invalid metadata and GitHub errors fail closed.
 - Stale source readings alone do not trigger another collection.
+- Recovery dispatches use the same publication policy as scheduled refreshes:
+  a forecast or background-trial failure does not discard valid new observations.
+  The previous forecast retains its original issue time and delay notice.
 - Seven days of timestamped check results are retained for review.
 
 Publication older than two hours, forecasts older than three hours or past their

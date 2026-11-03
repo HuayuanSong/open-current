@@ -111,16 +111,43 @@ def restore(base, require_existing=True):
     return local
 
 
+def collected_electricity(start, at):
+    """Reuse a complete, recent collection covering the requested revision window."""
+    path = ROOT / ".cache/energinet/ElectricityProdex5MinRealtime.json"
+    try:
+        payload = json.loads(path.read_text())
+        retrieved = pd.Timestamp(payload["_retrieved_at"])
+        covered_start = dt.date.fromisoformat(payload["_start"])
+        if (
+            retrieved.tzinfo is None
+            or not at - pd.Timedelta(minutes=10) <= retrieved <= at
+            or covered_start > start
+            or payload.get("dataset") != "ElectricityProdex5MinRealtime"
+            or not payload.get("records")
+            or payload.get("total") != len(payload["records"])
+        ):
+            return None
+        return payload
+    except (OSError, ValueError, TypeError, KeyError, AttributeError):
+        return None
+
+
 def electricity(state, at):
     start = (
         (at - pd.Timedelta(days=35 if not state["hourly"] else 3))
         .tz_convert("Europe/Copenhagen")
         .date()
     )
-    payload = request(
-        "https://api.energidataservice.dk/dataset/ElectricityProdex5MinRealtime",
-        {"start": str(start), "end": "now", "limit": 30000, "sort": "Minutes5UTC asc"},
-    )
+    payload = collected_electricity(start, at)
+    if payload is None:
+        payload = request(
+            "https://api.energidataservice.dk/dataset/ElectricityProdex5MinRealtime",
+            {"start": str(start), "end": "now", "limit": 30000, "sort": "Minutes5UTC asc"},
+        )
+        retrieved_at = now().isoformat()
+    else:
+        retrieved_at = payload["_retrieved_at"]
+        print(f"Reusing electricity collection from {retrieved_at}", flush=True)
     if (
         payload.get("total") != len(payload.get("records", []))
         or not payload["records"]
@@ -142,7 +169,7 @@ def electricity(state, at):
     serial = hourly.copy()
     serial["time"] = serial.time.map(lambda x: x.isoformat())
     state["hourly"] = json.loads(serial.to_json(orient="records"))
-    state["electricityRetrievedAt"] = now().isoformat()
+    state["electricityRetrievedAt"] = retrieved_at
     return hourly
 
 

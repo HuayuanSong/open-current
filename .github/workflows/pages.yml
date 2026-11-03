@@ -84,7 +84,7 @@ jobs:
         env:
           FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
       - name: Require successful scoring during deployment validation
-        if: github.event_name != 'schedule'
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.refresh)
         run: test "${{ steps.forecast.outcome }}" = success
       - name: Record prospective challengers and score matured outcomes
         id: trial
@@ -94,7 +94,7 @@ jobs:
         env:
           FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
       - name: Require successful trial validation during deployment
-        if: github.event_name != 'schedule'
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.refresh)
         run: test "${{ steps.trial.outcome }}" = success
       - name: Preserve prospective issue evidence
         if: steps.trial.outputs.issued == 'true'

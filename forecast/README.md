@@ -25,6 +25,12 @@ not credentials. This is durable across GitHub Actions cache eviction. A restore
 failure prevents replacing it with an empty archive. Model/download/environment
 caches improve runtime but are not the source of truth for issued forecasts.
 
+During a full refresh, collection and forecasting share one Energinet power
+response covering the three-day revision window. Forecasting reuses it only
+when it is complete, less than ten minutes old and covers the required period.
+Standalone updates and initial history bootstrap still fetch their own inputs.
+This avoids requesting the same five-minute dataset twice within seconds.
+
 Each forecast is identified by model version, source-hour origin and weather
 run. Repeated runs preserve its original values and issue timestamp. The live
 error table scores only archived, actually issued forecasts against observed
@@ -69,6 +75,9 @@ benchmark numbers are not claimed as live accuracy.
 A failed source or model update keeps the previous valid forecast, with a
 delay notice. The ensemble is never silently reweighted around a failed model.
 The frontend independently marks forecasts over two hours old as delayed.
+Scheduled and manually dispatched data refreshes can publish valid observations
+while retaining a delayed forecast. Code pushes and validation-only dispatches
+still require successful forecasting and trial validation before deployment.
 
 ## Validation
 

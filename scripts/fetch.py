@@ -15,6 +15,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from zoneinfo import ZoneInfo
 
 from config import COUNTRIES, PRICE_ZONES, SOURCE
 
@@ -125,16 +126,25 @@ def energinet(days):
     failures = []
     for dataset in ["ElectricityProdex5MinRealtime", "CO2Emis"]:
         try:
-            # Use supported start + startOffset parameters, in Danish local time.
-            params = urllib.parse.urlencode(
-                {"start": "now", "startOffset": f"-P{min(days, 7)}D", "limit": 5000}
-            )
+            query = {"start": "now", "startOffset": f"-P{min(days, 7)}D", "limit": 5000}
+            if dataset == "ElectricityProdex5MinRealtime":
+                # Share the forecast's three-day revision window with collection,
+                # avoiding a second request to the same five-minute dataset.
+                start = (
+                    datetime.now(timezone.utc) - timedelta(days=max(3, min(days, 7)))
+                ).astimezone(ZoneInfo("Europe/Copenhagen")).date()
+                query = {"start": str(start), "end": "now", "limit": 5000}
+            params = urllib.parse.urlencode(query)
             data = fetch_json(
                 "https://api.energidataservice.dk/dataset/" + dataset + "?" + params
             )
             if not isinstance(data.get("records"), list) or not data["records"]:
                 raise ValueError("No records returned")
+            if data.get("total") != len(data["records"]):
+                raise ValueError("Incomplete electricity response")
             data["_retrieved_at"] = datetime.now(timezone.utc).isoformat()
+            if dataset == "ElectricityProdex5MinRealtime":
+                data["_start"] = query["start"]
             write_json(CACHE / "energinet" / (dataset + ".json"), data)
             print(f'Energinet/{dataset}: {len(data["records"])} rows', flush=True)
         except Exception as error:
