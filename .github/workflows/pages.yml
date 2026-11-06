@@ -135,6 +135,15 @@ jobs:
             .cache/forecast-serving/run/*.json
           retention-days: 3
       - uses: actions/configure-pages@v5
+      - name: Record the exact snapshot being published
+        run: python scripts/verify_publication.py manifest --site-dir dist --output "$RUNNER_TEMP/publication.json"
+      - name: Preserve the expected publication checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: publication-manifest
+          path: ${{ runner.temp }}/publication.json
+          if-no-files-found: error
+          retention-days: 1
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -143,10 +152,38 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.redeployment.outputs.page_url || steps.deployment.outputs.page_url }}
+    env:
+      SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
     steps:
+      - uses: actions/checkout@v4
+      - name: Download the expected publication checksums
+        uses: actions/download-artifact@v4
+        with:
+          name: publication-manifest
+          path: ${{ runner.temp }}/publication
       - name: Publish GitHub Pages
         id: deployment
+        continue-on-error: true
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 300000
+      - name: Verify the snapshot visitors receive
+        id: publication
+        if: steps.deployment.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: 5
+        run: python3 scripts/verify_publication.py check --manifest "$RUNNER_TEMP/publication/publication.json" --url "$SITE_URL"
+      - name: Retry publication of the same artifact once
+        id: redeployment
+        if: steps.deployment.outcome == 'failure' || steps.publication.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 300000
+      - name: Require the retried publication to be publicly reachable
+        if: steps.redeployment.outcome == 'success'
+        timeout-minutes: 5
+        run: python3 scripts/verify_publication.py check --manifest "$RUNNER_TEMP/publication/publication.json" --url "$SITE_URL"

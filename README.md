@@ -139,6 +139,15 @@ Forecast inference runs in GitHub Actions on CPU; Pages serves the resulting JSO
 
 Standard hosted runners are free for public repositories within applicable GitHub terms. The data pipeline uses the automatically provided GitHub deployment token; source APIs require no credentials. Artifacts expire after one day, the website retains seven days of data, and asset filenames in HTML are fingerprinted to prevent stale UI caching.
 
+After deployment, the workflow verifies the public `health.json`, `index.json`,
+`forecasts.json` and `denmark.json` against SHA-256 checksums recorded before
+upload. It checks up to seven times, 30 seconds apart, to allow publication to
+propagate. If publication fails or the files still differ, it republishes the
+same artifact **once**, without repeating collection or model inference, then
+checks again. A persistent mismatch fails the workflow. This verifies that the
+runner can retrieve the intended snapshot; it does not make old upstream
+readings fresh or guarantee propagation to every CDN location simultaneously.
+
 GitHub's scheduler is best effort, so collection can be delayed or skipped. Public-repository schedules can be disabled after **60 days of repository inactivity**; if this happens, re-enable the workflow in Actions. The site marks delayed readings and warns when the prepared snapshot is over two hours old. It remains readable during upstream outages. Keep an eye on failed runs: this is not a guaranteed real-time service.
 
 An independent [Cloudflare watchdog](watchdog/README.md) checks publication every
