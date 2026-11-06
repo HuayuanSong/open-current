@@ -152,7 +152,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     environment:
       name: github-pages
       url: ${{ steps.redeployment.outputs.page_url || steps.deployment.outputs.page_url }}
@@ -169,20 +169,20 @@ jobs:
         id: deployment
         continue-on-error: true
         uses: actions/deploy-pages@v4
-        with:
-          timeout: 300000
       - name: Verify the snapshot visitors receive
         id: publication
         if: steps.deployment.outcome == 'success'
         continue-on-error: true
         timeout-minutes: 5
         run: python3 scripts/verify_publication.py check --manifest "$RUNNER_TEMP/publication/publication.json" --url "$SITE_URL"
+      - name: Allow Pages to settle before retrying
+        id: retry_delay
+        if: steps.deployment.outcome == 'failure' || steps.publication.outcome == 'failure'
+        run: sleep 60
       - name: Retry publication of the same artifact once
         id: redeployment
-        if: steps.deployment.outcome == 'failure' || steps.publication.outcome == 'failure'
+        if: steps.retry_delay.outcome == 'success'
         uses: actions/deploy-pages@v4
-        with:
-          timeout: 300000
       - name: Require the retried publication to be publicly reachable
         if: steps.redeployment.outcome == 'success'
         timeout-minutes: 5

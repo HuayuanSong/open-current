@@ -142,8 +142,8 @@ Standard hosted runners are free for public repositories within applicable GitHu
 After deployment, the workflow verifies the public `health.json`, `index.json`,
 `forecasts.json` and `denmark.json` against SHA-256 checksums recorded before
 upload. It checks up to seven times, 30 seconds apart, to allow publication to
-propagate. If publication fails or the files still differ, it republishes the
-same artifact **once**, without repeating collection or model inference, then
+propagate. If publication fails or the files still differ, it waits one minute
+and republishes the same artifact **once**, without repeating collection or model inference, then
 checks again. A persistent mismatch fails the workflow. This verifies that the
 runner can retrieve the intended snapshot; it does not make old upstream
 readings fresh or guarantee propagation to every CDN location simultaneously.
