@@ -11,7 +11,7 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const d3 = window.d3;
 const state = {
-  area: "DK1",
+  area: "DK2",
   target: "wind",
   view: "outlook",
   range: true,

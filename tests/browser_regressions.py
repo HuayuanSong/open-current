@@ -434,6 +434,7 @@ class BrowserRegressions(unittest.TestCase):
                         {**rows[-1], "time": data["latest"]["times"][0], "wind": 0}
                     )
                 self.page.goto(self.url, wait_until="networkidle")
+                self.page.locator('[data-forecast-area="DK1"]').click()
                 expect(self.page.locator(".forecast-predicted")).to_have_count(1)
                 expect(self.page.locator(".forecast-transition")).to_have_count(0)
                 expect(self.page.locator("#forecast-transition-key")).to_be_hidden()
