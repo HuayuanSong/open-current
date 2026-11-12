@@ -1,0 +1,12 @@
+{
+  "version": "weather-refit-2026-11-12",
+  "url": "https://github.com/HuayuanSong/open-current/releases/download/weather-refit-2026-11-12/weather-refit-2026-11-12.tar.gz",
+  "sha256": "bb24910d7444c00391262148a4928887b6eb1109b7b11048ea65dd6ff0858e7e",
+  "bytes": 19273606,
+  "fixtures": {
+    "fixture.npz": "5b2106d5f067e963e5b3b19a34e22351b097a1340efd027347576d98a00753a8",
+    "expected.npz": "21359907c5fd843b0ec21922da3cfc5c323c27e496295f6dd53582e386b3ef8b"
+  },
+  "modelManifestHash": "3ab00da9a33a355011c1958b30acace661d9b12c9aede784b22fd91d0800395c",
+  "inferenceLockHash": "6568593d4532c81bd0a55274e20e29442b4bd4e0ae0ceaae3ed5943172fe1d61"
+}

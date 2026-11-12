@@ -1,0 +1,962 @@
+[
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.440993375028484,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.3872426669695415,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.582122166000772,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 5.198772292002104,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.04119495896156877,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.0758686659974046,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.05873050005175173,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.04410587495658547,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 5.638611833972391,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 5.062377292022575,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 2.061560332949739,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 2.1595690840040334,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.9102409170009196,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.9629665000247769,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.8707213340094313,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.9484173749806359,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.127989250002429,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.653906499966979,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.068486584001221,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.387110957992263,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.03231741697527468,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.034039166988804936,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.019947207998484373,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.022290458029601723,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.942106083035469,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.9518293750006706,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 5.261037625023164,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 5.632909125008155,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.7469980000169016,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 1.8766451249830425,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 2.0397024580161087,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 2.1002867920324206,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.7835702919983305,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 2.086079749977216,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.8566390830092132,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 1.8486881669959985,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.02625516598345712,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.0278448750032112,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.019594542041886598,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.02322391699999571,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 6.9312411670107394,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 8.065991457959171,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.9748649580287747,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 2.3417493749875575,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 2.201800042006653,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 2.1650207079946995,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.9517806670046411,
+    "reused": false
+  },
+  {
+    "policy": "daily",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 2.1054573750006966,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.099492791981902,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.6033902920316905,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.168148625001777,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.385733124974649,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.027326790965162218,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.0286766670178622,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.019309750001411885,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.021443250006996095,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 5.033363417023793,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 5.216471790976357,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 2.2042866249685176,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 2.134105625038501,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.9225373340304941,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 1.0163306669564918,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.1213278750074096,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "wind",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 1.055796874978114,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.199428874999285,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.325141708017327,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.039225957996678,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.296894084021915,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.03288933401927352,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.034199959016405046,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.020210415998008102,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.02351958298822865,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 5.004627125046682,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.9612826249795035,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 4.967272709007375,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 4.991000833979342,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.7426505840267055,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 1.870427792018745,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.8453491249820217,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "solar",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 1.9792981669888832,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.711733042029664,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK1",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 1.9159287919756025,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.7471609999774955,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "tree_control",
+    "area": "DK2",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 1.9204195000347681,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.03190879197791219,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK1",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.032834500016178936,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 0.019720249983947724,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "ridge",
+    "area": "DK2",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 0.022039333009161055,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 7.224522833013907,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK1",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 7.972969082999043,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.9251445000409149,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "lightgbm",
+    "area": "DK2",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 2.1200336249894463,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.8369373750174418,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK1",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 1.9273856660001911,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "stage": "development",
+    "trainOrigins": 955,
+    "seconds": 1.9558120419969782,
+    "reused": false
+  },
+  {
+    "policy": "latest",
+    "family": "xgboost",
+    "area": "DK2",
+    "target": "load",
+    "stage": "final",
+    "trainOrigins": 1070,
+    "seconds": 2.0809492919943295,
+    "reused": false
+  }
+]

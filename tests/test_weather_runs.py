@@ -130,6 +130,19 @@ class WeatherRunsTests(unittest.TestCase):
         for key in old:
             np.testing.assert_array_equal(old[key], fallback[key])
 
+    def test_equal_run_prefers_verified_download_only_when_opted_in(self):
+        state = self.state()
+        at = self.run + pd.Timedelta(hours=12, minutes=30)
+        state["weather"][str(self.run.date())] = {
+            "retrievedAt": self.available.isoformat(), "data": points(self.run, wind=5)
+        }
+        old, old_meta = data.inputs(state, at)
+        latest, meta = data.inputs(state, at, latest_weather=True)
+        self.assertEqual(meta["weatherRun"], old_meta["weatherRun"])
+        self.assertEqual(meta["weatherSelection"], "recorded-availability")
+        self.assertNotEqual(meta["weatherRetrievedAt"], old_meta["weatherRetrievedAt"])
+        self.assertFalse(np.array_equal(old["future"], latest["future"]))
+
 
 if __name__ == "__main__":
     unittest.main()

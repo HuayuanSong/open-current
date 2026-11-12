@@ -266,7 +266,9 @@ def inputs(state, at, *, latest_weather=False):
             choices.append((run, entry))
     if latest_weather:
         from .weather_runs import candidates
-        choices.extend(candidates(state, at))
+        # Prefer the availability-verified download when both caches hold the
+        # same initialization time. Stable sorting retains that provenance.
+        choices = list(candidates(state, at)) + choices
     for run, entry in sorted(choices, key=lambda pair: pair[0], reverse=True):
         try:
             points = entry["data"]

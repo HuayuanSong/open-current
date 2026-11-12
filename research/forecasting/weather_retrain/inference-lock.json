@@ -1,0 +1,21 @@
+{
+  "forecast/data.py": "8ae1747f359b1782c8d4413879e93dbe8b9ceb6219473d366bb86608db317a4f",
+  "forecast/features.py": "c67df70bc8c4770bc2fdedb110b38b968180f30be1390bb6475166d2605bded4",
+  "forecast/weather_runs.py": "04cd00863fbce8e02ab751ebcc1616c780d37a862bfe4dbdcf853ab7553eb7aa",
+  "forecast/score.py": "03324254815928dfc64e264970224f4e123c5c59dcff3f7223ddd51d1798e52e",
+  "forecast/worker.py": "f85f425c51e54f983a3ec0a905dab2551a5c5531d6c655e926dba4dc4fae0eb8",
+  "forecast/weather_mlp.py": "c7c19bfb2c611b6742721a12c05ce9b489638e1b75282adc9086cd95fc45acff",
+  "forecast/artifacts.py": "a33012dc057679e1160aa1a1faf237767499ddf5acbded8a5b621bece1a3a560",
+  "forecast/config.json": "b9d292a03ddf386adb979667078746393a4f79adbb633290ed3e46be08c369fc",
+  "forecast/model-release.json": "0ba7d8699a9e1a20d55f11452d14a9711fb1c4b795c661043416199355bc6f7f",
+  "forecast/requirements-main.txt": "e15411f97d650f9cf4830ccf023c479cca45dd795403bc7ccc8f8323a66b174f",
+  "forecast/requirements-ttm.txt": "4bf9091d48d2b5fad2e19c26c23d73dddaf42b91d58d066d2ecc5dea009ec229",
+  "forecast/trial/ledger.py": "803c9dcc3150320747bb41cbf6102dfb46784c777369cd1b622e28b8a9b0024d",
+  "research/forecasting/weather_retrain/common.py": "31c14c7dbe1f42176e836383dd41ec47e458e91c721abe1a776bb30c77b8c2cb",
+  "research/forecasting/weather_retrain/models.py": "f27579d3888413e68612d24bb12bb31224f72b1ff99cd292e265f9a08af972c9",
+  "research/forecasting/weather_retrain/compare.py": "db4ff9bc3dc78df9f7022ee1617171c1157e2f354273b11a0aab0846b4dcf929",
+  "research/forecasting/weather_retrain/prospective.py": "5e23106911f6e7973316b86f3978c526617903340fe80e97234fe8e2f72fbc7a",
+  "research/forecasting/weather_retrain/verify.py": "91c82610a5d1c3666c1a1a46b3500c3c0f2cf0a5268a97873bcc43d867b62b72",
+  "research/forecasting/weather_retrain/protocol.json": "222f202f9c8b850c9a88568f55e0adb19551c9bacdd50e767bc06cafac7229d8",
+  "research/forecasting/weather_retrain/PROTOCOL.md": "75d47b5404f58976579e0061267ab69cfd8d3818d0e6f849a8dd5cca0905afe7"
+}

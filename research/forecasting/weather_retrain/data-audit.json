@@ -1,0 +1,51 @@
+{
+  "protocolHash": "222f202f9c8b850c9a88568f55e0adb19551c9bacdd50e767bc06cafac7229d8",
+  "sourceManifestHash": "e9c83474cf28bb0ffb0f84fb0b2c5fd558bd25e16210bc8498992c486ca0ed85",
+  "datasetHash": "9e9b02b878519be9ea1855a97b874c06763159c073ea5cc6dc1979a549bdc341",
+  "attemptedOrigins": 1334,
+  "completeOrigins": 1070,
+  "exclusions": 264,
+  "features": 97,
+  "shapes": {
+    "history": [
+      2140,
+      168,
+      3
+    ],
+    "history512": [
+      2140,
+      512,
+      3
+    ],
+    "observed512": [
+      2140,
+      512,
+      3
+    ],
+    "past_full512": [
+      2140,
+      512,
+      97
+    ],
+    "y": [
+      2140,
+      48,
+      3
+    ],
+    "area_ids": [
+      2140
+    ],
+    "future": [
+      2140,
+      48,
+      97
+    ],
+    "fresh": [
+      2140,
+      48,
+      97
+    ]
+  },
+  "acquisitionMode": "cached-only",
+  "historicalAvailability": "assumed eight-hour lag, not verified per-run publication times"
+}

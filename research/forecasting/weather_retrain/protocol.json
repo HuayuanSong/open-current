@@ -1,0 +1,215 @@
+{
+  "version": "weather-retrain-2026-11-12",
+  "frozenAt": "2026-11-12T11:38:11.216133+00:00",
+  "baselineVersion": "ensemble-v2-2026-10-27",
+  "families": [
+    "tree_control",
+    "ridge",
+    "lightgbm",
+    "xgboost"
+  ],
+  "settings": {
+    "tree_control": [
+      {
+        "area": "DK1",
+        "target": "wind",
+        "setting": 1,
+        "mae": 402.74267578125
+      },
+      {
+        "area": "DK2",
+        "target": "wind",
+        "setting": 1,
+        "mae": 125.33637237548828
+      },
+      {
+        "area": "DK1",
+        "target": "solar",
+        "setting": 1,
+        "mae": 131.11395263671875
+      },
+      {
+        "area": "DK2",
+        "target": "solar",
+        "setting": 1,
+        "mae": 41.18220138549805
+      },
+      {
+        "area": "DK1",
+        "target": "load",
+        "setting": 0,
+        "mae": 179.7595672607422
+      },
+      {
+        "area": "DK2",
+        "target": "load",
+        "setting": 0,
+        "mae": 62.381587982177734
+      }
+    ],
+    "ridge": [
+      {
+        "area": "DK1",
+        "target": "wind",
+        "setting": 0,
+        "mae": 451.32037353515625
+      },
+      {
+        "area": "DK2",
+        "target": "wind",
+        "setting": 1,
+        "mae": 127.55170440673828
+      },
+      {
+        "area": "DK1",
+        "target": "solar",
+        "setting": 1,
+        "mae": 155.2059783935547
+      },
+      {
+        "area": "DK2",
+        "target": "solar",
+        "setting": 1,
+        "mae": 49.66741180419922
+      },
+      {
+        "area": "DK1",
+        "target": "load",
+        "setting": 0,
+        "mae": 199.3815460205078
+      },
+      {
+        "area": "DK2",
+        "target": "load",
+        "setting": 0,
+        "mae": 67.00994873046875
+      }
+    ],
+    "lightgbm": [
+      {
+        "area": "DK1",
+        "target": "wind",
+        "setting": 1,
+        "mae": 394.8154602050781
+      },
+      {
+        "area": "DK2",
+        "target": "wind",
+        "setting": 0,
+        "mae": 122.9739761352539
+      },
+      {
+        "area": "DK1",
+        "target": "solar",
+        "setting": 1,
+        "mae": 128.92886352539062
+      },
+      {
+        "area": "DK2",
+        "target": "solar",
+        "setting": 1,
+        "mae": 40.74654769897461
+      },
+      {
+        "area": "DK1",
+        "target": "load",
+        "setting": 3,
+        "mae": 179.3108367919922
+      },
+      {
+        "area": "DK2",
+        "target": "load",
+        "setting": 0,
+        "mae": 61.92490005493164
+      }
+    ],
+    "xgboost": [
+      {
+        "area": "DK1",
+        "target": "wind",
+        "setting": 0,
+        "mae": 405.112548828125
+      },
+      {
+        "area": "DK2",
+        "target": "wind",
+        "setting": 2,
+        "mae": 123.9903564453125
+      },
+      {
+        "area": "DK1",
+        "target": "solar",
+        "setting": 1,
+        "mae": 132.06561279296875
+      },
+      {
+        "area": "DK2",
+        "target": "solar",
+        "setting": 1,
+        "mae": 39.92551040649414
+      },
+      {
+        "area": "DK1",
+        "target": "load",
+        "setting": 3,
+        "mae": 178.82139587402344
+      },
+      {
+        "area": "DK2",
+        "target": "load",
+        "setting": 1,
+        "mae": 61.66386795043945
+      }
+    ]
+  },
+  "seed": 42,
+  "threads": 4,
+  "horizonHours": 48,
+  "historyHours": 512,
+  "startDate": "2025-01-01",
+  "endDate": "2026-10-29",
+  "originHoursByDayParity": [
+    [
+      3,
+      15
+    ],
+    [
+      9,
+      21
+    ]
+  ],
+  "parityAnchor": "2025-01-01",
+  "assumedAvailabilityHours": 8,
+  "issueMinutesAfterOrigin": 30,
+  "developmentFitLabelsBefore": "2026-08-01",
+  "developmentStart": "2026-08-01",
+  "developmentEndExclusive": "2026-10-01",
+  "finalFitLabelsBefore": "2026-11-01",
+  "diagnosticStart": "2026-11-01",
+  "diagnosticEnd": "2026-11-09",
+  "diagnosticHours": [
+    3,
+    9,
+    15,
+    21
+  ],
+  "prospectiveStart": "2026-11-13",
+  "prospectiveEndExclusive": "2026-12-11",
+  "prospectiveHours": [
+    3,
+    9,
+    15,
+    21
+  ],
+  "issueWindowMinutes": [
+    15,
+    59
+  ],
+  "minimumCompleteOrigins": 80,
+  "minimumDistinctDays": 21,
+  "minimumIssueCoverage": 0.8,
+  "minimumDK1WindImprovementPct": 5,
+  "maximumSeriesRegressionPct": 0,
+  "maximumLeadBandRegressionPct": 5,
+  "automaticPromotion": false
+}

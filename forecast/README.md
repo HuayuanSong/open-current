@@ -70,6 +70,11 @@ but did not improve wind or pass the accuracy gate, so production and the existi
 prospective trial retain the default policy. The alternative changes only future
 weather inputs and keeps downloaded runs in a separate cache.
 
+A separate [component-refit experiment](../research/forecasting/weather_retrain/README.md)
+trains matched daily/latest-weather tree and ridge models. Its independent
+prospective evidence is stored as GitHub Actions artifacts; it does not update
+the public forecast or the existing trial.
+
 Up to three missing older hours in the last 168 hours may be filled from prior
 weekly/daily observations or forward-filled earlier values. No backward fill
 or interpolation from later observations is used. Recent three hours must be

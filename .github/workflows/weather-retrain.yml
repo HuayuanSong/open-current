@@ -1,0 +1,109 @@
+name: Record weather-refit comparison
+
+on:
+  schedule:
+    - cron: "17,37 3,9,15,21 * * *"
+  workflow_dispatch:
+    inputs:
+      probe:
+        description: Run a diagnostic now without creating a prospective record
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: weather-refit-evidence
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: weather-refit-2026-11-12
+      - name: Check collection window
+        id: window
+        env:
+          DIAGNOSTIC: ${{ github.event_name == 'workflow_dispatch' && inputs.probe }}
+        run: |
+          python - <<'PY'
+          import datetime, json, os
+          from pathlib import Path
+          p = json.loads(Path('research/forecasting/weather_retrain/protocol.json').read_text())
+          now = datetime.datetime.now(datetime.timezone.utc)
+          start = datetime.datetime.fromisoformat(p['prospectiveStart']).replace(tzinfo=datetime.timezone.utc)
+          end = datetime.datetime.fromisoformat(p['prospectiveEndExclusive']).replace(tzinfo=datetime.timezone.utc) + datetime.timedelta(days=6)
+          active = start <= now < end or os.environ['DIAGNOSTIC'] == 'true'
+          last_day = datetime.datetime.fromisoformat(p['prospectiveEndExclusive']).replace(tzinfo=datetime.timezone.utc) - datetime.timedelta(days=1)
+          review_after = last_day + datetime.timedelta(hours=max(p['prospectiveHours']) + p['horizonHours'] + 72)
+          review = active and now >= review_after and os.environ['DIAGNOSTIC'] != 'true'
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'active={str(active).lower()}\n')
+              f.write(f'review={str(review).lower()}\n')
+          PY
+      - uses: actions/setup-python@v5
+        if: steps.window.outputs.active == 'true'
+        id: python
+        with:
+          python-version: "3.12"
+      - name: Restore shared inference dependencies and baseline weights
+        if: steps.window.outputs.active == 'true'
+        id: forecast-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache/forecast-serving/main-env
+            .cache/forecast-serving/ttm-env
+            .cache/forecast-serving/models
+            .cache/forecast-serving/huggingface
+          key: forecast-${{ runner.os }}-${{ runner.arch }}-${{ steps.python.outputs.python-version }}-${{ hashFiles('forecast/requirements-*.txt', 'forecast/model-release.json', 'forecast/setup.sh') }}
+      - name: Install CPU inference dependencies
+        if: steps.window.outputs.active == 'true' && steps.forecast-cache.outputs.cache-hit != 'true'
+        run: bash forecast/setup.sh
+      - name: Verify refitted model exports against the fixed local fixture
+        if: steps.window.outputs.active == 'true'
+        run: .cache/forecast-serving/main-env/bin/python -m research.forecasting.weather_retrain.verify
+      - name: Record independent inputs, predictions and observation snapshots
+        if: steps.window.outputs.active == 'true'
+        env:
+          FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
+          DIAGNOSTIC: ${{ github.event_name == 'workflow_dispatch' && inputs.probe }}
+        run: |
+          if [[ "$DIAGNOSTIC" == true ]]; then
+            .cache/forecast-serving/main-env/bin/python -m research.forecasting.weather_retrain.prospective --probe
+          else
+            .cache/forecast-serving/main-env/bin/python -m research.forecasting.weather_retrain.prospective
+          fi
+      - name: Preserve immutable comparison evidence
+        if: always() && steps.window.outputs.active == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: weather-refit-${{ github.event_name == 'workflow_dispatch' && inputs.probe && 'probe' || 'evidence' }}-${{ github.run_id }}-${{ github.run_attempt }}
+          include-hidden-files: true
+          path: |
+            .cache/weather-retrain/evidence/
+            .cache/weather-retrain/probe/
+          retention-days: 90
+          if-no-files-found: error
+      - name: Evaluate the matured prospective comparison
+        if: always() && steps.window.outputs.review == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: .cache/forecast-serving/main-env/bin/python -m research.forecasting.weather_retrain.review --download
+      - name: Preserve the completed comparison report
+        if: steps.window.outputs.review == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: weather-refit-review-${{ github.run_id }}-${{ github.run_attempt }}
+          include-hidden-files: true
+          path: |
+            .cache/weather-retrain/prospective-review.json
+            .cache/weather-retrain/prospective-predictions.csv
+            .cache/weather-retrain/prospective-lead-metrics.csv
+          retention-days: 90
+          if-no-files-found: error
