@@ -102,7 +102,7 @@ export function parseState(hash, codes) {
       ? metric
       : "lowCarbon",
     time: time && /^\d{13}$/.test(time) ? Number(time) : null,
-    chart: ["power", "share", "price"].includes(chart) ? chart : "power",
+    chart: ["power", "share", "price"].includes(chart) ? chart : "price",
     zone: zone && /^[A-Za-z0-9-]{1,20}$/.test(zone) ? zone : null,
   };
 }

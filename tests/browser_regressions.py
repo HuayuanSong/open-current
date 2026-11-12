@@ -121,6 +121,7 @@ class BrowserRegressions(unittest.TestCase):
         self.load()
         expect(self.page.locator("#detail-value")).to_have_text("—")
         expect(self.page.locator("#country-time")).to_have_text("No reading in this period")
+        self.page.locator('[data-chart="power"]').click()
         expect(self.page.locator("#chart-empty")).to_be_visible()
         expect(self.page.locator(".chart-line")).to_have_count(0)
         expect(self.page.locator(".danish-card")).to_have_count(2)

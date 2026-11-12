@@ -11,7 +11,7 @@ import {
   metricValue,
   escapeHTML as esc,
   parseState,
-} from "./model.js?v=ce1e63c9b335";
+} from "./model.js?v=3d601174243d";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -20,7 +20,7 @@ const state = {
   country: "dk",
   metric: "lowCarbon",
   time: null,
-  chart: "power",
+  chart: "price",
   panel: "mix",
   zone: null,
   showAll: false,

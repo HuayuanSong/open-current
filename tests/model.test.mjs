@@ -41,7 +41,7 @@ test("invalid URL state is bounded to known countries and views", () => {
     {
       country: "dk",
       metric: "lowCarbon",
-      chart: "power",
+      chart: "price",
       time: null,
       zone: null,
     },

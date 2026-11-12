@@ -12,7 +12,7 @@
     <link rel="icon" href="icon.svg?v=6969a3192d60" type="image/svg+xml" />
     <link rel="stylesheet" href="style.css?v=d7fbcb5b8f2a" />
     <script src="vendor/d3.v7.min.js" defer></script>
-    <script type="module" src="app.js?v=68e315c6c87e"></script>
+    <script type="module" src="app.js?v=98e5585e7393"></script>
     <script type="module" src="forecasts.js?v=bec63bb8134a"></script>
   </head>
   <body>
@@ -260,13 +260,13 @@
             </h2>
           </div>
           <div class="segmented chart-tabs" aria-label="Historical chart">
-            <button data-chart="power" aria-pressed="true">Power</button
+            <button data-chart="power" aria-pressed="false">Power</button
             ><button data-chart="share" aria-pressed="false">Mix</button
-            ><button data-chart="price" aria-pressed="false">Price</button>
+            ><button data-chart="price" aria-pressed="true">Price</button>
           </div>
         </div>
         <div class="chart-header">
-          <p id="chart-caption">Generation and demand, in gigawatts.</p>
+          <p id="chart-caption">Day-ahead wholesale price, in EUR/MWh.</p>
           <div id="chart-legend" class="chart-legend"></div>
         </div>
         <div class="chart-wrap" id="chart-wrap">
