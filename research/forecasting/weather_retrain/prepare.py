@@ -14,6 +14,10 @@ from forecast import data, weather_runs
 from forecast.features import AREAS, CONFIG, TARGETS, calendar, weather_features
 from .common import CACHE, HERE, ROOT, PROTOCOL, boundary, digest, write_json
 
+# Reserve headroom under the free service's 5,000 hourly call allowance.
+# Each of these six-location requests consumes multiple API call units.
+REQUEST_INTERVAL_SECONDS = len(CONFIG["locations"]) * 3600 / 4500
+
 
 def read(path):
     with gzip.open(path, "rt") as source:
@@ -109,7 +113,7 @@ def weather(run, times, *, cached_only=False, state=None, state_path=None):
         temporary.replace(path)
         return points, path
     finally:
-        time.sleep(max(0, 1.5 - (time.monotonic() - start)))
+        time.sleep(max(0, REQUEST_INTERVAL_SECONDS - (time.monotonic() - start)))
 
 
 def build_history(frame, past, origin):

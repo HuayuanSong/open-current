@@ -21,6 +21,15 @@ are 48 exported final models: four families, three targets and two regions under
 two weather policies. Export/reload checks passed. The bundle includes a fixed
 prediction fixture for checking the Linux runner against the local exports.
 
+Validation passed **99 Python tests and 13 JavaScript tests**. On GitHub's Linux
+runner, all eight policy/family prediction arrays matched the Mac fixture
+exactly (maximum difference **0 MW**). A live diagnostic fetched current
+electricity observations and the 12 November 06 UTC ECMWF run, then scored both
+refits alongside the baseline. This diagnostic is excluded from prospective
+evaluation. See the [successful workflow run](https://github.com/HuayuanSong/open-current/actions/runs/43221644598).
+The [normal deployment checks](https://github.com/HuayuanSong/open-current/actions/runs/43221387900)
+also passed; the published model remains `ensemble-v2-2026-10-27`.
+
 ## November full-ensemble diagnostic
 
 36 complete origins at 03, 09, 15 and 21 UTC on November 1–9; 48-hour outcomes

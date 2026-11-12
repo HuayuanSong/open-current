@@ -28,6 +28,10 @@ improvement cannot, on its own, justify public promotion.
 The backfill encountered a provider rate limit before all planned runs were
 downloaded. Fitting uses complete cached pairs only; see the
 [pre-fitting acquisition note](ACQUISITION.md) and coverage/exclusion audit.
+For future acquisitions, the online helper spaces new six-location requests
+4.8 seconds apart to leave headroom under the documented
+[hourly allowance](https://open-meteo.com/en/pricing). A rate-limit response still
+stops acquisition. This does not change the candidate's frozen source inventory.
 Overlapping 48-hour forecasts are dependent; their hour counts are not counts
 of independent experiments. Four daily origins also do not validate every
 possible half-hourly issue time of the public service.
