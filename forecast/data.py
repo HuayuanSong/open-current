@@ -239,7 +239,7 @@ def fill_history(frame, origin):
     return filled.to_numpy(), unfilled.notna().to_numpy(), int(missing.sum())
 
 
-def inputs(state, at):
+def inputs(state, at, *, latest_weather=False):
     hourly = pd.DataFrame(state["hourly"])
     hourly["time"] = pd.to_datetime(hourly.time, utc=True)
     # Latest jointly complete source hour, with a 15-minute publication buffer.
@@ -258,22 +258,34 @@ def inputs(state, at):
     times = pd.date_range(origin + pd.Timedelta(hours=1), periods=48, freq="h")
     future_run = None
     future_points = None
-    for key, entry in sorted(state["weather"].items(), reverse=True):
+    choices = []
+    for key, entry in state["weather"].items():
         run = pd.Timestamp(key, tz="UTC")
-        if run + pd.Timedelta(hours=12, minutes=15) > at or not entry.get("data"):
-            continue
-        if at - run > pd.Timedelta(hours=48):
-            break
-        points = entry["data"]
-        candidate_weather = [
-            weather_features(points[area_index * 3 : area_index * 3 + 3], times)[
-                0
-            ].to_numpy()
-            for area_index in range(2)
-        ]
+        if (run + pd.Timedelta(hours=12, minutes=15) <= at
+                and at - run <= pd.Timedelta(hours=48) and entry.get("data")):
+            choices.append((run, entry))
+    if latest_weather:
+        from .weather_runs import candidates
+        choices.extend(candidates(state, at))
+    for run, entry in sorted(choices, key=lambda pair: pair[0], reverse=True):
+        try:
+            points = entry["data"]
+            if len(points) != len(CONFIG["locations"]):
+                continue
+            candidate_weather = [
+                weather_features(points[area_index * 3 : area_index * 3 + 3], times)[
+                    0
+                ].to_numpy()
+                for area_index in range(2)
+            ]
+        except (ValueError, TypeError, KeyError):
+            if latest_weather:
+                continue
+            raise
         if all(np.isfinite(values).all() for values in candidate_weather):
             future_run = run
             future_points = points
+            future_entry = entry
             break
     if future_run is None:
         raise ValueError("No usable issued weather forecast")
@@ -323,12 +335,19 @@ def inputs(state, at):
     metadata = {
         "origin": origin.isoformat(),
         "weatherRun": future_run.isoformat(),
-        "weatherRetrievedAt": state["weather"][str(future_run.date())]["retrievedAt"],
+        "weatherRetrievedAt": future_entry["retrievedAt"],
         "electricityRetrievedAt": state.get("electricityRetrievedAt"),
         "quality": quality,
         "featureNames": feature_names,
         "times": [t.isoformat() for t in times],
     }
+    if latest_weather:
+        from .weather_runs import POLICY
+        metadata["weatherPolicy"] = POLICY
+        metadata["weatherAvailableAt"] = future_entry.get("availableAt")
+        metadata["weatherSelection"] = (
+            "recorded-availability" if future_entry.get("availableAt") else "daily-fallback"
+        )
     return result, metadata
 
 

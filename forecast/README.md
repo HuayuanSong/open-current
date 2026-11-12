@@ -64,6 +64,12 @@ the same daily 00 UTC ECMWF model, made eligible after 12:15 UTC. Five days are
 requested to cover 48 hours from origins throughout the day. Historical weather
 features continue to use the preceding issued daily forecast, as in training.
 
+An [availability-aware latest-ECMWF option](../research/forecasting/weather_refresh/README.md)
+is implemented for local comparison. Its 48-origin November replay improved solar
+but did not improve wind or pass the accuracy gate, so production and the existing
+prospective trial retain the default policy. The alternative changes only future
+weather inputs and keeps downloaded runs in a separate cache.
+
 Up to three missing older hours in the last 168 hours may be filled from prior
 weekly/daily observations or forward-filled earlier values. No backward fill
 or interpolation from later observations is used. Recent three hours must be

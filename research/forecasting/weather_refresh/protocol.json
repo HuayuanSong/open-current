@@ -1,0 +1,17 @@
+{
+  "version": "weather-refresh-replay-2026-11-12",
+  "modelVersion": "ensemble-v2-2026-10-27",
+  "startDate": "2026-10-29",
+  "endDate": "2026-11-09",
+  "originHoursUTC": [3, 9, 15, 21],
+  "issueMinutesAfterOrigin": 30,
+  "assumedWeatherAvailabilityHours": 8,
+  "horizonHours": 48,
+  "batchOrigins": 8,
+  "promotionGate": {
+    "minimumCompleteOrigins": 40,
+    "maximumSeriesMAEIncreasePct": 0,
+    "maximumLeadBandMAEIncreasePct": 5,
+    "minimumDK1WindMAEReductionPct": 5
+  }
+}

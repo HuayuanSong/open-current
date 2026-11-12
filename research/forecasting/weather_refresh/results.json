@@ -1,0 +1,36 @@
+{
+  "protocolHash": "9249b3b6cdfa0190efd4a99628356b5f902d342aac6a3c98176b1ff466bb191d",
+  "stateHash": "ba5dd05a6e2246fc2ff8751e8c1bf58d38705b1c2d03522b4d64d3eb7cdd9a08",
+  "modelRelease": {
+    "version": "ensemble-v2-2026-10-27",
+    "url": "https://github.com/HuayuanSong/open-current/releases/download/ensemble-v2-2026-10-27/ensemble-v2-2026-10-27.tar.gz",
+    "sha256": "d5eb220fe96036faf8b8262cab7864927fac69394153174f2a2073f274972fa6",
+    "bytes": 26556425
+  },
+  "scoringSources": {
+    "score.py": "03324254815928dfc64e264970224f4e123c5c59dcff3f7223ddd51d1798e52e",
+    "worker.py": "f85f425c51e54f983a3ec0a905dab2551a5c5531d6c655e926dba4dc4fae0eb8",
+    "features.py": "c67df70bc8c4770bc2fdedb110b38b968180f30be1390bb6475166d2605bded4",
+    "weather_mlp.py": "c7c19bfb2c611b6742721a12c05ce9b489638e1b75282adc9086cd95fc45acff",
+    "requirements-main.txt": "e15411f97d650f9cf4830ccf023c479cca45dd795403bc7ccc8f8323a66b174f",
+    "requirements-ttm.txt": "4bf9091d48d2b5fad2e19c26c23d73dddaf42b91d58d066d2ecc5dea009ec229"
+  },
+  "stateUpdatedAt": "2026-11-12T10:20:53.235259+00:00",
+  "completeOrigins": 48,
+  "excluded": [],
+  "promotionGatePassed": false,
+  "seriesReductionPct": {
+    "DK1/load": -0.7473339730800443,
+    "DK1/solar": 4.285084602680378,
+    "DK1/wind": -0.4559283964017835,
+    "DK2/load": -0.326874836455171,
+    "DK2/solar": 7.827252405610308,
+    "DK2/wind": -0.6006825861244458
+  },
+  "worstLeadBandIncreasePct": 7.792399348717116,
+  "assumptions": [
+    "Eight-hour weather availability lag is assumed, not historically verified.",
+    "Revised observations are shared by both alternatives.",
+    "Overlapping horizons are dependent; this is a short retrospective diagnostic."
+  ]
+}
