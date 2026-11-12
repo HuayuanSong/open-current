@@ -107,7 +107,35 @@ class BrowserRegressions(unittest.TestCase):
     def load(self):
         self.page.goto(self.url, wait_until="networkidle")
         expect(self.page.locator("#country-code")).to_have_text("DK")
-        expect(self.page.locator(".chart-line")).to_have_count(3)
+        expect(self.page.locator("#download-data")).to_be_enabled()
+
+    def test_missing_generation_preserves_independent_feeds_and_forecasts(self):
+        country = fixture("countries/dk.json")
+        country["power"] = []
+        index = fixture("index.json")
+        index["countries"]["dk"]["power"] = None
+        self.page.route(
+            "**/data/countries/dk.json", lambda route: route.fulfill(json=country)
+        )
+        self.page.route("**/data/index.json", lambda route: route.fulfill(json=index))
+        self.load()
+        expect(self.page.locator("#detail-value")).to_have_text("—")
+        expect(self.page.locator("#country-time")).to_have_text("No reading in this period")
+        expect(self.page.locator("#chart-empty")).to_be_visible()
+        expect(self.page.locator(".chart-line")).to_have_count(0)
+        expect(self.page.locator(".danish-card")).to_have_count(2)
+        for card in self.page.locator(".danish-card").all():
+            expect(card.locator(".co2-value")).not_to_contain_text("—")
+            expect(card.locator("time")).to_contain_text("UTC")
+        expect(self.page.locator(".forecast-predicted")).to_have_count(1)
+        expect(self.page.locator("#forecast-download")).to_be_enabled()
+        self.page.locator('[data-panel="flows"]').click()
+        self.assertGreater(self.page.locator("#flows-list .flow-row").count(), 0)
+        self.page.locator('[data-metric="net"]').click()
+        expect(self.page.locator("#detail-value")).to_contain_text("GW")
+        self.page.locator('[data-chart="price"]').click()
+        expect(self.page.locator(".chart-line")).to_have_count(1)
+        self.assert_download_country("dk")
 
     def assert_download_country(self, country):
         with self.page.expect_download() as captured:

@@ -25,6 +25,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      # Watchdog/manual refreshes use the same outage policy as scheduled runs.
+      VALIDATE_DEPLOYMENT: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.refresh) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -53,10 +56,10 @@ jobs:
           path: .cache/forecast-serving/trial-models
           key: weather-trial-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('forecast/trial/model-release.json', 'forecast/trial/protocol.json') }}
       - name: Verify prospective trial model exports
-        if: github.event_name != 'schedule'
+        if: env.VALIDATE_DEPLOYMENT == 'true'
         run: .cache/forecast-serving/main-env/bin/python -m forecast.trial.verify
       - name: Verify exported models against the original experiment
-        if: github.event_name != 'schedule'
+        if: env.VALIDATE_DEPLOYMENT == 'true'
         run: .cache/forecast-serving/main-env/bin/python -m forecast.score
         env:
           FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
@@ -65,7 +68,7 @@ jobs:
         env:
           SNAPSHOT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
       - name: Verify demand explanations on the CPU runner
-        if: github.event_name != 'schedule'
+        if: env.VALIDATE_DEPLOYMENT == 'true'
         run: .cache/forecast-serving/main-env/bin/python -m forecast.verify_explanations
       - name: Restore issued forecasts and long input history
         run: .cache/forecast-serving/main-env/bin/python -m forecast.restore
@@ -84,7 +87,7 @@ jobs:
         env:
           FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
       - name: Require successful scoring during deployment validation
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.refresh)
+        if: env.VALIDATE_DEPLOYMENT == 'true'
         run: test "${{ steps.forecast.outcome }}" = success
       - name: Record prospective challengers and score matured outcomes
         id: trial
@@ -94,7 +97,7 @@ jobs:
         env:
           FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
       - name: Require successful trial validation during deployment
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.refresh)
+        if: env.VALIDATE_DEPLOYMENT == 'true'
         run: test "${{ steps.trial.outcome }}" = success
       - name: Preserve prospective issue evidence
         if: steps.trial.outputs.issued == 'true'
@@ -117,14 +120,14 @@ jobs:
       - name: Fingerprint assets
         run: python scripts/version_assets.py
       - name: Check explorer, forecast panel and browser regressions
-        if: github.event_name != 'schedule'
+        if: env.VALIDATE_DEPLOYMENT == 'true'
         timeout-minutes: 5
         run: |
           python -m pip install playwright
           python -m playwright install chromium
           python tests/browser_suite.py
       - name: Keep deployment validation evidence
-        if: github.event_name != 'schedule' && always()
+        if: env.VALIDATE_DEPLOYMENT == 'true' && always()
         uses: actions/upload-artifact@v4
         with:
           name: forecast-validation

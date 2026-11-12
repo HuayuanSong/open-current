@@ -1,5 +1,6 @@
 """User journeys and responsive checks against real bundled data."""
 import json
+import math
 import os
 from pathlib import Path
 from urllib.parse import urlparse
@@ -21,7 +22,15 @@ def check():
         page.on('request', lambda request: external.append(request.url) if request.url.startswith('http') and urlparse(request.url).netloc != urlparse(URL).netloc else None)
         page.goto(URL, wait_until='networkidle')
         expect(page.locator('#country-select')).to_have_value('dk')
-        expect(page.locator('#detail-value')).not_to_have_text('—')
+        expect(page.locator('#download-data')).to_be_enabled()
+        country = page.request.get(URL + 'data/countries/dk.json').json()
+        power = country['power']
+        low_carbon = power[-1].get('lowCarbon') if power else None
+        if isinstance(low_carbon, (int, float)) and math.isfinite(low_carbon):
+            expect(page.locator('#detail-value')).not_to_have_text('—')
+        else:
+            expect(page.locator('#detail-value')).to_have_text('—')
+            expect(page.locator('#country-time')).to_have_text('No reading in this period')
         expect(page.locator('.country-shape')).to_have_count(67)
         assert not page.evaluate('document.documentElement.scrollWidth > innerWidth'), 'Desktop overflow'
         page.screenshot(path=str(OUT / 'desktop.png'), full_page=True)
@@ -97,7 +106,9 @@ def check():
 
         page.locator('[data-metric="lowCarbon"]').click()
         page.locator('[data-panel="mix"]').click()
-        page.locator('[data-chart="power"]').click()
+        # Resize a populated chart even when the generation provider is offline.
+        chart = 'power' if power else 'price'
+        page.locator(f'[data-chart="{chart}"]').click()
         for width in [390,768,1024]:
             page.set_viewport_size({'width':width,'height':844})
             page.wait_for_function('Math.abs(document.querySelector("#history-chart").viewBox.baseVal.width - document.querySelector("#chart-wrap").clientWidth) < 1')

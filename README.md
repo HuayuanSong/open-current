@@ -165,6 +165,12 @@ are public; recovery controls require authentication.
 
 The full Python suite needs the forecasting environment. On Linux with Python 3.12, install it with `bash forecast/setup.sh`; viewing the static site needs no ML dependencies.
 
+Code pushes and manual runs with `refresh=false` require model-export and browser
+validation. Scheduled runs and manual/watchdog runs with `refresh=true` share the
+refresh policy: they retain Python and JavaScript data checks and publication
+checksum verification, but do not gate fresh feeds on browser checks against
+unrelated upstream availability. Missing source readings remain explicitly missing.
+
 ```sh
 .cache/forecast-serving/main-env/bin/python -m unittest discover -s tests -p 'test_*.py' -v
 node --test tests/*.test.mjs
