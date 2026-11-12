@@ -490,7 +490,7 @@ async function selectCountry(code, writeHash = true) {
     countryData = null;
     $("#country-time").textContent = "Could not load this country";
     $("#mix-list").innerHTML =
-      '<p class="empty-note">The country file could not be loaded. Choose another country or reload to retry.</p>';
+      '<p class="empty-note">This country’s readings could not be loaded. Select another country on the map or from the country menu, or reload to retry.</p>';
     toast("Country data unavailable. Please try again.");
   }
 }
@@ -543,7 +543,7 @@ function renderCountry() {
             `<div class="mix-row"><i style="background:${GROUPS[key].color}"></i><span>${esc(GROUPS[key].name)}</span><span class="mix-value">${esc(powerText(v))}</span><span class="mix-percent">${key !== "storage" && valid(v) && power.total > 0 ? fmt((100 * v) / power.total, 0) + "%" : "—"}</span></div>`,
         )
         .join("")
-    : '<p class="empty-note">No generation data available for this period.</p>';
+    : '<p class="empty-note">No generation data available for this period. Select another country on the map or from the country menu to explore its power mix.</p>';
   $("#mix-note").textContent =
     power?.missing?.length && !valid(power.total)
       ? `${power.missing.length} source series missing. Shares are withheld rather than treating missing data as zero.`

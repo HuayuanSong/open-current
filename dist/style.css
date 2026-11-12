@@ -812,6 +812,9 @@ h2 {
   inset: 0;
   display: grid;
   place-items: center;
+  padding: 20px;
+  text-align: center;
+  line-height: 1.6;
   color: var(--muted);
   font-size: 14px;
 }
@@ -1119,6 +1122,7 @@ dialog h2 {
   background: white;
 }
 .empty-note {
+  grid-column: 1 / -1;
   color: var(--muted);
   font-size: var(--text-note);
   line-height: 1.6;
