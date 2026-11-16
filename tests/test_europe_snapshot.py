@@ -87,6 +87,16 @@ class EuropeSnapshotTests(unittest.TestCase):
         europe.assert_called_once(); dk.assert_not_called()
         self.assertTrue((self.cache / "europe-fetch-status.json").exists())
 
+    def test_scheduled_publish_starts_after_source_hour_buffer(self):
+        import re
+        workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/pages.yml").read_text()
+        minutes = re.search(r'cron: "([0-9,]+) \* \* \* \*"', workflow).group(1)
+        for minute in map(int, minutes.split(",")):
+            at = self.at.replace(minute=minute)
+            from datetime import timedelta
+            latest_eligible_hour = (at - timedelta(minutes=15)).replace(minute=0)
+            self.assertEqual(latest_eligible_hour, at.replace(minute=0))
+
 
 if __name__ == "__main__":
     unittest.main()

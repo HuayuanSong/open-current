@@ -172,8 +172,9 @@ Public charts flag substantial recent undercoverage of their existing ranges.
 ## Automation and hosting
 
 GitHub Pages must be configured with **GitHub Actions** as the publishing source.
-The publisher runs on pushes to `main`, at minutes 7 and 37, and on manual/watchdog
-refreshes. A separate collector starts at minutes 2 and 32 and uploads European
+The publisher runs on pushes to `main`, at minutes 17 and 47 (after the source-hour
+publication buffer), and on manual/watchdog refreshes. A separate collector
+starts at minutes 24 and 54 and uploads European
 raw feeds. The publisher imports its latest completed, checksummed artifact;
 it never waits for a collection still in progress. Fresh Danish readings and
 forecast inputs are fetched on the short path. Only the publisher deploys the

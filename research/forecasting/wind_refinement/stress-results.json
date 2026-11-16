@@ -1,0 +1,34 @@
+{
+  "modelSelectionHash": "2d5fdb1d686bed80c75386c31a14f8aeb91cb433167467e5b0767a499982e3ab",
+  "rows": [
+    {
+      "origin": "2026-11-14T03:00:00+00:00",
+      "area": "DK1",
+      "baselineMAE": 243.47304908346928,
+      "challengerMAE": 218.6701977708833,
+      "fallback": null
+    },
+    {
+      "origin": "2026-11-14T03:00:00+00:00",
+      "area": "DK2",
+      "baselineMAE": 100.19194323977922,
+      "challengerMAE": 142.27456492920928,
+      "fallback": null
+    },
+    {
+      "origin": "2026-11-14T09:00:00+00:00",
+      "area": "DK1",
+      "baselineMAE": 421.5071088369802,
+      "challengerMAE": 242.04018651177094,
+      "fallback": null
+    },
+    {
+      "origin": "2026-11-14T09:00:00+00:00",
+      "area": "DK2",
+      "baselineMAE": 83.23885526901871,
+      "challengerMAE": 71.79264251354506,
+      "fallback": null
+    }
+  ],
+  "interpretation": "Two later November 14 origins; a small stress check, not independent proof of generalization. No model or setting was changed using these outcomes."
+}

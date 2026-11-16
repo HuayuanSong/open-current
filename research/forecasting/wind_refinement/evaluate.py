@@ -15,7 +15,7 @@ from research.forecasting.weather_retrain.common import digest, write_json
 from .prepare import CACHE, HERE, ROOT, raw_history
 
 
-def cases():
+def cases(*, stress=False):
     state = data.read_state(previous.STATE)
     actual = {(r["area"], r["time"]): r["wind"] for r in state["hourly"]}
     raw, _ = raw_history()
@@ -23,7 +23,7 @@ def cases():
     names = json.loads((ROOT / ".cache/weather-retrain/feature-names.json").read_text())["future"]
     loaded, ramp_selection = load_models()
     output = []
-    for path in sorted((previous.CACHE / "cases").glob("*/predictions.npz")):
+    for path in sorted((previous.CACHE / ("stress" if stress else "cases")).glob("*/predictions.npz")):
         origin = pd.Timestamp(pd.to_datetime(path.parent.name, format="%Y%m%dT%H"), tz="UTC")
         at = origin + pd.Timedelta(minutes=30)
         times = pd.date_range(origin + pd.Timedelta(hours=1), periods=48, freq="h")
@@ -31,7 +31,8 @@ def cases():
         recent = recent_wind(records, at)
         with np.load(path) as saved:
             predictions = dict(saved)
-        base = dict(np.load(path.parent / "baseline.npz"))
+        with np.load(path.parent / ("inputs.npz" if stress else "baseline.npz")) as saved:
+            base = dict(saved)
         run = (at - pd.Timedelta(hours=8)).floor("6h")
         points, _ = previous.archived("ecmwf", run, times, state)
         future = weather_sources.future_inputs(base, points, times, names)["future"]

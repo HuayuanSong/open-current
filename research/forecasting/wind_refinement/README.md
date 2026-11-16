@@ -48,6 +48,12 @@ small for a general ramp-performance claim. First-hour DK2 error increased
 slightly (15.21 to 15.57 MW), within the predeclared 5% lead tolerance.
 No fallback was needed in these 16 diagnostic origins.
 
+Two later November 14 stress cases gave mixed results (`stress-results.json`).
+DK1 improved in both (243.47 → 218.67 MW and 421.51 → 242.04 MW). DK2 improved
+at 09 UTC (83.24 → 71.79 MW) but worsened substantially at 03 UTC
+(100.19 → 142.27 MW). Settings were not changed after this check. This is a
+concrete reason to retain the current public model while collecting live evidence.
+
 **These are retrospective results on previously inspected November dates.**
 Revised electricity observations and assumed historical weather release lags
 are used. Overlapping forecast hours are dependent. A new model is not promoted
@@ -110,6 +116,7 @@ Using the existing local source caches and forecasting environment:
 .venv/bin/python -m research.forecasting.wind_refinement.prepare
 .venv/bin/python -m research.forecasting.wind_refinement.train
 .venv/bin/python -m research.forecasting.wind_refinement.evaluate
+.venv/bin/python -m research.forecasting.wind_refinement.stress
 .venv/bin/python -m forecast.wind_refinement --probe
 ```
 

@@ -130,6 +130,34 @@ class WindRefinementTests(unittest.TestCase):
         matched = trial.completed([record, {**record, "id":"duplicate"}], state, self.times[5]+pd.Timedelta(minutes=15), horizon=6)
         self.assertEqual(len(matched), 1)
 
+    def test_range_calibration_cannot_use_future_outcomes_or_other_model_versions(self):
+        previous, actual = [], {}
+        for i, origin in enumerate(pd.date_range("2026-11-10T00:00Z", "2026-11-17T06:00Z", freq="6h")):
+            times = pd.date_range(origin+pd.Timedelta(hours=1), periods=48, freq="h")
+            previous.append(dict(id=str(i), version=self.protocol["version"], baselineVersion="current",
+                origin=origin.isoformat(), issuedAt=(origin+pd.Timedelta(minutes=30)).isoformat(),
+                times=[t.isoformat() for t in times], baseline={a:[100.]*48 for a in data.AREAS},
+                weather={a:dict(meanWindMS=[10.]*48, meanLocalSpreadMS=[2.]*48) for a in data.AREAS}))
+            for area in data.AREAS:
+                for t in times: actual[(area,t.isoformat())] = dict(area=area,time=t.isoformat(),wind=200.)
+        current = dict(issuedAt=self.at.isoformat(), version=self.protocol["version"], baselineVersion="current",
+                       baseline={a:[100.]*48 for a in data.AREAS}, weather=previous[-1]["weather"])
+        state = dict(hourly=list(actual.values()))
+        before = trial.calibrate(current, previous, state, self.protocol)
+        self.assertEqual(set(before), set(trial.METHODS))
+        for row in state["hourly"]:
+            if pd.Timestamp(row["time"]) > self.at-pd.Timedelta(minutes=15): row["wind"] = 99999
+        after = trial.calibrate(current, previous, state, self.protocol)
+        self.assertEqual(before, after)
+        for value in after.values():
+            self.assertLessEqual(pd.Timestamp(value["lastCalibrationTarget"])+pd.Timedelta(minutes=15), self.at)
+        alien = [{**r, "baselineVersion":"old"} for r in previous]
+        self.assertEqual(trial.calibrate(current, alien, state, self.protocol), {})
+        current["weather"] = None
+        missing = trial.calibrate(current, previous, state, self.protocol)
+        self.assertNotIn("ensemble", missing)
+        self.assertIn("absolute", missing)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -2,7 +2,7 @@ name: Collect European readings
 
 on:
   schedule:
-    - cron: "2,32 * * * *"
+    - cron: "24,54 * * * *"
   workflow_dispatch:
 
 permissions:
