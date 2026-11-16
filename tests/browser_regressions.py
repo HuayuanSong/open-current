@@ -173,6 +173,7 @@ class BrowserRegressions(unittest.TestCase):
         self.assertEqual(saved["modelVersion"], "fresh-wind-fixture")
         self.assertEqual(saved["ranges"]["areas"], {})
         self.page.locator('[data-forecast-view="comparison"]').click()
+        self.page.locator('[data-forecast-comparison-model="current"]').click()
         expect(self.page.locator("#forecast-empty")).to_be_visible()
         self.page.locator('[data-forecast-target="solar"]').click()
         expect(self.page.locator("#forecast-empty")).to_be_hidden()
@@ -185,6 +186,65 @@ class BrowserRegressions(unittest.TestCase):
         self.assertFalse(self.page.evaluate("document.documentElement.scrollWidth > innerWidth"))
         (ROOT / "test-results").mkdir(exist_ok=True)
         self.page.locator("#forecasts").screenshot(path=str(ROOT / "test-results/forecasts-fresh-wind-390.png"))
+
+    def test_wind_rollout_retains_old_comparisons_and_draws_a_single_actual_hour(self):
+        data = fixture("forecasts.json")
+        old = copy.deepcopy(data["latest"])
+        origin = dt.datetime(2026, 11, 15, 13, tzinfo=dt.timezone.utc)
+        old.update(modelVersion="previous-wind-fixture", origin=origin.isoformat(),
+            issuedAt=(origin+dt.timedelta(minutes=25)).isoformat(),
+            times=[(origin+dt.timedelta(hours=h)).isoformat() for h in range(1,49)])
+        for area in ["DK1", "DK2"]: old["areas"][area]["wind"] = [200.] * 48
+        old["ranges"]["issuedAt"] = old["issuedAt"]
+        data.update(comparison=old, checkedAt="2026-11-16T14:30:00+00:00")
+        data["observations"] = {area: [dict(time=t, area=area, wind=250., solar=0., load=2000.)
+            for t in old["times"][:25]] for area in ["DK1","DK2"]}
+        data["performance"]["DK2"]["wind"].update(maeMW=77, forecastHours=48, origins=2)
+        fresh = copy.deepcopy(old)
+        origin += dt.timedelta(days=1)
+        fresh.update(modelVersion="current-wind-fixture", origin=origin.isoformat(),
+            issuedAt=(origin+dt.timedelta(minutes=25)).isoformat(),
+            times=[(origin+dt.timedelta(hours=h)).isoformat() for h in range(1,49)])
+        fresh["ranges"] = dict(areas={}, issuedAt=fresh["issuedAt"])
+        for area in ["DK1","DK2"]: fresh["areas"][area]["wind"] = [350.] * 48
+        data["windOutlook"] = dict(status="ready", latest=fresh, comparison=fresh,
+            observations=copy.deepcopy(data["observations"]), checkedAt=data["checkedAt"],
+            performance={a: {"wind": dict(forecastHours=1, origins=1, maeMW=9)} for a in ["DK1","DK2"]})
+        self.page.route("**/data/forecasts.json", lambda route: route.fulfill(json=data))
+        self.load()
+        self.page.locator('[data-forecast-view="comparison"]').click()
+        expect(self.page.locator('#forecast-status')).to_contain_text('Previous wind model')
+        expect(self.page.locator('#forecast-comparison-note')).to_contain_text('25 matched observed hours')
+        expect(self.page.locator('#forecast-stats')).to_contain_text('77 MW')
+        self.assertIn('L', self.page.locator('.forecast-observed').get_attribute('d'))
+        with self.page.expect_download() as download: self.page.locator('#forecast-download').click()
+        self.assertEqual(json.loads(Path(download.value.path()).read_text()), old)
+        self.page.locator('[data-forecast-comparison-model="current"]').click()
+        expect(self.page.locator('#forecast-status')).to_contain_text('Current wind model')
+        expect(self.page.locator('#forecast-comparison-note')).to_contain_text('1 matched observed hour.')
+        expect(self.page.locator('.forecast-observed-point')).to_have_count(1)
+        expect(self.page.locator('.forecast-observed-point')).to_be_visible()
+        expect(self.page.locator('.forecast-observed-point title')).to_contain_text('Observed: 250 MW')
+        expect(self.page.locator('#forecast-stats')).to_contain_text('Collecting outcomes')
+        expect(self.page.locator('#forecast-range-toggle')).to_be_disabled()
+        self.page.locator('#forecast-chart').focus(); self.page.keyboard.press('ArrowLeft')
+        expect(self.page.locator('#forecast-tooltip')).to_contain_text('Observed: 250 MW')
+        with self.page.expect_download() as download: self.page.locator('#forecast-download').click()
+        self.assertEqual(json.loads(Path(download.value.path()).read_text()), fresh)
+        self.page.set_viewport_size({'width':390,'height':844})
+        self.page.wait_for_function("Number(document.querySelector('#forecast-chart').getAttribute('viewBox').split(' ')[2]) === document.querySelector('#forecast-chart-wrap').clientWidth")
+        self.assertFalse(self.page.evaluate('document.documentElement.scrollWidth > innerWidth'))
+        self.page.locator('#forecasts').screenshot(path=str(ROOT/'test-results/comparison-single-hour-390.png'))
+        self.page.locator('[data-forecast-target="solar"]').click()
+        expect(self.page.locator('#forecast-comparison-model')).to_be_hidden()
+        self.page.locator('[data-forecast-target="wind"]').click()
+        self.page.locator('[data-forecast-comparison-model="previous"]').click()
+        self.page.locator('[data-forecast-view="outlook"]').click()
+        expect(self.page.locator('#forecast-comparison-model')).to_be_hidden()
+        expect(self.page.locator('#forecast-comparison-note')).to_be_hidden()
+        expect(self.page.locator('#forecast-range-toggle')).to_be_disabled()
+        with self.page.expect_download() as download: self.page.locator('#forecast-download').click()
+        self.assertEqual(json.loads(Path(download.value.path()).read_text()), fresh)
 
     def test_missing_generation_preserves_independent_feeds_and_forecasts(self):
         country = fixture("countries/dk.json")

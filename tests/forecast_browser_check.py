@@ -89,6 +89,8 @@ def check():
         assert len(saved['times'])==48
         assert saved['ranges']['issuedAt']==saved['issuedAt']
         page.locator('[data-forecast-view="comparison"]').click()
+        if page.locator('[data-forecast-comparison-model="current"]').is_visible():
+            page.locator('[data-forecast-comparison-model="current"]').click()
         if wind['comparison']:
             expect(page.locator('#forecast-timing')).to_contain_text('Comparing the forecast issued')
         else:

@@ -121,6 +121,12 @@ error by about 14% / 13% in a short November replay; this is not a guarantee of
 live accuracy. Solar and demand retain the original model. Wind has its own
 issue archive, source timestamps, comparisons and live error statistics.
 
+The wind comparison view lets you inspect the current or previous model. While
+the current model has fewer than 24 matched observed hours, it initially shows
+the previous model when that has more comparison history. Each view keeps its
+own model's values, statistics, saved ranges and downloads. Isolated observations
+are shown as dots, including during a new model's first hours.
+
 The [short-term wind and uncertainty experiments](research/forecasting/wind_refinement/README.md)
 run separately from that public forecast. A small LightGBM challenger uses recent
 five-minute production changes for the next six hours. Timestamped weather-ensemble

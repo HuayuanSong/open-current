@@ -2175,6 +2175,12 @@ body {
 .forecast-legend [hidden], #forecast-explanation[hidden] { display: none; }
 .forecast-legend { flex-wrap: wrap; }
 .forecast-options { padding: 12px 24px 0; }
+.forecast-comparison-model { display: flex; align-items: center; gap: 8px; padding: 12px 24px 0; flex-wrap: wrap; }
+.forecast-comparison-model button { font-size: 16px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 3px; }
+.forecast-comparison-model button[aria-pressed="true"] { color: var(--paper); background: var(--ink); }
+.forecast-comparison-note { margin: 10px 24px 0; color: var(--muted); font-size: 16px; line-height: 1.5; }
+.forecast-observed-point { fill: var(--ink); }
+.forecast-predicted-point { fill: var(--green); }
 .forecast-options label { display: inline-flex; gap: 10px; align-items: center; font-size: 16px; cursor: pointer; flex-wrap: wrap; }
 .forecast-options input { width: 20px; height: 20px; accent-color: var(--green); margin: 0; cursor: pointer; }
 .forecast-options label span { color: var(--muted); }
@@ -2239,6 +2245,8 @@ body {
   .forecast-footer { padding: 16px 18px; align-items: flex-start; flex-direction: column; gap: 12px; }
   .forecast-footer p { max-width: 100%; }
   .forecast-options { padding: 14px 14px 0; }
+  .forecast-comparison-model { padding-left: 14px; padding-right: 14px; }
+  .forecast-comparison-note { margin-left: 14px; margin-right: 14px; }
   .forecast-range-note { padding: 0 18px 16px; }
   .forecast-range-note.undercoverage,
   .forecast-range-note.uncalibrated { margin: 0 18px 16px; padding: 12px; }

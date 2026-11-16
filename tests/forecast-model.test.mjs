@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {forecastState,chartSeries,forecastStats,forecastTransition,rangeUndercoverage,targetPayload,HOUR} from '../dist/forecast-model.js';
+import {forecastState,chartSeries,forecastStats,forecastTransition,rangeUndercoverage,targetPayload,viewPayload,matchedObservationCount,isolatedPoints,HOUR} from '../dist/forecast-model.js';
 const record={origin:'2026-10-27T10:00:00Z',issuedAt:'2026-10-27T10:20:00Z',
   times:['2026-10-27T11:00:00Z','2026-10-27T12:00:00Z'],areas:{DK1:{solar:[0,100]}}};
 test('updated wind uses its own issue, comparison, metrics and ranges without changing solar',()=>{
@@ -104,4 +104,40 @@ test('transition adjacency uses UTC hours across midnight, year changes and DST'
     const points=[{time:start,observed:20,predicted:null},{time:start+HOUR,observed:null,predicted:30}];
     assert.deepEqual(forecastTransition(points,origin),[{time:start,value:20},{time:start+HOUR,value:30}]);
   }
+});
+
+test('wind comparison keeps usable prior-model history without mixing the outlook or metrics',()=>{
+  const times=Array.from({length:48},(_,i)=>new Date(Date.parse('2026-11-15T14:00Z')+i*HOUR).toISOString());
+  const old={modelVersion:'old',origin:'2026-11-15T13:00Z',issuedAt:'2026-11-15T13:25Z',times,areas:{DK2:{wind:times.map(()=>200)}}};
+  const fresh={...old,modelVersion:'new',origin:'2026-11-16T13:00Z',issuedAt:'2026-11-16T13:25Z',
+    times:times.map(t=>new Date(Date.parse(t)+24*HOUR).toISOString())};
+  const observations={DK2:times.slice(0,25).map(time=>({time,wind:0}))};
+  const payload={latest:old,comparison:old,observations,performance:{old:true},
+    windOutlook:{latest:fresh,comparison:fresh,observations,performance:{fresh:true}}};
+  const before=structuredClone(payload);
+  assert.equal(matchedObservationCount(payload.windOutlook,'DK2','wind'),1);
+  let view=viewPayload(payload,'DK2','wind','comparison');
+  assert.equal(view.comparisonSource,'previous');assert.equal(view.performance,payload.performance);
+  assert.equal(chartSeries(payload,'DK2','wind','comparison').record,old);
+  assert.equal(chartSeries(payload,'DK2','wind','comparison','current').record,fresh);
+  assert.equal(viewPayload(payload,'DK2','wind','comparison','current').performance,payload.windOutlook.performance);
+  assert.equal(chartSeries(payload,'DK2','wind','outlook','previous').record,fresh);
+  assert.deepEqual(payload,before);
+  payload.windOutlook.observations={DK2:fresh.times.slice(0,24).map(time=>({time,wind:0}))};
+  assert.equal(viewPayload(payload,'DK2','wind','comparison').comparisonSource,'current');
+  assert.equal(viewPayload(payload,'DK2','wind','comparison','previous').comparisonSource,'previous');
+});
+
+test('comparison counts exclude retrospective, missing and not-yet-matured outcomes',()=>{
+  const payload={checkedAt:'2026-10-27T12:10Z',comparison:record,
+    observations:{DK1:[{time:'2026-10-27T11:00:00+00:00',solar:0},{time:record.times[1],solar:100}]}};
+  assert.equal(matchedObservationCount(payload,'DK1','solar'),1);
+  payload.comparison={...record,issuedAt:record.times[0]};
+  assert.equal(matchedObservationCount(payload,'DK1','solar'),0);
+});
+
+test('isolated observations remain visible, including zero and points between gaps',()=>{
+  const points=[{observed:0},{observed:null},{observed:20},{observed:30},{observed:null},{observed:40}];
+  assert.deepEqual(isolatedPoints(points,'observed'),[points[0],points[5]]);
+  assert.deepEqual(isolatedPoints([{observed:NaN},{observed:Infinity}],'observed'),[]);
 });

@@ -8,6 +8,34 @@ export function targetPayload(payload, target) {
     windUpdatePending: true };
 }
 
+export function matchedObservationCount(payload, area, target) {
+  const record = payload?.comparison;
+  if (!record) return 0;
+  const observations = new Map((payload.observations?.[area] || []).map(r => [Date.parse(r.time), r[target]]));
+  const checked = Date.parse(payload.checkedAt);
+  const cutoff = Number.isFinite(checked) ? checked - 15 * 60000 : Infinity;
+  return record.times.filter((time, index) => Date.parse(time) > Date.parse(record.issuedAt) &&
+    Date.parse(time) <= cutoff && usable(observations.get(Date.parse(time))) &&
+    usable(record.areas[area]?.[target]?.[index])).length;
+}
+
+export function viewPayload(payload, area, target, mode = "outlook", preference = "auto") {
+  const current = targetPayload(payload, target);
+  if (mode !== "comparison" || target !== "wind" || !payload?.windOutlook?.latest) return current;
+  const currentHours = matchedObservationCount(current, area, target);
+  const previousHours = matchedObservationCount(payload, area, target);
+  const hasPrevious = Boolean(payload.comparison);
+  const previous = hasPrevious && (preference === "previous" ||
+    (preference === "auto" && currentHours < 24 && previousHours > currentHours));
+  return { ...(previous ? payload : current), comparisonSource: previous ? "previous" : "current",
+    comparisonCurrentHours: currentHours, comparisonHasPrevious: hasPrevious };
+}
+
+export function isolatedPoints(points, key) {
+  return points.filter((point, index) => usable(point[key]) &&
+    !usable(points[index - 1]?.[key]) && !usable(points[index + 1]?.[key]));
+}
+
 export function rangeUndercoverage(stats) {
   return stats?.rangeHours >= 24 && stats?.rangeOrigins >= 3 &&
     usable(stats.rangeCoverage) && stats.rangeCoverage < 0.75;
@@ -37,8 +65,8 @@ export function forecastState(payload, now = Date.now()) {
   return "ready";
 }
 
-export function chartSeries(payload, area, target, mode = "outlook") {
-  payload = targetPayload(payload, target);
+export function chartSeries(payload, area, target, mode = "outlook", preference = "auto") {
+  payload = viewPayload(payload, area, target, mode, preference);
   const record = mode === "comparison" ? payload?.comparison : payload?.latest;
   if (!record) return { record: null, points: [] };
   const observed = new Map((payload.observations?.[area] || []).map(r => [Date.parse(r.time), r[target]]));

@@ -330,6 +330,12 @@
             </div>
             <div class="forecast-legend"><span><i class="forecast-observed-key"></i>Observed</span><span><i class="forecast-predicted-key"></i>Forecast</span><span id="forecast-transition-key" title="Visual guide between consecutive observed and forecast hours" hidden><i class="forecast-transition-key"></i>Transition guide</span><span id="forecast-range-key" hidden><i class="forecast-range-key"></i>Prediction range</span></div>
           </div>
+          <div class="forecast-comparison-model" id="forecast-comparison-model" aria-label="Wind comparison model" hidden>
+            <span>Compare:</span>
+            <button data-forecast-comparison-model="current" aria-pressed="false">Current wind model</button>
+            <button data-forecast-comparison-model="previous" aria-pressed="false">Previous wind model</button>
+          </div>
+          <p class="forecast-comparison-note" id="forecast-comparison-note" aria-live="polite" hidden></p>
           <div class="forecast-options"><label><input id="forecast-range-toggle" type="checkbox" checked aria-describedby="forecast-range-note" /> Show prediction range <span id="forecast-range-target">(80% target)</span></label></div>
           <div class="forecast-chart-wrap" id="forecast-chart-wrap">
             <svg id="forecast-chart" role="img" tabindex="0" aria-label="Danish electricity forecast. Use left and right arrow keys to inspect hourly values."></svg>
