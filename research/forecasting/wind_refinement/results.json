@@ -1,0 +1,510 @@
+{
+  "protocolHash": "daac08f3fe5cf7a2cc5c3b7a7b91ae79a481298fc36d0e15515564e9f591995e",
+  "modelSelectionHash": "2d5fdb1d686bed80c75386c31a14f8aeb91cb433167467e5b0767a499982e3ab",
+  "evaluationOrigins": 16,
+  "shortTerm": {
+    "DK1": {
+      "baselineMAE": 214.89437834280054,
+      "challengerMAE": 209.9738446800412,
+      "improvementPct": 2.289745176539737,
+      "baselineByLead": [
+        67.66385385525281,
+        223.28566110394272,
+        241.60615576370327,
+        229.03661435910982,
+        256.714320011665,
+        271.05966496312953
+      ],
+      "challengerByLead": [
+        57.8543352977523,
+        165.43141128538713,
+        245.31753822035208,
+        238.75730203751397,
+        274.9964586926344,
+        277.4860225466072
+      ],
+      "rampHours": 8,
+      "rampBaselineMAE": 571.5002815822577,
+      "rampChallengerMAE": 545.2070602330948,
+      "accuracyPass": false,
+      "leadPass": false,
+      "longHorizonUnchanged": true
+    },
+    "DK2": {
+      "baselineMAE": 59.89011179478396,
+      "challengerMAE": 44.23930725933244,
+      "improvementPct": 26.13253518223455,
+      "baselineByLead": [
+        15.213911427370473,
+        42.404371679487376,
+        56.98783229680225,
+        68.41657771371095,
+        79.88732317027004,
+        96.43065448106269
+      ],
+      "challengerByLead": [
+        15.574754954174809,
+        27.226584155848613,
+        34.29488086371424,
+        49.005188859984344,
+        60.55036936861548,
+        78.78406535365718
+      ],
+      "rampHours": 11,
+      "rampBaselineMAE": 129.43583575182038,
+      "rampChallengerMAE": 94.28475256086386,
+      "accuracyPass": true,
+      "leadPass": true,
+      "longHorizonUnchanged": true
+    }
+  },
+  "ranges": {
+    "DK1": {
+      "selected": {
+        "method": "weather_disagreement",
+        "windowDays": 7
+      },
+      "checks": {
+        "coveragePass": false,
+        "scorePass": true,
+        "widthPass": false
+      },
+      "candidates": [
+        {
+          "method": "absolute",
+          "windowDays": 7,
+          "development": {
+            "origins": 9,
+            "coverage": 0.7106481481481481,
+            "intervalScore": 1157.507938807246,
+            "meanWidthMW": 727.0369661635242,
+            "coverageByLeadBand": {
+              "1-6": 0.7777777777777778,
+              "7-24": 0.6975308641975309,
+              "25-48": 0.7037037037037037
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.4192708333333333,
+            "intervalScore": 3607.5377296618412,
+            "meanWidthMW": 864.2413730329594,
+            "coverageByLeadBand": {
+              "1-6": 0.6458333333333334,
+              "7-24": 0.4548611111111111,
+              "25-48": 0.3359375
+            }
+          }
+        },
+        {
+          "method": "absolute",
+          "windowDays": 14,
+          "development": {
+            "origins": 9,
+            "coverage": 0.7106481481481481,
+            "intervalScore": 1157.507938807246,
+            "meanWidthMW": 727.0369661635242,
+            "coverageByLeadBand": {
+              "1-6": 0.7777777777777778,
+              "7-24": 0.6975308641975309,
+              "25-48": 0.7037037037037037
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.3528645833333333,
+            "intervalScore": 3887.2101412750726,
+            "meanWidthMW": 737.3088470746019,
+            "coverageByLeadBand": {
+              "1-6": 0.6354166666666666,
+              "7-24": 0.4375,
+              "25-48": 0.21875
+            }
+          }
+        },
+        {
+          "method": "signed",
+          "windowDays": 7,
+          "development": {
+            "origins": 9,
+            "coverage": 0.5740740740740741,
+            "intervalScore": 1672.665098408218,
+            "meanWidthMW": 607.6876584660392,
+            "coverageByLeadBand": {
+              "1-6": 0.7592592592592593,
+              "7-24": 0.654320987654321,
+              "25-48": 0.4675925925925926
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.5247395833333334,
+            "intervalScore": 3027.9905292480034,
+            "meanWidthMW": 783.51212363204,
+            "coverageByLeadBand": {
+              "1-6": 0.625,
+              "7-24": 0.6284722222222222,
+              "25-48": 0.421875
+            }
+          }
+        },
+        {
+          "method": "signed",
+          "windowDays": 14,
+          "development": {
+            "origins": 9,
+            "coverage": 0.5740740740740741,
+            "intervalScore": 1672.665098408218,
+            "meanWidthMW": 607.6876584660392,
+            "coverageByLeadBand": {
+              "1-6": 0.7592592592592593,
+              "7-24": 0.654320987654321,
+              "25-48": 0.4675925925925926
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.40234375,
+            "intervalScore": 3535.438347631612,
+            "meanWidthMW": 754.8559564886442,
+            "coverageByLeadBand": {
+              "1-6": 0.6041666666666666,
+              "7-24": 0.4861111111111111,
+              "25-48": 0.2890625
+            }
+          }
+        },
+        {
+          "method": "power",
+          "windowDays": 7,
+          "development": {
+            "origins": 9,
+            "coverage": 0.6574074074074074,
+            "intervalScore": 1229.3229536507702,
+            "meanWidthMW": 591.0638916702474,
+            "coverageByLeadBand": {
+              "1-6": 0.7222222222222222,
+              "7-24": 0.6049382716049383,
+              "25-48": 0.6805555555555556
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.7955729166666666,
+            "intervalScore": 2834.9374184303692,
+            "meanWidthMW": 2117.28305061762,
+            "coverageByLeadBand": {
+              "1-6": 0.8958333333333334,
+              "7-24": 0.8993055555555556,
+              "25-48": 0.6927083333333334
+            }
+          }
+        },
+        {
+          "method": "power",
+          "windowDays": 14,
+          "development": {
+            "origins": 9,
+            "coverage": 0.6574074074074074,
+            "intervalScore": 1229.3229536507702,
+            "meanWidthMW": 591.0638916702474,
+            "coverageByLeadBand": {
+              "1-6": 0.7222222222222222,
+              "7-24": 0.6049382716049383,
+              "25-48": 0.6805555555555556
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.7747395833333334,
+            "intervalScore": 2655.3870726683676,
+            "meanWidthMW": 1858.7355661733843,
+            "coverageByLeadBand": {
+              "1-6": 0.875,
+              "7-24": 0.8645833333333334,
+              "25-48": 0.6822916666666666
+            }
+          }
+        },
+        {
+          "method": "weather_disagreement",
+          "windowDays": 7,
+          "development": {
+            "origins": 9,
+            "coverage": 0.7847222222222222,
+            "intervalScore": 1484.4415409043902,
+            "meanWidthMW": 1015.890601422882,
+            "coverageByLeadBand": {
+              "1-6": 0.7222222222222222,
+              "7-24": 0.7592592592592593,
+              "25-48": 0.8194444444444444
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.73046875,
+            "intervalScore": 2723.26394112284,
+            "meanWidthMW": 1684.771096884674,
+            "coverageByLeadBand": {
+              "1-6": 0.8958333333333334,
+              "7-24": 0.8333333333333334,
+              "25-48": 0.6119791666666666
+            }
+          }
+        },
+        {
+          "method": "weather_disagreement",
+          "windowDays": 14,
+          "development": {
+            "origins": 9,
+            "coverage": 0.7847222222222222,
+            "intervalScore": 1484.4415409043902,
+            "meanWidthMW": 1015.890601422882,
+            "coverageByLeadBand": {
+              "1-6": 0.7222222222222222,
+              "7-24": 0.7592592592592593,
+              "25-48": 0.8194444444444444
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.7330729166666666,
+            "intervalScore": 2622.3087782924144,
+            "meanWidthMW": 1644.9089243770024,
+            "coverageByLeadBand": {
+              "1-6": 0.8645833333333334,
+              "7-24": 0.8159722222222222,
+              "25-48": 0.6380208333333334
+            }
+          }
+        }
+      ],
+      "prospectiveValidationRequired": true
+    },
+    "DK2": {
+      "selected": {
+        "method": "absolute",
+        "windowDays": 7
+      },
+      "checks": {
+        "coveragePass": false,
+        "scorePass": false,
+        "widthPass": true
+      },
+      "candidates": [
+        {
+          "method": "absolute",
+          "windowDays": 7,
+          "development": {
+            "origins": 9,
+            "coverage": 0.7476851851851852,
+            "intervalScore": 287.86328285908024,
+            "meanWidthMW": 171.84898587430067,
+            "coverageByLeadBand": {
+              "1-6": 0.7592592592592593,
+              "7-24": 0.7222222222222222,
+              "25-48": 0.7638888888888888
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.5716145833333334,
+            "intervalScore": 543.1650348787304,
+            "meanWidthMW": 195.78976170353204,
+            "coverageByLeadBand": {
+              "1-6": 0.6770833333333334,
+              "7-24": 0.6631944444444444,
+              "25-48": 0.4765625
+            }
+          }
+        },
+        {
+          "method": "absolute",
+          "windowDays": 14,
+          "development": {
+            "origins": 9,
+            "coverage": 0.7476851851851852,
+            "intervalScore": 287.86328285908024,
+            "meanWidthMW": 171.84898587430067,
+            "coverageByLeadBand": {
+              "1-6": 0.7592592592592593,
+              "7-24": 0.7222222222222222,
+              "25-48": 0.7638888888888888
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.5533854166666666,
+            "intervalScore": 559.9429645521651,
+            "meanWidthMW": 186.3812035437852,
+            "coverageByLeadBand": {
+              "1-6": 0.6875,
+              "7-24": 0.6631944444444444,
+              "25-48": 0.4375
+            }
+          }
+        },
+        {
+          "method": "signed",
+          "windowDays": 7,
+          "development": {
+            "origins": 9,
+            "coverage": 0.6597222222222222,
+            "intervalScore": 348.2805953456655,
+            "meanWidthMW": 152.97944878629258,
+            "coverageByLeadBand": {
+              "1-6": 0.8148148148148148,
+              "7-24": 0.7222222222222222,
+              "25-48": 0.5740740740740741
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.58984375,
+            "intervalScore": 567.7997896868858,
+            "meanWidthMW": 198.68128707967034,
+            "coverageByLeadBand": {
+              "1-6": 0.6979166666666666,
+              "7-24": 0.6805555555555556,
+              "25-48": 0.4947916666666667
+            }
+          }
+        },
+        {
+          "method": "signed",
+          "windowDays": 14,
+          "development": {
+            "origins": 9,
+            "coverage": 0.6597222222222222,
+            "intervalScore": 348.2805953456655,
+            "meanWidthMW": 152.97944878629258,
+            "coverageByLeadBand": {
+              "1-6": 0.8148148148148148,
+              "7-24": 0.7222222222222222,
+              "25-48": 0.5740740740740741
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.5533854166666666,
+            "intervalScore": 577.4308642140322,
+            "meanWidthMW": 186.2877766983639,
+            "coverageByLeadBand": {
+              "1-6": 0.71875,
+              "7-24": 0.6875,
+              "25-48": 0.4114583333333333
+            }
+          }
+        },
+        {
+          "method": "power",
+          "windowDays": 7,
+          "development": {
+            "origins": 9,
+            "coverage": 0.75,
+            "intervalScore": 288.1529032689061,
+            "meanWidthMW": 172.9340533573697,
+            "coverageByLeadBand": {
+              "1-6": 0.7592592592592593,
+              "7-24": 0.7222222222222222,
+              "25-48": 0.7685185185185185
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.88671875,
+            "intervalScore": 606.6319676524888,
+            "meanWidthMW": 525.3287225177294,
+            "coverageByLeadBand": {
+              "1-6": 0.875,
+              "7-24": 0.9201388888888888,
+              "25-48": 0.8645833333333334
+            }
+          }
+        },
+        {
+          "method": "power",
+          "windowDays": 14,
+          "development": {
+            "origins": 9,
+            "coverage": 0.75,
+            "intervalScore": 288.1529032689061,
+            "meanWidthMW": 172.9340533573697,
+            "coverageByLeadBand": {
+              "1-6": 0.7592592592592593,
+              "7-24": 0.7222222222222222,
+              "25-48": 0.7685185185185185
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.8893229166666666,
+            "intervalScore": 578.3690167442916,
+            "meanWidthMW": 499.8630958486415,
+            "coverageByLeadBand": {
+              "1-6": 0.8854166666666666,
+              "7-24": 0.9270833333333334,
+              "25-48": 0.8619791666666666
+            }
+          }
+        },
+        {
+          "method": "weather_disagreement",
+          "windowDays": 7,
+          "development": {
+            "origins": 9,
+            "coverage": 0.7800925925925926,
+            "intervalScore": 311.85872017324357,
+            "meanWidthMW": 215.10006037683038,
+            "coverageByLeadBand": {
+              "1-6": 0.7592592592592593,
+              "7-24": 0.7777777777777778,
+              "25-48": 0.7870370370370371
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.8880208333333334,
+            "intervalScore": 568.258663708333,
+            "meanWidthMW": 494.48496677619477,
+            "coverageByLeadBand": {
+              "1-6": 0.875,
+              "7-24": 0.9305555555555556,
+              "25-48": 0.859375
+            }
+          }
+        },
+        {
+          "method": "weather_disagreement",
+          "windowDays": 14,
+          "development": {
+            "origins": 9,
+            "coverage": 0.7800925925925926,
+            "intervalScore": 311.85872017324357,
+            "meanWidthMW": 215.10006037683038,
+            "coverageByLeadBand": {
+              "1-6": 0.7592592592592593,
+              "7-24": 0.7777777777777778,
+              "25-48": 0.7870370370370371
+            }
+          },
+          "evaluation": {
+            "origins": 16,
+            "coverage": 0.8658854166666666,
+            "intervalScore": 538.6447701522076,
+            "meanWidthMW": 454.25402160854657,
+            "coverageByLeadBand": {
+              "1-6": 0.8854166666666666,
+              "7-24": 0.9270833333333334,
+              "25-48": 0.8151041666666666
+            }
+          }
+        }
+      ],
+      "prospectiveValidationRequired": true
+    }
+  },
+  "publicPromotion": false,
+  "interpretation": "November outcomes and October were previously inspected. This is retrospective diagnosis, not an independent test. Electricity archives are revised measurements. Weather comes from exact runs with conservative assumed publication lags. Overlapping hours are dependent. Ensemble means/spreads from the stitched historical endpoint are not valid issuance-time inputs; collect timestamped live snapshots instead.",
+  "rampFallbacks": []
+}

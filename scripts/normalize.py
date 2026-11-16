@@ -300,6 +300,8 @@ def main():
     cutoff = int((now - timedelta(days=7)).timestamp() * 1000)
     countries = {}
     errors = []
+    previous_index = read(DATA / "index.json", {})
+    europe_collection = read(CACHE / "europe-collection.json", previous_index.get("europeCollection"))
     for code, (name, lon, lat) in COUNTRIES.items():
         path = DATA / "countries" / (code + ".json")
         previous = read(path, {})
@@ -378,6 +380,7 @@ def main():
             "countries": countries,
             "coverage": sum(c["power"] is not None for c in countries.values()),
             "normalizationIssues": errors,
+            "europeCollection": europe_collection,
         },
     )
     for error in errors:

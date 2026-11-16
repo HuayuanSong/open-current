@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -74,11 +75,16 @@ jobs:
         run: .cache/forecast-serving/main-env/bin/python -m forecast.restore
         env:
           SNAPSHOT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
-      - name: Collect public readings (paced to provider limits)
+      - name: Import the latest completed European collection
+        continue-on-error: true
+        timeout-minutes: 2
+        run: python scripts/europe_snapshot.py import
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Collect fresh Danish readings without waiting for Europe
         if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.refresh)
-        run: python -u scripts/fetch.py --days 1
+        run: python -u scripts/fetch.py --days 1 --source denmark
       - name: Normalize the refreshed readings
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.refresh)
         run: python scripts/normalize.py
       - name: Issue forecasts and evaluate previously issued outlooks
         id: forecast
@@ -156,6 +162,19 @@ jobs:
             .cache/fresh-wind/live/evidence/sources.json.gz
             .cache/fresh-wind/live/evidence/record.json
             .cache/fresh-wind/live/evidence/status.json
+          retention-days: 90
+      - name: Record short-term wind and uncertainty challengers
+        id: wind-research
+        continue-on-error: true
+        timeout-minutes: 2
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.wind_refinement
+      - name: Preserve wind challenger and ensemble-weather evidence
+        if: steps.wind-research.outputs.issued == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-research-${{ github.run_id }}-${{ github.run_attempt }}
+          include-hidden-files: true
+          path: .cache/wind-refinement/live/evidence/
           retention-days: 90
       - name: Verify normalization and published data
         run: .cache/forecast-serving/main-env/bin/python -m unittest discover -s tests -p 'test_*.py' -v

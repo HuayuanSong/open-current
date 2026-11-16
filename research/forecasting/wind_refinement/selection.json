@@ -1,0 +1,136 @@
+{
+  "version": "wind-refinement-2026-11-16",
+  "protocolHash": "daac08f3fe5cf7a2cc5c3b7a7b91ae79a481298fc36d0e15515564e9f591995e",
+  "featureNames": [
+    "lead",
+    "hoursFromMeasurement",
+    "levelMW",
+    "previousMW",
+    "trendMWPerHour",
+    "mean1h",
+    "mean3h",
+    "std1h",
+    "std3h",
+    "change1h",
+    "offshoreFraction",
+    "ageMinutes",
+    "lag1h",
+    "lag3h",
+    "lag6h",
+    "lag24h",
+    "wx_0_wind_speed_100m",
+    "wx_0_wind_speed_100m_change",
+    "wx_0_wind_sin",
+    "wx_0_wind_sin_change",
+    "wx_0_wind_cos",
+    "wx_0_wind_cos_change",
+    "wx_0_power_curve",
+    "wx_0_power_curve_change",
+    "wx_1_wind_speed_100m",
+    "wx_1_wind_speed_100m_change",
+    "wx_1_wind_sin",
+    "wx_1_wind_sin_change",
+    "wx_1_wind_cos",
+    "wx_1_wind_cos_change",
+    "wx_1_power_curve",
+    "wx_1_power_curve_change",
+    "wx_2_wind_speed_100m",
+    "wx_2_wind_speed_100m_change",
+    "wx_2_wind_sin",
+    "wx_2_wind_sin_change",
+    "wx_2_wind_cos",
+    "wx_2_wind_cos_change",
+    "wx_2_power_curve",
+    "wx_2_power_curve_change",
+    "hour_sin",
+    "hour_cos",
+    "year_sin",
+    "year_cos"
+  ],
+  "datasetHash": "7684a53236a509d4ea423bcd42d2215bc7c053ccdb64ba452d9ce460b3f651e6",
+  "models": {
+    "DK1": {
+      "family": "lightgbm",
+      "setting": 15,
+      "file": "DK1.txt",
+      "sha256": "b201d4bb60d072adef2ea3c8340e665c974730300bd6b6928ef847939fdab955",
+      "fittingOrigins": 1003,
+      "maximumLabel": "2026-10-26T15:00:00+00:00"
+    },
+    "DK2": {
+      "family": "lightgbm",
+      "setting": 15,
+      "file": "DK2.txt",
+      "sha256": "566ad682b50aa558c32d324f17f7c7bce6dcd7777112f336c14d2fb177027443",
+      "fittingOrigins": 1003,
+      "maximumLabel": "2026-10-26T15:00:00+00:00"
+    }
+  },
+  "developmentScores": [
+    {
+      "area": "DK1",
+      "family": "ridge",
+      "setting": 10,
+      "maeMW": 247.3332079446105,
+      "fittingOrigins": 898,
+      "validationOrigins": 98
+    },
+    {
+      "area": "DK1",
+      "family": "ridge",
+      "setting": 100,
+      "maeMW": 245.5490097147155,
+      "fittingOrigins": 898,
+      "validationOrigins": 98
+    },
+    {
+      "area": "DK1",
+      "family": "lightgbm",
+      "setting": 7,
+      "maeMW": 224.93823023709598,
+      "fittingOrigins": 898,
+      "validationOrigins": 98
+    },
+    {
+      "area": "DK1",
+      "family": "lightgbm",
+      "setting": 15,
+      "maeMW": 214.6832592170563,
+      "fittingOrigins": 898,
+      "validationOrigins": 98
+    },
+    {
+      "area": "DK2",
+      "family": "ridge",
+      "setting": 10,
+      "maeMW": 82.16866466329056,
+      "fittingOrigins": 898,
+      "validationOrigins": 98
+    },
+    {
+      "area": "DK2",
+      "family": "ridge",
+      "setting": 100,
+      "maeMW": 81.49011403444825,
+      "fittingOrigins": 898,
+      "validationOrigins": 98
+    },
+    {
+      "area": "DK2",
+      "family": "lightgbm",
+      "setting": 7,
+      "maeMW": 82.86477212913674,
+      "fittingOrigins": 898,
+      "validationOrigins": 98
+    },
+    {
+      "area": "DK2",
+      "family": "lightgbm",
+      "setting": 15,
+      "maeMW": 81.46580269380722,
+      "fittingOrigins": 898,
+      "validationOrigins": 98
+    }
+  ],
+  "publicPromotion": false
+}

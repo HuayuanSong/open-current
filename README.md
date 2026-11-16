@@ -50,18 +50,22 @@ flowchart TB
     energy["Energy-Charts API<br/>Generation, flows, open prices"]
     energinet["Energinet API<br/>DK electricity and operational CO₂"]
     weather["Open-Meteo Single Runs + availability API<br/>Issued ECMWF and DMI weather"]
+    ensembleweather["Open-Meteo Ensemble Mean API<br/>Wind means and local spreads"]
     weights["Pinned model artifacts<br/>GitHub Release + Hugging Face"]
     watchdog["Cloudflare freshness watchdog<br/>15-minute checks · bounded recovery"]
     health["Small freshness metadata<br/>Publication, forecast and source times"]
 
     subgraph actions["GitHub Actions · scheduled Python jobs"]
-        collect["Collect and normalize electricity<br/>Validate units, missing data and UTC"]
+        eurocollect["Independent European collection<br/>Paced requests · no site publication"]
+        bundle["Checksummed raw-feed artifact<br/>Newest completed collection only"]
+        collect["Fast Danish collection + normalize<br/>Import completed Europe feeds · retain history"]
         inputs["Prepare DK1/DK2 forecast inputs<br/>Causal history + issued weather"]
         models["Isolated CPU model inference<br/>LightGBM · XGBoost · ridge<br/>Weather MLP · Chronos-2 · TinyTimeMixer"]
         blend["Fixed nine-family ensemble<br/>Wind, solar and demand · 48 hours"]
         evaluate["Archive forecasts and ranges<br/>Score against later observations"]
         windtest["Separate wind comparison<br/>Latest ECMWF + five-minute correction<br/>No automatic model promotion"]
         freshwind["Public wind update<br/>Refitted components + regional ECMWF/DMI mix<br/>Recent-power correction · separate issue archive"]
+        research["Internal wind challengers<br/>1–6h LightGBM + conditional ranges<br/>Timestamped weather ensembles · no auto-promotion"]
     end
 
     archive["Static JSON + forecast archive<br/>Readings, predictions and retained history"]
@@ -69,7 +73,8 @@ flowchart TB
     browser["D3 browser application<br/>Map, history, forecasts and downloads"]
     user["User controls<br/>Country, time, metric, region and target"]
 
-    energy --> collect
+    energy --> eurocollect --> bundle
+    bundle -->|Does not wait for running collections| collect
     energinet --> collect
     energinet --> inputs
     weather --> inputs
@@ -88,6 +93,9 @@ flowchart TB
     models -->|Reuse matching baseline inference| freshwind
     collect -->|Five-minute wind observations| freshwind
     freshwind -->|Wind outlook and measured errors| archive
+    freshwind -->|Unchanged public baseline| research
+    ensembleweather --> research
+    research -->|Separate research records and later-outcome checks| archive
     archive -.->|Restore history| inputs
     archive --> pages
     pages -->|Static files only| browser
@@ -112,6 +120,12 @@ next six hours using recent power readings. Its regional source mixture reduced
 error by about 14% / 13% in a short November replay; this is not a guarantee of
 live accuracy. Solar and demand retain the original model. Wind has its own
 issue archive, source timestamps, comparisons and live error statistics.
+
+The [short-term wind and uncertainty experiments](research/forecasting/wind_refinement/README.md)
+run separately from that public forecast. A small LightGBM challenger uses recent
+five-minute production changes for the next six hours. Timestamped weather-ensemble
+means/spreads are collected for conditional range evaluation. Neither the challenger
+nor unvalidated ranges automatically replaces what visitors see.
 
 Forecast charts plot hourly averages at the end of each hour; tooltips show the
 covered interval. A faint dotted transition guide joins consecutive observed
@@ -157,7 +171,16 @@ Public charts flag substantial recent undercoverage of their existing ranges.
 
 ## Automation and hosting
 
-GitHub Pages must be configured with **GitHub Actions** as the publishing source. The workflow publishes on pushes to `main`, refreshes at minutes 7 and 37 of each hour, and supports manual refreshes. Concurrent runs are serialized. A code-only push restores the latest deployed electricity snapshot and refreshes the forecast inputs.
+GitHub Pages must be configured with **GitHub Actions** as the publishing source.
+The publisher runs on pushes to `main`, at minutes 7 and 37, and on manual/watchdog
+refreshes. A separate collector starts at minutes 2 and 32 and uploads European
+raw feeds. The publisher imports its latest completed, checksummed artifact;
+it never waits for a collection still in progress. Fresh Danish readings and
+forecast inputs are fetched on the short path. Only the publisher deploys the
+site, and its runs remain serialized to preserve issued forecasts. Failed or
+older European collections retain the previously published data and source times.
+A code-only push restores the latest deployed electricity snapshot, imports any
+new completed European collection, and refreshes forecast inputs.
 
 Forecast inference runs in GitHub Actions on CPU; Pages serves the resulting JSON. It uses the development-selected blend of tree, linear, weather MLP, Chronos-2 and TinyTimeMixer models, with frozen weights and no scheduled retraining. Two isolated Python 3.12 environments keep model dependencies compatible. An immutable, checksummed GitHub Release stores model weights, and the published site preserves 35 days of issued forecasts across runner cache eviction. Models refresh only when a new source hour or weather run is available. Failed updates keep the previous forecast and its original issue time.
 
@@ -225,6 +248,7 @@ separate prospective trial.
 - [Energinet / Energi Data Service](https://www.energidataservice.dk/terms-and-conditions): Danish power and CO₂, CC BY 4.0. We normalize timestamps and derive wind shares and area demand.
 - [Open-Meteo / ECMWF IFS](https://open-meteo.com/en/docs/single-runs-api): issued weather forecasts, CC BY 4.0 data; the free endpoint is used within its non-commercial usage limits.
 - [DMI HARMONIE via Open-Meteo](https://open-meteo.com/en/docs/dmi-api): current and archived regional weather forecasts for the wind update, using the same non-commercial endpoint limits.
+- [Open-Meteo Ensemble Mean API](https://open-meteo.com/en/docs/ensemble-mean-api): ECMWF ensemble wind means/spreads, archived at actual retrieval time for internal uncertainty evaluation. Spatially averaged local spreads are features, not calibrated electricity prediction intervals.
 - [Amazon Chronos-2](https://huggingface.co/amazon/chronos-2) and [IBM Granite TinyTimeMixer](https://huggingface.co/ibm-granite/granite-timeseries-ttm-r2): Apache-2.0 pretrained models, with locally trained adaptations. Licence and attribution notices are included in the model release.
 - [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/): public-domain 1:50m geographic boundaries, version 5.1.2. Boundaries do not imply a position on territorial disputes.
 - [D3 7.9.0](https://d3js.org/): ISC licence; vendored licence in `dist/vendor/d3-LICENSE`.

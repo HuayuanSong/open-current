@@ -162,6 +162,7 @@ def main():
         help="Seconds per request per endpoint (minimum 31)",
     )
     parser.add_argument("--countries", nargs="*")
+    parser.add_argument("--source", choices=("all", "europe", "denmark"), default="all")
     args = parser.parse_args()
     countries = args.countries or list(COUNTRIES)
     if any(code not in COUNTRIES for code in countries):
@@ -169,6 +170,20 @@ def main():
     prices = [
         code for code, (country, _) in PRICE_ZONES.items() if country in countries
     ]
+    failures = []
+    if args.source != "denmark":
+        failures.extend(fetch_europe(countries, prices, args.days, args.interval))
+    if args.source != "europe":
+        failures.extend(energinet(args.days))
+    status_name = "europe-fetch-status.json" if args.source == "europe" else "fetch-status.json"
+    write_json(
+        CACHE / status_name,
+        {"finished_at": datetime.now(timezone.utc).isoformat(), "failures": failures},
+    )
+    print(f"Collection finished: {len(failures)} unavailable feeds.", flush=True)
+
+
+def fetch_europe(countries, prices, days, interval):
     with ThreadPoolExecutor(max_workers=3) as pool:
         jobs = [
             pool.submit(
@@ -176,25 +191,17 @@ def main():
                 "public_power",
                 countries,
                 "country",
-                args.days,
-                max(31, args.interval),
+                days,
+                max(31, interval),
             ),
             pool.submit(
-                queue, "cbpf", countries, "country", args.days, max(31, args.interval)
+                queue, "cbpf", countries, "country", days, max(31, interval)
             ),
             pool.submit(
-                queue, "price", prices, "bzn", args.days, max(31, args.interval)
+                queue, "price", prices, "bzn", days, max(31, interval)
             ),
         ]
-        failures = [failure for job in jobs for failure in job.result()]
-    # Collect the faster Danish feeds last, so the European queue doesn't add
-    # its full run time to the age of Denmark's five-minute readings.
-    failures.extend(energinet(args.days))
-    write_json(
-        CACHE / "fetch-status.json",
-        {"finished_at": datetime.now(timezone.utc).isoformat(), "failures": failures},
-    )
-    print(f"Collection finished: {len(failures)} unavailable feeds.", flush=True)
+        return [failure for job in jobs for failure in job.result()]
 
 
 if __name__ == "__main__":

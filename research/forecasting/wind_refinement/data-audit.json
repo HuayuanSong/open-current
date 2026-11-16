@@ -1,0 +1,325 @@
+{
+  "sourceHashes": {
+    ".cache/forecasting/electricity/2024-12-01.json.gz": "dcec30c6aeaa540d5dc72fe5d15160e16f9ca64c7e474858ab71a02b63e1641a",
+    ".cache/forecasting/electricity/2025-01-01.json.gz": "2a8bd8084f30a5751fbc33170bb7eecaa7801f355f0122aa16301266389f3a26",
+    ".cache/forecasting/electricity/2025-02-01.json.gz": "53822aa56ebb9b9aa5d146bcd256c21c8a67c515ba3fb4cd28e9e9e1d619577f",
+    ".cache/forecasting/electricity/2025-03-01.json.gz": "84992af1a043a2b2bc1b2b1d8da7c33c465ec38c8ee3cc4f9f2c05e993dfb20d",
+    ".cache/forecasting/electricity/2025-04-01.json.gz": "0deec44cca6e48d8acc60b017ae37bb307f5002d786f9666ddceb199413cac90",
+    ".cache/forecasting/electricity/2025-05-01.json.gz": "11ea18dfebbd8699d59cdb5bdfc4497bd35871e440e6be4c410f3dc9c735366a",
+    ".cache/forecasting/electricity/2025-06-01.json.gz": "810b8be25ecf2ee4c445ff3d82a914439c7221256f15ad72d86696a44b095a03",
+    ".cache/forecasting/electricity/2025-07-01.json.gz": "9451bf77eebc49ca284cb637270068c74568ba4328ef2da9e5fbdb05a8dbc62f",
+    ".cache/forecasting/electricity/2025-08-01.json.gz": "2aaef96660fc49d417bd346ec4077941e34724cb0054e5b92771d61967a7cfba",
+    ".cache/forecasting/electricity/2025-09-01.json.gz": "7513e46aae73dec258186dbf68d63816319ccb14b774cec3ee59415ab378d94c",
+    ".cache/forecasting/electricity/2025-10-01.json.gz": "dbbd96e3cae6b6a11d4a4747d74c2092ae5a950d5d87825578af3fe5527571b5",
+    ".cache/forecasting/electricity/2025-11-01.json.gz": "1601d7ec28d063e9a591a16392d81ed4c7083994b445be85917e20b024f591a2",
+    ".cache/forecasting/electricity/2025-12-01.json.gz": "e6e4056e6db907e384a36081eb89b0c094ea2ec4a094fabea8e1368f4ba7924b",
+    ".cache/forecasting/electricity/2026-01-01.json.gz": "60c4193aec59f12687819f198d874faa3ae103549af32e4a580c9bb8ec73f77e",
+    ".cache/forecasting/electricity/2026-02-01.json.gz": "6a1eb840837057da5a84d99bf01fbcd7a979f211377809fcded77fefb18ecaec",
+    ".cache/forecasting/electricity/2026-03-01.json.gz": "2a87596380f128a01f1c8c40c4600ddcb4831aa7b271fd73739293bfd0ea02f8",
+    ".cache/forecasting/electricity/2026-04-01.json.gz": "3e5db4de0ffe490c41ec95da2c13f34783e8b34f7b5807bfefd3c86dda0b086f",
+    ".cache/forecasting/electricity/2026-05-01.json.gz": "6f5f0ac1847aae303f7b287d0ee38da214b2b860dfd7a93fef9dceefbeb0bbc3",
+    ".cache/forecasting/electricity/2026-06-01.json.gz": "17d12b38ad8af0e59f84b02d956f5cea5abfbefd3af17393fa88bb967152a48c",
+    ".cache/forecasting/electricity/2026-07-01.json.gz": "206c891ff5e12de5364e758679f42d7932a2bed72aa87cbc33ee0fc682ad6f47",
+    ".cache/forecasting/electricity/2026-08-01.json.gz": "972058cc343f6e7469b1894bd7c5f5d43dd42a03dd419e0b5d7d8d0e5d8914b1",
+    ".cache/forecasting/electricity/2026-09-01.json.gz": "bdb774a21c0cf23ec7288b3b91cc1aca472027466c5ee6439ec7a3cee46fe4f7",
+    ".cache/forecasting/electricity/2026-10-01.json.gz": "ecd83adcd25359d069c7e4dd044cbd4c7912a51c222ae42b13171237e21a9195",
+    ".cache/forecasting/v2/electricity/2024-12-01.json.gz": "dcec30c6aeaa540d5dc72fe5d15160e16f9ca64c7e474858ab71a02b63e1641a",
+    ".cache/forecasting/v2/electricity/2025-01-01.json.gz": "2a8bd8084f30a5751fbc33170bb7eecaa7801f355f0122aa16301266389f3a26",
+    ".cache/forecasting/v2/electricity/2025-02-01.json.gz": "53822aa56ebb9b9aa5d146bcd256c21c8a67c515ba3fb4cd28e9e9e1d619577f",
+    ".cache/forecasting/v2/electricity/2025-03-01.json.gz": "84992af1a043a2b2bc1b2b1d8da7c33c465ec38c8ee3cc4f9f2c05e993dfb20d",
+    ".cache/forecasting/v2/electricity/2025-04-01.json.gz": "0deec44cca6e48d8acc60b017ae37bb307f5002d786f9666ddceb199413cac90",
+    ".cache/forecasting/v2/electricity/2025-05-01.json.gz": "11ea18dfebbd8699d59cdb5bdfc4497bd35871e440e6be4c410f3dc9c735366a",
+    ".cache/forecasting/v2/electricity/2025-06-01.json.gz": "810b8be25ecf2ee4c445ff3d82a914439c7221256f15ad72d86696a44b095a03",
+    ".cache/forecasting/v2/electricity/2025-07-01.json.gz": "9451bf77eebc49ca284cb637270068c74568ba4328ef2da9e5fbdb05a8dbc62f",
+    ".cache/forecasting/v2/electricity/2025-08-01.json.gz": "2aaef96660fc49d417bd346ec4077941e34724cb0054e5b92771d61967a7cfba",
+    ".cache/forecasting/v2/electricity/2025-09-01.json.gz": "7513e46aae73dec258186dbf68d63816319ccb14b774cec3ee59415ab378d94c",
+    ".cache/forecasting/v2/electricity/2025-10-01.json.gz": "dbbd96e3cae6b6a11d4a4747d74c2092ae5a950d5d87825578af3fe5527571b5",
+    ".cache/forecasting/v2/electricity/2025-11-01.json.gz": "1601d7ec28d063e9a591a16392d81ed4c7083994b445be85917e20b024f591a2",
+    ".cache/forecasting/v2/electricity/2025-12-01.json.gz": "e6e4056e6db907e384a36081eb89b0c094ea2ec4a094fabea8e1368f4ba7924b",
+    ".cache/forecasting/v2/electricity/2026-01-01.json.gz": "60c4193aec59f12687819f198d874faa3ae103549af32e4a580c9bb8ec73f77e",
+    ".cache/forecasting/v2/electricity/2026-02-01.json.gz": "6a1eb840837057da5a84d99bf01fbcd7a979f211377809fcded77fefb18ecaec",
+    ".cache/forecasting/v2/electricity/2026-03-01.json.gz": "2a87596380f128a01f1c8c40c4600ddcb4831aa7b271fd73739293bfd0ea02f8",
+    ".cache/forecasting/v2/electricity/2026-04-01.json.gz": "3e5db4de0ffe490c41ec95da2c13f34783e8b34f7b5807bfefd3c86dda0b086f",
+    ".cache/forecasting/v2/electricity/2026-05-01.json.gz": "6f5f0ac1847aae303f7b287d0ee38da214b2b860dfd7a93fef9dceefbeb0bbc3",
+    ".cache/forecasting/v2/electricity/2026-06-01.json.gz": "17d12b38ad8af0e59f84b02d956f5cea5abfbefd3af17393fa88bb967152a48c",
+    ".cache/forecasting/v2/electricity/2026-07-01.json.gz": "206c891ff5e12de5364e758679f42d7932a2bed72aa87cbc33ee0fc682ad6f47",
+    ".cache/forecasting/v2/electricity/2026-08-01.json.gz": "972058cc343f6e7469b1894bd7c5f5d43dd42a03dd419e0b5d7d8d0e5d8914b1",
+    ".cache/forecasting/v2/electricity/2026-09-01.json.gz": "bdb774a21c0cf23ec7288b3b91cc1aca472027466c5ee6439ec7a3cee46fe4f7",
+    ".cache/forecasting/v2/electricity/2026-10-01.json.gz": "4a8296371d75d1ca1c5d7251f90e3132c8319db86a7ccc825c44ca73d2816b56",
+    ".cache/wind-update/electricity.json.gz": "1623b9d08d7f3dab64e23a896f1033885f63c25ce907e7f597d81b3053143aea",
+    ".cache/weather-retrain/dataset.npz": "9e9b02b878519be9ea1855a97b874c06763159c073ea5cc6dc1979a549bdc341"
+  },
+  "origins": 1003,
+  "excluded": [
+    {
+      "origin": "2025-01-09T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-01-13T03:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-01-14T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-01-26T21:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-01-28T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-02-14T15:00:00+00:00",
+      "reason": "Incomplete recent wind observations for DK1"
+    },
+    {
+      "origin": "2025-02-19T09:00:00+00:00",
+      "reason": "No recent wind observations for DK2"
+    },
+    {
+      "origin": "2025-02-25T21:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-02-26T15:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2025-03-08T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-03-11T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-03-13T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-03-20T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-04-03T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-04-06T09:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK1"
+    },
+    {
+      "origin": "2025-04-14T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-04-20T21:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-04-21T03:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-04-21T15:00:00+00:00",
+      "reason": "Incomplete recent wind observations for DK2"
+    },
+    {
+      "origin": "2025-04-23T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-04-28T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-05-01T03:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2025-05-17T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-06-03T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-06-26T03:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2025-07-03T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-07-14T15:00:00+00:00",
+      "reason": "Incomplete recent wind observations for DK2"
+    },
+    {
+      "origin": "2025-07-15T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-07-17T21:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-07-18T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-07-19T09:00:00+00:00",
+      "reason": "No recent wind observations for DK1"
+    },
+    {
+      "origin": "2025-08-12T09:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2025-08-18T09:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK1"
+    },
+    {
+      "origin": "2025-08-21T03:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-10-02T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-11-08T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-11-09T15:00:00+00:00",
+      "reason": "Incomplete recent wind observations for DK2"
+    },
+    {
+      "origin": "2025-11-10T09:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2025-11-10T21:00:00+00:00",
+      "reason": "Incomplete recent wind observations for DK2"
+    },
+    {
+      "origin": "2025-11-14T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-01-20T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-02-15T03:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2026-03-05T03:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2026-03-07T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-03-21T03:00:00+00:00",
+      "reason": "Incomplete recent wind observations for DK2"
+    },
+    {
+      "origin": "2026-04-17T09:00:00+00:00",
+      "reason": "No recent wind observations for DK2"
+    },
+    {
+      "origin": "2026-04-29T09:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2026-05-01T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-05-03T09:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2026-05-07T09:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK1"
+    },
+    {
+      "origin": "2026-05-07T21:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-05-08T03:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2026-05-31T21:00:00+00:00",
+      "reason": "No recent wind observations for DK2"
+    },
+    {
+      "origin": "2026-06-01T03:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-06-06T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-06-30T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-06-30T21:00:00+00:00",
+      "reason": "Five-minute wind observations are stale for DK2"
+    },
+    {
+      "origin": "2026-07-01T03:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-07-14T09:00:00+00:00",
+      "reason": "Incomplete recent wind observations for DK1"
+    },
+    {
+      "origin": "2026-07-14T21:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-07-26T09:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-08-08T15:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-08-25T09:00:00+00:00",
+      "reason": "No recent wind observations for DK2"
+    },
+    {
+      "origin": "2026-09-09T03:00:00+00:00",
+      "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2026-10-28T09:00:00+00:00",
+      "reason": "No recent wind observations for DK1"
+    },
+    {
+      "origin": "2026-10-29T03:00:00+00:00",
+      "reason": "No recent wind observations for DK1"
+    },
+    {
+      "origin": "2026-10-29T15:00:00+00:00",
+      "reason": "No recent wind observations for DK1"
+    }
+  ],
+  "features": 44,
+  "datasetHash": "7684a53236a509d4ea423bcd42d2215bc7c053ccdb64ba452d9ce460b3f651e6"
+}
