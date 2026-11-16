@@ -15,8 +15,9 @@ class FreshWeatherTests(unittest.TestCase):
     def setUp(self):
         self.at = pd.Timestamp("2026-11-16T12:30Z")
         self.times = pd.date_range("2026-11-16T13:00Z", periods=48, freq="h")
-        hourly = {"time": self.times.strftime("%Y-%m-%dT%H:%M").tolist()}
-        hourly.update({name: [5.] * 48 for name in sources.CONFIG["variables"]})
+        weather_times = pd.date_range("2026-11-16T09:00Z", periods=72, freq="h")
+        hourly = {"time": weather_times.strftime("%Y-%m-%dT%H:%M").tolist()}
+        hourly.update({name: [5.] * 72 for name in sources.CONFIG["variables"]})
         self.points = [dict(hourly=copy.deepcopy(hourly)) for _ in sources.CONFIG["locations"]]
         self.entry = dict(model=sources.MODELS["dmi"], run="2026-11-16T09:00:00+00:00",
                           availableAt="2026-11-16T12:06:00+00:00",
@@ -82,6 +83,39 @@ class FreshWeatherTests(unittest.TestCase):
         self.assertFalse(np.array_equal(result["future"], baseline["future"]))
         with self.assertRaisesRegex(ValueError, "schema"):
             sources.future_inputs(baseline, self.points, self.times, ["wrong"])
+
+    def test_complete_exact_response_can_establish_availability_when_metadata_lags(self):
+        at = pd.Timestamp("2026-11-16T13:30Z")
+        old = copy.deepcopy(self.entry)
+        old.update(model=sources.MODELS["ecmwf"], run="2026-11-16T00:00:00+00:00",
+                   availableAt="2026-11-16T06:20Z", retrievedAt="2026-11-16T06:40Z")
+        for p in old["data"]:
+            p["hourly"]["time"] = pd.date_range(old["run"], periods=72, freq="h").strftime("%Y-%m-%dT%H:%M").tolist()
+        new = copy.deepcopy(old["data"])
+        for p in new:
+            p["hourly"]["time"] = pd.date_range("2026-11-16T06:00Z", periods=72, freq="h").strftime("%Y-%m-%dT%H:%M").tolist()
+        metadata = dict(last_run_initialisation_time=int(pd.Timestamp(old["run"]).timestamp()),
+                        last_run_availability_time=int(pd.Timestamp(old["availableAt"]).timestamp()))
+        state = dict(availableWeather={"ecmwf": {old["run"]: old}})
+        with patch.object(sources.time, "sleep"), patch.object(sources.data, "now", return_value=at), patch.object(
+            sources.data, "request", side_effect=[metadata, new]
+        ) as get:
+            sources.refresh(state, "ecmwf", at, self.times, get)
+        self.assertEqual(get.call_args_list[1].args[1]["run"], "2026-11-16T06:00")
+        entry = sources.select(state, "ecmwf", at, self.times)
+        self.assertEqual(entry["run"], "2026-11-16T06:00:00+00:00")
+        self.assertEqual(entry["availabilityEvidence"], "complete-exact-run-response")
+        self.assertEqual(entry["availableAt"], at.isoformat())
+        self.assertEqual(entry["retrievedAt"], at.isoformat())
+        # The response itself must be complete and from the requested run.
+        for points in (old["data"], [{**p, "hourly": {**p["hourly"], "wind_speed_100m": [None] * 72}} for p in new]):
+            state = dict(availableWeather={"ecmwf": {old["run"]: old}})
+            with patch.object(sources.time, "sleep"), patch.object(sources.data, "now", return_value=at), patch.object(
+                sources.data, "request", side_effect=[metadata, points]
+            ) as get:
+                status = sources.refresh(state, "ecmwf", at, self.times, get)
+            self.assertIn("probeError", status)
+            self.assertEqual(sources.select(state, "ecmwf", at, self.times)["run"], old["run"])
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ prospective experiments keep their protocols and previously issued records.
 ## What changed
 
 The refitted LightGBM, XGBoost, ridge and tree-control components now receive the
-latest complete ECMWF run with recorded publication and retrieval times. There
+latest complete ECMWF run with recorded availability evidence and retrieval times. There
 is no fixed noon waiting period for the public wind update. West Denmark also
 uses DMI HARMONIE weather: 75% ECMWF and 25% DMI predictions from this refitted
 branch. East Denmark uses ECMWF; substituting DMI increased its diagnostic error.
@@ -20,11 +20,20 @@ power readings, not weather-station wind speeds.
 
 Both weather providers are checked during ordinary refreshes. Downloads specify
 the exact initialization, all six locations, the trained units and variables.
-Only complete 48-hour horizons with known availability and a ten-minute
-replication margin qualify. Missing required inputs preserve the last issued
+Metadata-selected runs require a ten-minute replication margin. If geographical
+metadata replicas lag, one plausible newer initialization is checked directly
+against the exact-run archive. It qualifies only when the response starts at
+that initialization and all locations, variables and 48 future hours are present.
+Its first actual retrieval is recorded as the availability evidence; no earlier
+publication time is inferred from the schedule. Missing required inputs preserve the last issued
 wind forecast and display a delay notice. A cached, still-complete run can be
 used when metadata retrieval fails; its original run time remains visible.
 GitHub scheduling and upstream publication still limit freshness.
+
+The initial live check reproduced this discrepancy: the runner's metadata still
+reported ECMWF 00 UTC while the exact 06 UTC run was accessible elsewhere.
+Version `fresh-wind-2026-11-16.1` adds direct complete-response evidence; it retains
+the first version's issued record and does not change the selected model weights.
 
 Sources: [DMI model documentation](https://open-meteo.com/en/docs/dmi-api),
 [ECMWF documentation](https://open-meteo.com/en/docs/ecmwf-api), and

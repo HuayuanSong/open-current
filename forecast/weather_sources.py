@@ -26,12 +26,21 @@ def parameters(source, run):
 def eligible(entry, source, at):
     try:
         run, available, retrieved = [pd.Timestamp(entry[k]) for k in ("run", "availableAt", "retrievedAt")]
+        evidence = entry.get("availabilityEvidence", "metadata")
+        published = (available + BUFFER <= retrieved if evidence == "metadata"
+                     else available == retrieved if evidence == "complete-exact-run-response" else False)
         return (all(t.tzinfo is not None and not pd.isna(t) for t in (run, available, retrieved))
                 and entry["model"] == MODELS[source]
                 and at - MAX_AGE <= run <= available
-                and available + BUFFER <= retrieved <= at)
+                and published and retrieved <= at)
     except (KeyError, ValueError, TypeError):
         return False
+
+
+def validate_exact(points, run, times):
+    weather_runs.validate_points(points, times)
+    if any(pd.to_datetime(point["hourly"]["time"][0], utc=True) != run for point in points):
+        raise ValueError("Weather response does not start at the requested initialization")
 
 
 def refresh(state, source, at, times, request=data.request):
@@ -54,13 +63,32 @@ def refresh(state, source, at, times, request=data.request):
         status.update(latestRun=run.isoformat(), availableAt=available.isoformat())
         if at - MAX_AGE <= run and available + BUFFER <= at and run.isoformat() not in cache:
             points = request(weather_runs.FORECAST_URL, parameters(source, run))
-            weather_runs.validate_points(points, times)
+            validate_exact(points, run, times)
             cache[run.isoformat()] = dict(model=MODELS[source], run=run.isoformat(),
                 availableAt=available.isoformat(), retrievedAt=data.now().isoformat(), data=points)
     except (requests.RequestException, ValueError, TypeError, KeyError) as error:
         status["error"] = str(error)[:240]
-    finally:
+    # Geographical metadata replicas can lag the exact-run archive. Probe one
+    # plausible newer initialization, but accept it only after the entire exact
+    # response is received and validated. The first retrieval is the availability
+    # evidence; never invent an earlier publication time from the model schedule.
+    interval = 3 if source == "dmi" else 6
+    candidate = (at - pd.Timedelta(hours=interval)).floor(f"{interval}h")
+    newest = max((pd.Timestamp(e["run"]) for e in cache.values() if eligible(e, source, data.now())),
+                 default=at - MAX_AGE)
+    if candidate > newest and candidate.isoformat() not in cache:
         time.sleep(max(0, 1.5 - (time.monotonic() - begin)))
+        try:
+            points = request(weather_runs.FORECAST_URL, parameters(source, candidate))
+            validate_exact(points, candidate, times)
+            retrieved = data.now().isoformat()
+            cache[candidate.isoformat()] = dict(model=MODELS[source], run=candidate.isoformat(),
+                availableAt=retrieved, retrievedAt=retrieved,
+                availabilityEvidence="complete-exact-run-response", data=points)
+            status["confirmedRun"] = candidate.isoformat()
+        except (requests.RequestException, ValueError, TypeError, KeyError) as error:
+            status["probeError"] = str(error)[:240]
+    time.sleep(max(0, 1.5 - (time.monotonic() - begin)))
     checked = data.now()
     state["availableWeather"][source] = {k: v for k, v in cache.items() if eligible(v, source, checked)}
     state.setdefault("availableWeatherStatus", {})[source] = status
@@ -73,7 +101,7 @@ def select(state, source, at, times):
         if not eligible(entry, source, at):
             continue
         try:
-            weather_runs.validate_points(entry["data"], times)
+            validate_exact(entry["data"], pd.Timestamp(entry["run"]), times)
             return entry
         except (ValueError, TypeError, KeyError):
             continue
