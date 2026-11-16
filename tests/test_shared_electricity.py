@@ -92,6 +92,38 @@ class SharedElectricityTests(unittest.TestCase):
                     datetime(2026, 10, 31).date(), self.at
                 ))
 
+    def test_direct_fetch_is_shared_with_wind_comparison_without_another_request(self):
+        from forecast.wind_update import measurements
+
+        state = {"hourly": [self.previous.copy()]}
+        with patch.object(data, "ROOT", self.root), patch.object(
+            data, "now", return_value=self.at
+        ), patch.object(data, "request", return_value=self.payload) as get:
+            data.electricity(state, self.at)
+            records, retrieved = measurements(self.at + pd.Timedelta(minutes=1))
+        get.assert_called_once()
+        self.assertEqual(records, self.payload["records"])
+        self.assertEqual(retrieved, self.at.isoformat())
+        self.assertEqual(json.loads(self.path.read_text())["_start"], "2026-10-31")
+
+    def test_cache_write_failure_does_not_discard_valid_readings(self):
+        state = {"hourly": [self.previous.copy()]}
+        with patch.object(data, "ROOT", self.root), patch.object(
+            data, "request", return_value=self.payload
+        ), patch.object(Path, "write_text", side_effect=OSError("read only")):
+            result = data.electricity(state, self.at)
+        self.assertGreater(len(result), 1)
+        self.assertGreater(len(state["hourly"]), 1)
+
+    def test_incomplete_direct_fetch_cannot_replace_cached_readings(self):
+        self.write({**self.payload, "_retrieved_at": "2026-11-03T12:00Z"})
+        before = self.path.read_bytes()
+        with patch.object(data, "ROOT", self.root), patch.object(
+            data, "request", return_value={**self.payload, "total": self.payload["total"] + 1}
+        ), self.assertRaisesRegex(ValueError, "Incomplete"):
+            data.electricity({"hourly": [self.previous.copy()]}, self.at)
+        self.assertEqual(self.path.read_bytes(), before)
+
     def test_short_collection_cannot_replace_the_35_day_bootstrap_request(self):
         self.write(self.payload)
         with patch.object(data, "ROOT", self.root), patch.object(

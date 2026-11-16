@@ -44,6 +44,14 @@ def configuration():
 def initialize(state, protocol, fingerprint):
     trial = state.setdefault("windUpdate", dict(version=protocol["version"], fingerprint=fingerprint,
                                                records=[], observations={}, lastAttempt=None))
+    if (trial["version"] == protocol["version"] and trial["fingerprint"] != fingerprint
+            and not trial["records"] and not trial["observations"]):
+        # A deployment repair before the first issue changes no predictions.
+        # Keep its previous fingerprint and failed attempt as an audit trail.
+        trial.setdefault("preIssueRepairs", []).append(dict(
+            fingerprint=trial["fingerprint"], lastAttempt=trial["lastAttempt"],
+            replacedAt=data.now().isoformat()))
+        trial["fingerprint"] = fingerprint
     if trial["version"] != protocol["version"] or trial["fingerprint"] != fingerprint:
         raise ValueError("Wind candidate changed; retain existing evidence and start a new version")
     for record in trial["records"]:

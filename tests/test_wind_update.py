@@ -89,6 +89,22 @@ class WindUpdateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "modified"):
             candidate.initialize(state, self.protocol, self.fingerprint)
 
+    def test_pre_issue_repair_retains_failed_attempt_and_cannot_change_protocol(self):
+        state = {}
+        trial = candidate.initialize(state, self.protocol, "original")
+        attempt = dict(status="unavailable", error="provider timeout")
+        trial["lastAttempt"] = attempt
+        candidate.initialize(state, self.protocol, "repaired")
+        self.assertEqual(trial["fingerprint"], "repaired")
+        self.assertEqual(trial["lastAttempt"], attempt)
+        self.assertEqual(trial["preIssueRepairs"][0]["fingerprint"], "original")
+        self.assertEqual(trial["preIssueRepairs"][0]["lastAttempt"], attempt)
+        with self.assertRaisesRegex(ValueError, "changed"):
+            candidate.initialize(state, {**self.protocol, "version": "different"}, "repaired")
+        trial["observations"] = {"saved": {}}
+        with self.assertRaisesRegex(ValueError, "changed"):
+            candidate.initialize(state, self.protocol, "another")
+
     def test_first_mature_observation_is_retained_and_targets_freeze_independently(self):
         trial = dict(records=[dict(times=self.times)], observations={})
         stamp = self.times[0]

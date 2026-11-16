@@ -64,7 +64,11 @@ latency guarantee, and missed or late comparisons remain missing.
 - Freeze each area's first valid outcome captured 24–72 hours later. Report only
   complete paired trajectories, with separate point-error and range diagnostics.
   Inference fingerprints prevent a changed candidate from silently continuing
-  the same experiment.
+  the same experiment. Before the first issued record or frozen outcome only,
+  a deployment repair may update the fingerprint, retaining the previous
+  fingerprint and failed attempt in `preIssueRepairs`. The initial live checks
+  exposed an ECMWF timeout and then an Energinet rate limit; manual refreshes now
+  share their raw electricity response too, avoiding that duplicate request.
 
 Records persist under `windUpdate` in the existing published forecast state;
 the current status is [data/wind-update.json](https://huayuansong.github.io/open-current/data/wind-update.json).

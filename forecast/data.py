@@ -139,6 +139,7 @@ def electricity(state, at):
         .date()
     )
     payload = collected_electricity(start, at)
+    fetched = payload is None
     if payload is None:
         payload = request(
             "https://api.energidataservice.dk/dataset/ElectricityProdex5MinRealtime",
@@ -170,6 +171,20 @@ def electricity(state, at):
     serial["time"] = serial.time.map(lambda x: x.isoformat())
     state["hourly"] = json.loads(serial.to_json(orient="records"))
     state["electricityRetrievedAt"] = retrieved_at
+    if fetched:
+        # Manual/deployment refreshes also share their raw readings with wind
+        # diagnostics. Cache failures must not discard a valid public forecast.
+        path = ROOT / ".cache/energinet/ElectricityProdex5MinRealtime.json"
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            temporary = path.with_suffix(".tmp")
+            temporary.write_text(json.dumps(
+                {**payload, "_retrieved_at": retrieved_at, "_start": str(start)},
+                separators=(",", ":"), allow_nan=False,
+            ))
+            temporary.replace(path)
+        except (OSError, ValueError) as error:
+            print(f"Could not cache raw electricity readings: {error}", flush=True)
     return hourly
 
 
