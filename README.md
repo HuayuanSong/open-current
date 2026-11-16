@@ -12,7 +12,7 @@
 - Day-ahead wholesale prices for **15 explicitly open bidding zones**, including DK1 and DK2. Country subdivisions remain separate; a zone is never presented as a national average.
 - Energinet’s preliminary five-minute power and operational consumption-CO₂ readings for West and East Denmark.
 - Experimental 48-hour wind, solar and demand forecasts for DK1/DK2, with saved forecast-versus-observed comparisons and accuracy measured after issue.
-- Optional 80%-target prediction ranges with measured coverage (solar: daylight only), plus internally audited demand explanations for the LightGBM component. See the [range and SHAP checks](research/forecasting/uncertainty/README.md).
+- Wind forecasts use current ECMWF/DMI weather and recent five-minute production readings. Solar and demand have optional 80%-target ranges (solar: daylight only); updated wind ranges are withheld after failed calibration checks. Demand also has audited LightGBM explanations.
 - Shareable views, downloadable country JSON, source attribution, and a full methodology panel.
 
 This is an open-data exploration, not a globally complete Electricity Maps replacement. It does **not** estimate European consumption-based carbon intensity or trace the carbon content of imports. Domestic low-carbon generation shares and Danish operational CO₂ have different meanings and are presented separately.
@@ -49,7 +49,7 @@ All upstream requests are unauthenticated. No source API keys, tile-server keys 
 flowchart TB
     energy["Energy-Charts API<br/>Generation, flows, open prices"]
     energinet["Energinet API<br/>DK electricity and operational CO₂"]
-    weather["Open-Meteo Single Runs API<br/>Issued ECMWF weather"]
+    weather["Open-Meteo Single Runs + availability API<br/>Issued ECMWF and DMI weather"]
     weights["Pinned model artifacts<br/>GitHub Release + Hugging Face"]
     watchdog["Cloudflare freshness watchdog<br/>15-minute checks · bounded recovery"]
     health["Small freshness metadata<br/>Publication, forecast and source times"]
@@ -61,6 +61,7 @@ flowchart TB
         blend["Fixed nine-family ensemble<br/>Wind, solar and demand · 48 hours"]
         evaluate["Archive forecasts and ranges<br/>Score against later observations"]
         windtest["Separate wind comparison<br/>Latest ECMWF + five-minute correction<br/>No automatic model promotion"]
+        freshwind["Public wind update<br/>Refitted components + regional ECMWF/DMI mix<br/>Recent-power correction · separate issue archive"]
     end
 
     archive["Static JSON + forecast archive<br/>Readings, predictions and retained history"]
@@ -83,6 +84,10 @@ flowchart TB
     collect -->|Five-minute wind observations| windtest
     models -->|Reuse identical inference inputs| windtest
     windtest -->|Separate comparison records| archive
+    weather -->|Latest complete published runs| freshwind
+    models -->|Reuse matching baseline inference| freshwind
+    collect -->|Five-minute wind observations| freshwind
+    freshwind -->|Wind outlook and measured errors| archive
     archive -.->|Restore history| inputs
     archive --> pages
     pages -->|Static files only| browser
@@ -101,12 +106,19 @@ TinyTimeMixer variants. The original baseline includes weather-MLP blends for
 DK1 wind and DK2 solar. Frozen weights vary across the six region/target series
 and leads **1–6, 7–24 and 25–48 hours**. Scheduled jobs perform inference, not training.
 
+The public [wind update](research/forecasting/fresh_wind/README.md) refits selected
+components for fresher ECMWF inputs, adds DMI in West Denmark, and corrects the
+next six hours using recent power readings. Its regional source mixture reduced
+error by about 14% / 13% in a short November replay; this is not a guarantee of
+live accuracy. Solar and demand retain the original model. Wind has its own
+issue archive, source timestamps, comparisons and live error statistics.
+
 Forecast charts plot hourly averages at the end of each hour; tooltips show the
 covered interval. A faint dotted transition guide joins consecutive observed
 and forecast hours only when both values are available. It adds no forecast
 values or prediction ranges and leaves missing-data gaps open.
 
-Prediction ranges use mature out-of-sample errors; issued values and bounds are
+Solar/demand prediction ranges use mature out-of-sample errors; issued values and bounds are
 saved rather than recalculated retrospectively. The separate
 [prospective trial](forecast/trial/README.md) records challengers and outcomes in
 its own ledger without automatically replacing this production ensemble.
@@ -114,9 +126,9 @@ its own ledger without automatically replacing this production ensemble.
 The [wind update comparison](research/forecasting/wind_update/README.md) runs
 during ordinary refreshes, using fresher ECMWF inputs and five-minute wind
 measurements for a six-hour correction. It records results separately from the
-public model. Historical point errors improved, but its prediction-range check
-failed, so it remains under evaluation. Public charts flag substantial recent
-undercoverage of their existing ranges.
+public wind update. Its protocol and old records remain frozen. The public wind
+update also failed its range check, so it shows a point forecast without a band.
+Public charts flag substantial recent undercoverage of their existing ranges.
 
 - `scripts/fetch.py`: three independent queues (generation, physical flows, licensed prices), followed by the faster Energinet feeds; requests paced at least 31 seconds apart per Energy-Charts endpoint; retries honour `Retry-After`.
 - `scripts/normalize.py`: source-unit checks, explicit generation classification, missing-value preservation, historical revision merging, sorted UTC timestamps, compact map summaries.
@@ -212,6 +224,7 @@ separate prospective trial.
 - [Fraunhofer ISE / Energy-Charts.info](https://api.energy-charts.info/): generation and flows, CC BY 4.0. Open price feeds originate from Bundesnetzagentur / SMARD.de under CC BY 4.0. Responses are transformed and aggregated.
 - [Energinet / Energi Data Service](https://www.energidataservice.dk/terms-and-conditions): Danish power and CO₂, CC BY 4.0. We normalize timestamps and derive wind shares and area demand.
 - [Open-Meteo / ECMWF IFS](https://open-meteo.com/en/docs/single-runs-api): issued weather forecasts, CC BY 4.0 data; the free endpoint is used within its non-commercial usage limits.
+- [DMI HARMONIE via Open-Meteo](https://open-meteo.com/en/docs/dmi-api): current and archived regional weather forecasts for the wind update, using the same non-commercial endpoint limits.
 - [Amazon Chronos-2](https://huggingface.co/amazon/chronos-2) and [IBM Granite TinyTimeMixer](https://huggingface.co/ibm-granite/granite-timeseries-ttm-r2): Apache-2.0 pretrained models, with locally trained adaptations. Licence and attribution notices are included in the model release.
 - [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/): public-domain 1:50m geographic boundaries, version 5.1.2. Boundaries do not imply a position on territorial disputes.
 - [D3 7.9.0](https://d3js.org/): ISC licence; vendored licence in `dist/vendor/d3-LICENSE`.

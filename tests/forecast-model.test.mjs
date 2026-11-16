@@ -1,8 +1,32 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {forecastState,chartSeries,forecastStats,forecastTransition,rangeUndercoverage,HOUR} from '../dist/forecast-model.js';
+import {forecastState,chartSeries,forecastStats,forecastTransition,rangeUndercoverage,targetPayload,HOUR} from '../dist/forecast-model.js';
 const record={origin:'2026-10-27T10:00:00Z',issuedAt:'2026-10-27T10:20:00Z',
   times:['2026-10-27T11:00:00Z','2026-10-27T12:00:00Z'],areas:{DK1:{solar:[0,100]}}};
+test('updated wind uses its own issue, comparison, metrics and ranges without changing solar',()=>{
+  const base={...record,areas:{DK1:{wind:[10,20],solar:[0,100]}}};
+  const fresh={...base,issuedAt:'2026-10-27T10:40:00Z',areas:{DK1:{wind:[30,40]}}};
+  const payload={status:'ready',latest:base,comparison:base,windOutlook:{status:'ready',latest:fresh,comparison:null}};
+  assert.equal(targetPayload(payload,'wind'),payload.windOutlook);
+  assert.equal(targetPayload(payload,'solar'),payload);
+  assert.equal(chartSeries(payload,'DK1','wind').record,fresh);
+  assert.equal(chartSeries(payload,'DK1','wind','comparison').record,null);
+  assert.equal(chartSeries(payload,'DK1','solar','comparison').record,base);
+  assert.ok(chartSeries(payload,'DK1','wind').points.every(p=>p.lower===null));
+});
+test('failed first wind update retains the original forecast with a delay status',()=>{
+  const payload={status:'ready',latest:record,windOutlook:{latest:null,status:'unavailable',message:'provider failed'}};
+  assert.equal(targetPayload(payload,'wind').latest,record);
+  assert.equal(targetPayload(payload,'wind').status,'delayed');
+  assert.equal(payload.status,'ready');
+});
+test('waiting for the first valid wind issue labels the existing model without inventing a source failure',()=>{
+  const payload={status:'ready',latest:record,windOutlook:{latest:null,status:'unavailable',message:null}};
+  const selected=targetPayload(payload,'wind');
+  assert.equal(selected.latest,record);
+  assert.equal(selected.status,'ready');
+  assert.equal(selected.windUpdatePending,true);
+});
 test('range warning needs enough recorded outcomes and a material coverage shortfall',()=>{
   assert.equal(rangeUndercoverage({rangeHours:4000,rangeOrigins:100,rangeCoverage:.52}),true);
   for(const stats of [undefined,{rangeHours:10,rangeOrigins:3,rangeCoverage:0},

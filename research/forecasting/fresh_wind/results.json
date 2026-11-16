@@ -1,0 +1,233 @@
+{
+  "version": "fresh-wind-2026-11-16",
+  "protocolHash": "1cbc645faf17490deba8d16b75a466674268d26ee18ac3ceb03af58a315152e0",
+  "developmentOrigins": 28,
+  "evaluationOrigins": 16,
+  "dmiWeights": {
+    "DK1": 0.25,
+    "DK2": 0
+  },
+  "developmentScores": {
+    "DK1": [
+      {
+        "dmiWeight": 0,
+        "maeMW": 228.88102658702016
+      },
+      {
+        "dmiWeight": 0.25,
+        "maeMW": 226.3693211918134
+      },
+      {
+        "dmiWeight": 0.5,
+        "maeMW": 239.51472246060067
+      },
+      {
+        "dmiWeight": 0.75,
+        "maeMW": 262.85383880040314
+      },
+      {
+        "dmiWeight": 1,
+        "maeMW": 292.84645572880925
+      }
+    ],
+    "DK2": [
+      {
+        "dmiWeight": 0,
+        "maeMW": 56.45650848758417
+      },
+      {
+        "dmiWeight": 0.25,
+        "maeMW": 59.525878478410675
+      },
+      {
+        "dmiWeight": 0.5,
+        "maeMW": 66.6707362882008
+      },
+      {
+        "dmiWeight": 0.75,
+        "maeMW": 75.81037230251138
+      },
+      {
+        "dmiWeight": 1,
+        "maeMW": 87.03392209765495
+      }
+    ]
+  },
+  "checks": {
+    "DK1": {
+      "improvementPct": 14.314707832128715,
+      "pointErrorPass": true,
+      "leadBandsPass": true
+    },
+    "DK2": {
+      "improvementPct": 13.107219496841072,
+      "pointErrorPass": true,
+      "leadBandsPass": true
+    }
+  },
+  "metrics": [
+    {
+      "area": "DK1",
+      "baseline": 722.6611875500533,
+      "dmi": 621.6047280524468,
+      "ecmwf": 622.2303447516953,
+      "selected": 619.2143499360715
+    },
+    {
+      "area": "DK2",
+      "baseline": 115.7522981479788,
+      "dmi": 134.62279839333084,
+      "ecmwf": 100.58039035708532,
+      "selected": 100.58039035708532
+    }
+  ],
+  "bands": [
+    {
+      "area": "DK1",
+      "band": "1-6",
+      "baseline": 233.89793321335557,
+      "dmi": 216.09826120463515,
+      "ecmwf": 216.45862966706284,
+      "selected": 214.89437834280054
+    },
+    {
+      "area": "DK1",
+      "band": "7-24",
+      "baseline": 511.7118499288477,
+      "dmi": 459.5389151524215,
+      "ecmwf": 443.3351477527497,
+      "selected": 443.5250292883929
+    },
+    {
+      "area": "DK1",
+      "band": "25-48",
+      "baseline": 1003.064004350132,
+      "dmi": 844.5307044394189,
+      "ecmwf": 857.8446712720624,
+      "selected": 852.061333320148
+    },
+    {
+      "area": "DK2",
+      "band": "1-6",
+      "baseline": 70.48059281884457,
+      "dmi": 61.708445786866555,
+      "ecmwf": 59.89011179478396,
+      "selected": 59.89011179478396
+    },
+    {
+      "area": "DK2",
+      "band": "7-24",
+      "baseline": 96.7321929709272,
+      "dmi": 118.79134317569272,
+      "ecmwf": 81.54716139775289,
+      "selected": 81.54716139775289
+    },
+    {
+      "area": "DK2",
+      "band": "25-48",
+      "baseline": 141.33530336305105,
+      "dmi": 164.7249779581755,
+      "ecmwf": 125.02788171715999,
+      "selected": 125.02788171715999
+    }
+  ],
+  "excluded": [],
+  "sourceHashes": {
+    ".cache/weather-refresh/weather/20261031T18-c80331916646.json.gz": "84a09e7175234d2f88d52f1008276d6b7a73367e313e67d7bd2edcf7ac6a85ae",
+    ".cache/fresh-wind/weather/dmi-20261031T21.json.gz": "7f4dba8f416364aa86d1987b1999ba78439345c113f786bc0673bc280d16391c",
+    ".cache/weather-refresh/weather/20261101T00-2c363a67245d.json.gz": "8f0c4a8fc943fb441944eaa7f1e2ddda3d6acbea5e15cf4ddfe21122999e6c46",
+    ".cache/fresh-wind/weather/dmi-20261101T03.json.gz": "1e911c525515f040308bba0639436ec4ecf122dfb8519f0605e5fad83d514649",
+    ".cache/weather-refresh/weather/20261101T06-1c67ffa50e98.json.gz": "a4ec3e672764ecef164a5ecad08ea5e5837bcc4faf997761ad130a9375e4c3e0",
+    ".cache/fresh-wind/weather/dmi-20261101T09.json.gz": "4ba1f589edb35884011ec3ce0ba658215b74827454fcc981584b26952a01e861",
+    ".cache/weather-refresh/weather/20261101T12-389a1201e90c.json.gz": "4301cde0c17ef2d166e4deef49c3f467d14b3634ce129d989046800408918574",
+    ".cache/fresh-wind/weather/dmi-20261101T15.json.gz": "0c5d30846e798aa24c2c8b21333aa70f40e2a786050e75c13cad8a3eb3a99d6a",
+    ".cache/weather-refresh/weather/20261101T18-61ecbb969921.json.gz": "457684a5e4e9c46a016c40dd08c6d799920ddf05c77ba8a80e34b0b1a91bd86f",
+    ".cache/fresh-wind/weather/dmi-20261101T21.json.gz": "d6511b9c520eb4fc8594a0aad73adb4adcac403b26cc24fda938e6c79cf0669c",
+    ".cache/weather-refresh/weather/20261102T00-ca35b79e3121.json.gz": "ec150f0f4fe7325b2661f6f9f32accd59e9214338a1d32ec2da739280a67ca15",
+    ".cache/fresh-wind/weather/dmi-20261102T03.json.gz": "328c0f30927b4ee066cafa67d1cb0e15a24c5965617c52829149f71199e6d0c3",
+    ".cache/weather-refresh/weather/20261102T06-2926ef541a46.json.gz": "314ebd651268bbf3d2bc5f8182210cf46422126714bccdd0222706af23ec7ec2",
+    ".cache/fresh-wind/weather/dmi-20261102T09.json.gz": "f678bb899e8bb4a0c6dbc9556c4b0b3d843ddd0de19f2d4e4cfc0feb428e00a4",
+    ".cache/weather-refresh/weather/20261102T12-443727c760b7.json.gz": "51c3e6b90afb270ed87525bcea5cd8108ea83699e31d6528acef0bd76509e1cb",
+    ".cache/fresh-wind/weather/dmi-20261102T15.json.gz": "c7b00b6dae2f81e4fc5d098c12122c9546bd256792ef3019afcf395adca03753",
+    ".cache/weather-refresh/weather/20261102T18-8ec02854fcea.json.gz": "10279fc69938810b218486d25c8288b53814eb47a4d360610c26a1b0fbb16920",
+    ".cache/fresh-wind/weather/dmi-20261102T21.json.gz": "54e7a950357166ef79a883f6b8cfa0635762661ac142f90fc8e2313c2348d610",
+    ".cache/weather-refresh/weather/20261103T00-516994e1ec21.json.gz": "1848cef0f4422e9908d259c3ada5d7bb9a03febf037ff2534e307e10f809bf06",
+    ".cache/fresh-wind/weather/dmi-20261103T03.json.gz": "643b8446dc1d6b557baa93fa36dec9d3a8d7cf638f64c3cd6b7988641884ea65",
+    ".cache/weather-refresh/weather/20261103T06-90cfbb4b793d.json.gz": "9be5688c5a5bf0c50ed4941e7b38f14c46ab073478b56571111e7f2beabea6a6",
+    ".cache/fresh-wind/weather/dmi-20261103T09.json.gz": "9627650b6d799950bb18da5935c29f3594bb6faf76cc9103f282be704a1ff40c",
+    ".cache/weather-refresh/weather/20261103T12-cd152f654f5e.json.gz": "e3c087d9bdfdc7c79cc82e3231b805dcf5284f10e38dd8bd9380000c6adfcfa0",
+    ".cache/fresh-wind/weather/dmi-20261103T15.json.gz": "d039288ddc122b076e70e19c77823c0623a8da077fc94efabf66ec29a8837351",
+    ".cache/weather-refresh/weather/20261103T18-aee76cf86a05.json.gz": "ca31476e2632971eeda6161b5a99e1dddf52bcc290a9f7f595520d553382ced3",
+    ".cache/fresh-wind/weather/dmi-20261103T21.json.gz": "5a62a9b1e380a93b5a69a01e75855907ad7824ca3d37818f2d04eb4946b9f1ea",
+    ".cache/weather-refresh/weather/20261104T00-cd7d7fce4e9b.json.gz": "2e829f96552eec350262f016d33d788fc1908d47b85feaf8b4b0be97d92014e5",
+    ".cache/fresh-wind/weather/dmi-20261104T03.json.gz": "c0ed3daffd6a1529bbce6c068bd731aed817ea46527b9c0a67230e2cba01578e",
+    ".cache/weather-refresh/weather/20261104T06-cd68f966e817.json.gz": "2d1200a657dc335abb41a828090b0f9037ae7b6e8254898d5783d6f01291ae0e",
+    ".cache/fresh-wind/weather/dmi-20261104T09.json.gz": "76c8b75d27603dbb35434f782f3699e7a1e1aa579ef27d715f29b18e68ab47ea",
+    ".cache/weather-refresh/weather/20261104T12-6c5d1d06a09b.json.gz": "6fc9fbd18f70ed2935cf2d1949ea4c8166348dc4dd718bb355134409a48d0434",
+    ".cache/fresh-wind/weather/dmi-20261104T15.json.gz": "60aa764a4b6cc7964f37a1b0ebc057498fd8710d66dc29842323049b1a7fbcac",
+    ".cache/weather-refresh/weather/20261104T18-f88c99af576b.json.gz": "47aa37fd58fb806341b713d7c1c8b67ed4550aa61e8d9f13ad679aa7afeb6cf7",
+    ".cache/fresh-wind/weather/dmi-20261104T21.json.gz": "2a6ff68adb288c324b12e342dd0f4a74d62778581d9f6dbe637bb6d2d2ab817f",
+    ".cache/weather-refresh/weather/20261105T00-2976dcc01216.json.gz": "a10e23f17f82e66621939f0d2a6bcb96868189b1001346d81633753afd520cce",
+    ".cache/fresh-wind/weather/dmi-20261105T03.json.gz": "41d86f608c66cfea21b57e9861ef0a91dce0925c88ed4bcc101947b571b38656",
+    ".cache/weather-refresh/weather/20261105T06-7e8d6240b69a.json.gz": "c59206d02f876c2280caf7df863265c8b0b9913866642e7bd668292dca1dbbbc",
+    ".cache/fresh-wind/weather/dmi-20261105T09.json.gz": "09f2c1f9ec8ffbc88c8bae214557c28f94f5dbb6d1d16f229298801b3a665975",
+    ".cache/weather-refresh/weather/20261105T12-82a51260434e.json.gz": "c5f567c1b250f030d19d19c19d4e0b0add2905e9e1e63bb29ef2d8bbabc572ee",
+    ".cache/fresh-wind/weather/dmi-20261105T15.json.gz": "7de2417b8756f06359cf2ded266676e142deb8b7cfe0e85d2246367bf1e2b431",
+    ".cache/weather-refresh/weather/20261105T18-ce44ab5ff042.json.gz": "57bc0193828a80d884dd12d455ee448fc76d6aff829481bbeca3fbb74368685c",
+    ".cache/fresh-wind/weather/dmi-20261105T21.json.gz": "5a0141bea54b1c49a669e7ab0d20cde108bedaf259ed8f3ba28d18eebc5e03a5",
+    ".cache/weather-refresh/weather/20261106T00-d07c736f6b1a.json.gz": "2318f79d2a07c1f2cf9aa65b4506dfe791146f1f8b2e66a45c703ccc1bfbdd91",
+    ".cache/fresh-wind/weather/dmi-20261106T03.json.gz": "6d4b94c3838b750aa99011d6d1c566968d2d92596f243b9f30d79af2862e3303",
+    ".cache/weather-refresh/weather/20261106T06-83410ad822fd.json.gz": "c2ce5892fee5df431f12b2b1b18922ff9ebe6716182b6b3b63c9fb07ae9648fc",
+    ".cache/fresh-wind/weather/dmi-20261106T09.json.gz": "d0c9b625de1c37dc7f6481aa1c6fd2823d563deee66490466042e5401312cb09",
+    ".cache/weather-refresh/weather/20261106T12-cda56cc3cc7e.json.gz": "3a066f7e2995f8eb6887279b8327c0136113fe3fab858fc9564b7bebd98c6ca0",
+    ".cache/fresh-wind/weather/dmi-20261106T15.json.gz": "de8a838ce3105168472bc4f9a2053492bf3bca5d1611bed5999ddf07e637f0a0",
+    ".cache/weather-refresh/weather/20261106T18-3f5bf6ae60b4.json.gz": "70937e615cf972c09a8fb1fdecb270f527266119ea1ce36d41c3ecd9f83e18b8",
+    ".cache/fresh-wind/weather/dmi-20261106T21.json.gz": "f3a5ac6e24775c3e298d36ae8316abf585f96311d2f715e88b7a45a321e0f92f",
+    ".cache/weather-refresh/weather/20261107T00-fd6f3d1980d4.json.gz": "62fc169affe41dcc6c326e07e49b0509f20887f58483e4801efc82ccbb685718",
+    ".cache/fresh-wind/weather/dmi-20261107T03.json.gz": "e3ef7a10f1f9bd19f814cb4ef7f1292299ad383e69b88889076a827ba67431cc",
+    ".cache/weather-refresh/weather/20261107T06-c29a8e63079d.json.gz": "c13c0c5f3237897db31efcc2cb67b7205267963478f3583eafe8e6691e6b75b6",
+    ".cache/fresh-wind/weather/dmi-20261107T09.json.gz": "cec943d12ae41ec4843c2dc9fcd4f15791708e90880f5ed8015078e166e86035",
+    ".cache/weather-refresh/weather/20261107T12-fb900bf5f82b.json.gz": "ec65ca7be652f244093e9cc40a20132d082a267b91911d72cf059f72bff918f3",
+    ".cache/fresh-wind/weather/dmi-20261107T15.json.gz": "b5fe9dd1548ddc92b372718ba6c724b8bf413cd4a0c76cc49ed11affaadf61ef",
+    ".cache/weather-refresh/weather/20261107T18-7ac03aad972c.json.gz": "1c8c00d3c88cd6197c009851296df2c28e4939bfade129bab44e4501c9dbd26a",
+    ".cache/fresh-wind/weather/dmi-20261107T21.json.gz": "845b72b6950ba231cbdb42b406a2ee2d3e9772b05de0163b304525b0fa84197c",
+    ".cache/weather-refresh/weather/20261108T00-de8870b8b5fa.json.gz": "b5e47d22fb6b952caa7999774fca102887e8b02a0b8cbd676b7af34d968c1a89",
+    ".cache/fresh-wind/weather/dmi-20261108T03.json.gz": "ae30dc749410609d74962adba13bbb6221c24977642698df13f52999c6ddcff8",
+    ".cache/weather-refresh/weather/20261108T06-abda653fc9ee.json.gz": "353c6f8d12bfa7c7f6f9807473bc7372639fbe991604c790a1f82e6fb8d83de0",
+    ".cache/fresh-wind/weather/dmi-20261108T09.json.gz": "0d91a8b3899da095cb75fda374e549be1162b3c7a34175297937044c81310fd5",
+    ".cache/weather-refresh/weather/20261108T12-11664149fa6a.json.gz": "bbc7ecbe6cf79422549cc0f3addf669bc74c7f685b47cb0ece8ad863bcfb6c83",
+    ".cache/fresh-wind/weather/dmi-20261108T15.json.gz": "3632f1358438acc91b99f4575f3451b4c23cd80b15ca1e3dfcd9b39e8ac6dc47",
+    ".cache/weather-retrain/weather/20261109T18.json.gz": "0503c7243fa7cc75ba94b61d76c18b6f4502b396cd59abfd42e330e59407a364",
+    ".cache/fresh-wind/weather/dmi-20261109T21.json.gz": "54129e575d1ae57ecba8aa167e43b6e74de051d7bb6ed261d14d26c242a7e523",
+    ".cache/wind-update/state.json.gz": "17e26015f7f41e19a5a249fbec32fe43b07e3a603889f5c51d00e42092b9cbc5",
+    ".cache/fresh-wind/weather/dmi-20261110T03.json.gz": "4e10edd9ae567a32f74b50df9aeefce9811466d27cfe268f49ccf71133824ed7",
+    ".cache/weather-retrain/weather/20261110T06.json.gz": "58969256e5cb14310feb717584189d4fe56ce5908b6b4fbfbba87fdae9d59e5c",
+    ".cache/fresh-wind/weather/dmi-20261110T09.json.gz": "d78312745ff177e92cce55d8857881933d488125d25602e4d16063dc126218d7",
+    ".cache/weather-retrain/weather/20261110T12.json.gz": "af0fa0ac5c13cef7cba198504ee7c67259291f4ca49c3f37e53dc9ddebdbaa3c",
+    ".cache/fresh-wind/weather/dmi-20261110T15.json.gz": "3c68b1a00b373dd9429e75de384f8d36f8f9cea179940938d1d0c08f45e9a203",
+    ".cache/weather-retrain/weather/20261110T18.json.gz": "92d769c5cb9d8d6d15ee28978661a4c414ab67d21112192773a95a3c5abe6c83",
+    ".cache/fresh-wind/weather/dmi-20261110T21.json.gz": "6df3c26302912858aa8dbcd7d644574cc004e334d754492e2b87f85c8f74a457",
+    ".cache/fresh-wind/weather/dmi-20261111T03.json.gz": "78e711c8c96a845dc866643c8b4e79d5f80e337c4d0f4bf05921f11113ae61a1",
+    ".cache/weather-retrain/weather/20261111T06.json.gz": "e7bdd55b8e98e608593af53bf9942371cf017a552b5523757ad0edfb1f94321b",
+    ".cache/fresh-wind/weather/dmi-20261111T09.json.gz": "837ca6e33b0f1f0409373d5a3c968e95d30fd5d2f2c25d4ff293396cea581d33",
+    ".cache/weather-retrain/weather/20261111T12.json.gz": "58780c7dd56b018d4e0f417ad849987e55136fde0dcf404cf994079742f7f4e9",
+    ".cache/fresh-wind/weather/dmi-20261111T15.json.gz": "fa22190e718e54459473057d1ec6adf2f028100d15c589f8dce9f60e58502db0",
+    ".cache/weather-retrain/weather/20261111T18.json.gz": "9f6c24e5afe65d352670ebe97d2931ea3045699bd35b48c5281310b46daf450f",
+    ".cache/fresh-wind/weather/dmi-20261111T21.json.gz": "9c94313170d9a62c4d6a1aae4046683504c65f4f0930f1c71f0bfbe1a9cde851",
+    ".cache/fresh-wind/weather/dmi-20261112T03.json.gz": "116cb6b4c8e170c0f7b3806a0067fb120cf0028b953b9f3ae20b7946c6edb5c7",
+    ".cache/weather-retrain/weather/20261112T06.json.gz": "9ee80f7a41c11c72479224373a897fcbe43c142613e7ae163c0ec28f298bada0",
+    ".cache/fresh-wind/weather/dmi-20261112T09.json.gz": "212fecde23db9b127478e57472517711e1b608658a616f94d98434dd721afa7a",
+    ".cache/weather-retrain/weather/20261112T12.json.gz": "3391a31a66efdd669cbd5203e22270285ae153ab92a4629fecad53f44448b664",
+    ".cache/fresh-wind/weather/dmi-20261112T15.json.gz": "87137c06d600b48eeb461616ed251f228ef8a8bcb21d0116baf84399bc41ea62",
+    ".cache/weather-retrain/weather/20261112T18.json.gz": "24868017b559c2c48144bf7f197af4692431feaf9c883f4eeaab0351688f1fc9",
+    ".cache/fresh-wind/weather/dmi-20261112T21.json.gz": "d55ae420650d5f0b7df288b0f2a32719a1601d127f1882f9dfc0348599ee964f",
+    ".cache/fresh-wind/weather/dmi-20261113T03.json.gz": "722d02bd9bb91834f2f131b8a1b8469df5e28db497810aefe5f276aa761474e7",
+    ".cache/weather-retrain/weather/20261113T06.json.gz": "98ee371d97fec6d5d4e7d8ebb04fb33054168ceb94bffe0cc8de430d4c562502",
+    ".cache/fresh-wind/weather/dmi-20261113T09.json.gz": "80d77e5bc92f46f3fe07df6bddf658aa2ab05774b735a84839eee71e8a7ae888",
+    ".cache/weather-retrain/weather/20261113T12.json.gz": "a64b2fb2e78d2f0328eaa2d56723c2f0080a71be0fb2fa16eb580e0a5fb02d5c",
+    ".cache/fresh-wind/weather/dmi-20261113T15.json.gz": "ac8cf1def6f6dcd5a063d7854dfb7dcdf467e0625f194a953913486cbc3b0d68"
+  },
+  "stateHash": "17e26015f7f41e19a5a249fbec32fe43b07e3a603889f5c51d00e42092b9cbc5",
+  "rawHash": "1623b9d08d7f3dab64e23a896f1033885f63c25ce907e7f597d81b3053143aea",
+  "interpretation": "Short retrospective diagnostic with revised observations and assumed historical publication lags. November has previously been inspected. Source weights are selected only on development outcomes that end before evaluation starts. No claim of independent or year-round accuracy. Existing trials and their issued forecasts remain frozen."
+}

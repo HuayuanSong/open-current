@@ -1,0 +1,61 @@
+{
+  "calibrationOrigins": 28,
+  "calibratedBefore": "2026-11-10",
+  "nominalCoverage": 0.8,
+  "series": {
+    "DK1": {
+      "coverage": 0.3515625,
+      "intervalScore": 3929.066192468616,
+      "meanWidthMW": 729.2126642647046,
+      "evaluationOrigins": 16,
+      "rule": {
+        "method": "absolute",
+        "floorMW": 1.0,
+        "cells": {
+          "0": {
+            "low": -269.5951320935678,
+            "high": 269.5951320935678,
+            "observations": 168
+          },
+          "2": {
+            "low": -360.985100994825,
+            "high": 360.985100994825,
+            "observations": 504
+          },
+          "4": {
+            "low": -392.85173285937503,
+            "high": 392.85173285937503,
+            "observations": 672
+          }
+        }
+      }
+    },
+    "DK2": {
+      "coverage": 0.5416666666666666,
+      "intervalScore": 571.9287833973821,
+      "meanWidthMW": 178.93825963451482,
+      "evaluationOrigins": 16,
+      "rule": {
+        "method": "absolute",
+        "floorMW": 1.0,
+        "cells": {
+          "0": {
+            "low": -77.78011906500635,
+            "high": 77.78011906500635,
+            "observations": 168
+          },
+          "2": {
+            "low": -98.06658524970781,
+            "high": 98.06658524970781,
+            "observations": 504
+          },
+          "4": {
+            "low": -86.33656583105468,
+            "high": 86.33656583105468,
+            "observations": 672
+          }
+        }
+      }
+    }
+  }
+}

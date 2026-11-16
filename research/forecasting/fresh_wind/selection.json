@@ -1,0 +1,23 @@
+{
+  "version": "fresh-wind-2026-11-16",
+  "resultsHash": "6f88bac12c10baa8fffbea170af385dab74eef2a8460abbf37d8c8c8c3762bcf",
+  "dmiWeights": {
+    "DK1": 0.25,
+    "DK2": 0
+  },
+  "correctionRules": {
+    "DK1": {
+      "strength": 1,
+      "halfLifeHours": 2,
+      "trendWeight": 1
+    },
+    "DK2": {
+      "strength": 1,
+      "halfLifeHours": 1,
+      "trendWeight": 0
+    }
+  },
+  "ranges": null,
+  "rangePolicy": "Withhold new wind ranges after failed chronological calibration checks; preserve solar and demand ranges.",
+  "experimental": true
+}

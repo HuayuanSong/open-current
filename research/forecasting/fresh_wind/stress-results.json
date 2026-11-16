@@ -1,0 +1,33 @@
+{
+  "dmiWeights": {
+    "DK1": 0.25,
+    "DK2": 0
+  },
+  "rows": [
+    {
+      "origin": "2026-11-14T03:00:00+00:00",
+      "area": "DK1",
+      "baselineMAE": 1046.8524180492634,
+      "selectedMAE": 849.5837702608711
+    },
+    {
+      "origin": "2026-11-14T03:00:00+00:00",
+      "area": "DK2",
+      "baselineMAE": 167.62679421850586,
+      "selectedMAE": 125.27841303247084
+    },
+    {
+      "origin": "2026-11-14T09:00:00+00:00",
+      "area": "DK1",
+      "baselineMAE": 1409.3903966363976,
+      "selectedMAE": 1096.2120805074017
+    },
+    {
+      "origin": "2026-11-14T09:00:00+00:00",
+      "area": "DK2",
+      "baselineMAE": 190.61958640530193,
+      "selectedMAE": 138.57213762303567
+    }
+  ],
+  "interpretation": "Two additional recent stress cases, not a separate statistically sufficient validation set. No weights were selected using these outcomes."
+}

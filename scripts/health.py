@@ -15,6 +15,8 @@ def latest_time(rows):
 
 def build_health(index, forecasts, danish, at=None):
     latest = forecasts.get("latest") or {}
+    wind = forecasts.get("windOutlook") or {}
+    wind_latest = wind.get("latest") or {}
     return {
         "schema": 1,
         "preparedAt": (at or datetime.now(timezone.utc)).isoformat(),
@@ -25,6 +27,13 @@ def build_health(index, forecasts, danish, at=None):
             "origin": latest.get("origin"),
             "horizonEnd": (latest.get("times") or [None])[-1],
             "status": forecasts.get("status"),
+        },
+        "windForecast": {
+            "checkedAt": wind.get("checkedAt"),
+            "issuedAt": wind_latest.get("issuedAt"),
+            "origin": wind_latest.get("origin"),
+            "status": wind.get("status"),
+            "weatherSources": wind_latest.get("weatherSources"),
         },
         "sources": {
             "energinet": {

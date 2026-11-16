@@ -25,3 +25,12 @@ class HealthTests(unittest.TestCase):
         result = build_health({"generatedAt": "2026-11-02T10:00:00Z"}, {}, {})
         self.assertIsNone(result["forecast"]["issuedAt"])
         self.assertIsNone(result["forecast"]["horizonEnd"])
+
+    def test_wind_freshness_stays_separate_from_daily_forecast(self):
+        forecasts = dict(latest={"issuedAt": "2026-11-16T10:20Z"},
+            windOutlook=dict(status="ready", latest=dict(issuedAt="2026-11-16T10:40Z",
+                weatherSources={"dmi": {"run": "2026-11-16T06:00Z"}})))
+        result = build_health({"generatedAt": "2026-11-16T11:00Z"}, forecasts, {})
+        self.assertEqual(result["forecast"]["issuedAt"], "2026-11-16T10:20Z")
+        self.assertEqual(result["windForecast"]["issuedAt"], "2026-11-16T10:40Z")
+        self.assertEqual(result["windForecast"]["weatherSources"]["dmi"]["run"], "2026-11-16T06:00Z")

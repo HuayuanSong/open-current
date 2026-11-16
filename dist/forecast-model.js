@@ -1,6 +1,13 @@
 export const HOUR = 3600000;
 export const usable = (value) => typeof value === "number" && Number.isFinite(value);
 
+export function targetPayload(payload, target) {
+  if (target !== "wind" || !payload?.windOutlook) return payload;
+  if (payload.windOutlook.latest) return payload.windOutlook;
+  return { ...payload, status: payload.windOutlook.message ? "delayed" : payload.status,
+    windUpdatePending: true };
+}
+
 export function rangeUndercoverage(stats) {
   return stats?.rangeHours >= 24 && stats?.rangeOrigins >= 3 &&
     usable(stats.rangeCoverage) && stats.rangeCoverage < 0.75;
@@ -31,6 +38,7 @@ export function forecastState(payload, now = Date.now()) {
 }
 
 export function chartSeries(payload, area, target, mode = "outlook") {
+  payload = targetPayload(payload, target);
   const record = mode === "comparison" ? payload?.comparison : payload?.latest;
   if (!record) return { record: null, points: [] };
   const observed = new Map((payload.observations?.[area] || []).map(r => [Date.parse(r.time), r[target]]));

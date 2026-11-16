@@ -1,5 +1,11 @@
 # Deployed forecast ensemble
 
+The public **wind** outlook now uses the [current-weather update](../research/forecasting/fresh_wind/README.md):
+availability-verified ECMWF, a DMI contribution in West Denmark, refitted tree/
+ridge components, and a correction from five-minute generation. It has its own
+version, issue archive and measured errors. Solar and demand retain the ensemble
+described below. Wind ranges are withheld after failed calibration checks.
+
 The fixed v2 ensemble predicts hourly wind, solar and derived system load for
 DK1/DK2, 48 hours ahead. Model families and lead-dependent weights are identical
 to the development-selected research ensemble. There is no training in the
@@ -15,7 +21,8 @@ A separate [wind update comparison](../research/forecasting/wind_update/README.m
 records fresher ECMWF inputs and corrections from five-minute wind production
 during normal refreshes. It preserves the public model and both earlier trials.
 The historical point forecasts improved, but candidate range coverage failed;
-the comparison is not automatically promoted. Its status and measured outcomes
+the comparison is not automatically promoted. The separately versioned public
+wind update includes DMI and has its own records. Comparison status and outcomes
 are published at `data/wind-update.json`.
 
 ## Serving and storage
@@ -36,6 +43,7 @@ During a full refresh, collection and forecasting share one Energinet power
 response covering the three-day revision window. Forecasting reuses it only
 when it is complete, less than ten minutes old and covers the required period.
 Standalone updates and initial history bootstrap still fetch their own inputs.
+Those responses are now also cached for the wind update to reuse.
 This avoids requesting the same five-minute dataset twice within seconds.
 
 Each forecast is identified by model version, source-hour origin and weather
@@ -71,10 +79,12 @@ the same daily 00 UTC ECMWF model, made eligible after 12:15 UTC. Five days are
 requested to cover 48 hours from origins throughout the day. Historical weather
 features continue to use the preceding issued daily forecast, as in training.
 
-An [availability-aware latest-ECMWF option](../research/forecasting/weather_refresh/README.md)
+An earlier [availability-aware latest-ECMWF option](../research/forecasting/weather_refresh/README.md)
 is implemented for local comparison. Its 48-origin November replay improved solar
 but did not improve wind or pass the accuracy gate, so production and the existing
-prospective trial retain the default policy. The alternative changes only future
+prospective trial retained the default policy at that time. The new public wind
+update uses refitted components instead; solar/demand and trials keep their
+original policy. The alternative changes only future
 weather inputs and keeps downloaded runs in a separate cache.
 
 A separate [component-refit experiment](../research/forecasting/weather_retrain/README.md)

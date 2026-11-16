@@ -102,7 +102,7 @@ def performance(state, at, version):
     }
 
 
-def payload(state, at, version, error=None):
+def base_payload(state, at, version, error=None):
     records = [r for r in state["forecasts"] if r["modelVersion"] == version]
     latest = (
         max(records, key=lambda r: (r["origin"], r["issuedAt"])) if records else None
@@ -143,6 +143,19 @@ def payload(state, at, version, error=None):
             result["comparison"] = min(
                 prior, key=lambda r: abs(pd.Timestamp(r["origin"]) - target)
             )
+    return result
+
+
+def payload(state, at, version, error=None):
+    result = base_payload(state, at, version, error)
+    serving = state.get("windServing")
+    if serving:
+        wind_state = {**state, "forecasts": [r for r in state.get("windForecasts", []) if not r.get("diagnosticOnly")]}
+        wind = base_payload(wind_state, at, serving["version"], serving["lastAttempt"].get("error"))
+        wind["rangeValidation"] = None
+        wind["methodologyUrl"] = "https://github.com/HuayuanSong/open-current/tree/main/research/forecasting/fresh_wind"
+        wind["performance"] = {area: {"wind": targets["wind"]} for area, targets in wind["performance"].items()}
+        result["windOutlook"] = wind
     return result
 
 

@@ -123,6 +123,9 @@ jobs:
         run: .cache/forecast-serving/main-env/bin/python -m forecast.wind_update
         env:
           FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
+      - name: Verify public wind model exports
+        if: env.VALIDATE_DEPLOYMENT == 'true'
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.verify_wind
       - name: Preserve wind comparison inputs and provenance
         if: steps.wind-update.outputs.issued == 'true'
         uses: actions/upload-artifact@v4
@@ -134,6 +137,25 @@ jobs:
             .cache/wind-update/live/evidence/sources.json.gz
             .cache/wind-update/live/evidence/record.json
             .cache/wind-update/live/evidence/status.json
+          retention-days: 90
+      - name: Publish the current-weather wind forecast
+        id: fresh-wind
+        continue-on-error: true
+        timeout-minutes: 5
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.fresh_wind
+        env:
+          FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
+      - name: Preserve public wind inputs and provenance
+        if: steps.fresh-wind.outputs.issued == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: fresh-wind-${{ github.run_id }}-${{ github.run_attempt }}
+          include-hidden-files: true
+          path: |
+            .cache/fresh-wind/live/evidence/inputs.npz
+            .cache/fresh-wind/live/evidence/sources.json.gz
+            .cache/fresh-wind/live/evidence/record.json
+            .cache/fresh-wind/live/evidence/status.json
           retention-days: 90
       - name: Verify normalization and published data
         run: .cache/forecast-serving/main-env/bin/python -m unittest discover -s tests -p 'test_*.py' -v

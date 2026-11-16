@@ -18,7 +18,12 @@ URL = os.environ.get("GRID_TEST_URL")
 
 
 def fixture(name):
-    return json.loads((ROOT / "dist/data" / name).read_text())
+    data = json.loads((ROOT / "dist/data" / name).read_text())
+    if name == "forecasts.json":
+        # These fixtures exercise the original forecast and fallback behavior.
+        # Updated wind has a separate fixture below and a real-data browser check.
+        data.pop("windOutlook", None)
+    return data
 
 
 def transition_fixture():
@@ -133,6 +138,53 @@ class BrowserRegressions(unittest.TestCase):
         self.assertFalse(self.page.evaluate("document.documentElement.scrollWidth > innerWidth"))
         (ROOT / "test-results").mkdir(exist_ok=True)
         self.page.locator("#forecasts").screenshot(path=str(ROOT / "test-results/forecasts-warning-390.png"))
+
+    def test_fresh_wind_uses_own_sources_downloads_and_metrics_without_old_ranges(self):
+        data = fixture("forecasts.json")
+        fresh = copy.deepcopy(data)
+        record = fresh["latest"]
+        record["modelVersion"] = "fresh-wind-fixture"
+        record["weatherSources"] = {
+            "ecmwf": {"run": "2026-11-16T06:00:00+00:00"},
+            "dmi": {"run": "2026-11-16T09:00:00+00:00"},
+        }
+        record["dmiWeights"] = {"DK1": .25, "DK2": 0}
+        record["recentWind"] = {a: {"observationEnd": "2026-11-16T12:15:00+00:00"} for a in ["DK1", "DK2"]}
+        record["ranges"] = {"areas": {}, "issuedAt": record["issuedAt"]}
+        record["rangeUnavailableReason"] = "Prediction ranges are unavailable for this wind update because calibration checks did not pass."
+        fresh.update(comparison=None, performance={}, rangeValidation=None)
+        data["comparison"] = copy.deepcopy(data["latest"])
+        data["windOutlook"] = fresh
+        self.page.route("**/data/forecasts.json", lambda route: route.fulfill(json=data))
+        self.load()
+        expect(self.page.locator("#forecast-range-toggle")).to_be_disabled()
+        expect(self.page.locator(".forecast-range-band")).to_have_count(0)
+        expect(self.page.locator("#forecast-range-note")).to_contain_text("calibration checks did not pass")
+        expect(self.page.locator("#forecast-stats")).to_contain_text("Collecting outcomes")
+        timing = self.page.locator("#forecast-timing")
+        expect(timing).to_contain_text("ECMWF:")
+        expect(timing).not_to_contain_text("DMI:")
+        self.page.locator('[data-forecast-area="DK1"]').click()
+        expect(timing).to_contain_text("DMI:")
+        expect(timing).to_contain_text("Wind readings through")
+        with self.page.expect_download() as download:
+            self.page.locator("#forecast-download").click()
+        saved = json.loads(Path(download.value.path()).read_text())
+        self.assertEqual(saved["modelVersion"], "fresh-wind-fixture")
+        self.assertEqual(saved["ranges"]["areas"], {})
+        self.page.locator('[data-forecast-view="comparison"]').click()
+        expect(self.page.locator("#forecast-empty")).to_be_visible()
+        self.page.locator('[data-forecast-target="solar"]').click()
+        expect(self.page.locator("#forecast-empty")).to_be_hidden()
+        expect(self.page.locator("#forecast-range-toggle")).to_be_enabled()
+        expect(self.page.locator("#forecast-range-note")).to_contain_text("Daylight only")
+        self.page.locator('[data-forecast-view="outlook"]').click()
+        self.page.locator('[data-forecast-target="wind"]').click()
+        self.page.set_viewport_size({"width": 390, "height": 844})
+        self.page.wait_for_function("Number(document.querySelector('#forecast-chart').getAttribute('viewBox').split(' ')[2]) === document.querySelector('#forecast-chart-wrap').clientWidth")
+        self.assertFalse(self.page.evaluate("document.documentElement.scrollWidth > innerWidth"))
+        (ROOT / "test-results").mkdir(exist_ok=True)
+        self.page.locator("#forecasts").screenshot(path=str(ROOT / "test-results/forecasts-fresh-wind-390.png"))
 
     def test_missing_generation_preserves_independent_feeds_and_forecasts(self):
         country = fixture("countries/dk.json")
@@ -473,12 +525,14 @@ class BrowserRegressions(unittest.TestCase):
         # An older cached page can load newer script contents during deployment.
         self.page.add_init_script(
             "document.addEventListener('readystatechange', () => {"
-            "if (document.readyState === 'interactive') "
+            "if (document.readyState === 'interactive') {"
             "document.querySelector('#forecast-transition-key')?.remove();"
+            "document.querySelector('#forecast-range-target')?.removeAttribute('id');}"
             "});"
         )
         self.load()
         expect(self.page.locator("#forecast-transition-key")).to_have_count(0)
+        expect(self.page.locator("#forecast-range-target")).to_have_count(0)
         expect(self.page.locator(".forecast-predicted")).to_have_count(1)
         expect(self.page.locator(".forecast-range-band")).to_have_count(1)
         expect(self.page.locator("#forecast-download")).to_be_enabled()

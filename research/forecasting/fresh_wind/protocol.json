@@ -1,0 +1,17 @@
+{
+  "version": "fresh-wind-2026-11-16",
+  "developmentStart": "2026-11-01",
+  "developmentEndExclusive": "2026-11-09",
+  "evaluationStart": "2026-11-10",
+  "evaluationEndExclusive": "2026-11-14",
+  "originHoursUTC": [3, 9, 15, 21],
+  "issueMinutesAfterOrigin": 30,
+  "assumedAvailabilityHours": {"ecmwf": 8, "dmi": 4},
+  "dmiWeights": [0, 0.25, 0.5, 0.75, 1],
+  "minimumEvaluationOrigins": 12,
+  "minimumImprovementPct": 5,
+  "maximumLeadRegressionPct": 5,
+  "correctionSelection": "research/forecasting/wind_update/selection.json",
+  "rangePolicy": "Do not publish the prior model's ranges around changed wind predictions. The previous correction's 80% ranges failed validation.",
+  "interpretation": "Short retrospective diagnostic with revised observations and assumed historical publication lags. November has previously been inspected. Source weights are selected only on development outcomes that end before evaluation starts. No claim of independent or year-round accuracy. Existing trials and their issued forecasts remain frozen."
+}

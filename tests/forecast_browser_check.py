@@ -15,6 +15,15 @@ ROOT=Path(__file__).resolve().parents[1]
 URL=os.environ.get('GRID_TEST_URL','http://127.0.0.1:4322/')
 OUT=ROOT/'test-results'
 
+def selected_payload(source,target='wind'):
+    wind=source.get('windOutlook')
+    return wind if target=='wind' and wind and wind.get('latest') else source
+
+def has_range(source,area,target):
+    record=selected_payload(source,target).get('latest') or {}
+    band=record.get('ranges',{}).get('areas',{}).get(area,{}).get(target,{})
+    return any(lo is not None and hi is not None for lo,hi in zip(band.get('lower',[]),band.get('upper',[])))
+
 def check():
     OUT.mkdir(exist_ok=True)
     with sync_playwright() as p:
@@ -28,14 +37,20 @@ def check():
         assert source['latest'], 'Real forecast required for deployment'
         expect(page.locator('#forecast-stats>div')).to_have_count(3)
         assert page.locator('.forecast-predicted').get_attribute('d')
+        if not has_range(source,'DK2','wind'):
+            expect(page.locator('#forecast-range-toggle')).to_be_disabled()
+            expect(page.locator('.forecast-range-band')).to_have_count(0)
+        page.locator('[data-forecast-target="solar"]').click()
         expect(page.locator('#forecast-range-toggle')).to_be_checked()
         expect(page.locator('.forecast-range-band')).to_have_count(1)
         page.locator('#forecast-range-toggle').uncheck()
         expect(page.locator('.forecast-range-band')).to_have_count(0)
         page.reload(wait_until='networkidle')
         expect(page.locator('#forecast-range-toggle')).not_to_be_checked()
+        page.locator('[data-forecast-target="solar"]').click()
         page.locator('#forecast-range-toggle').check()
         expect(page.locator('.forecast-range-band')).to_have_count(1)
+        page.locator('[data-forecast-target="wind"]').click()
         page.locator('#forecasts').screenshot(path=str(OUT/'forecasts-desktop.png'))
         for area in ['DK2','DK1']:
             page.locator(f'[data-forecast-area="{area}"]').click()
@@ -43,11 +58,13 @@ def check():
                 page.locator(f'[data-forecast-target="{target}"]').click()
                 expect(page.locator(f'[data-forecast-target="{target}"]')).to_have_attribute('aria-pressed','true')
                 assert page.locator('.forecast-predicted').get_attribute('d')
-                expect(page.locator('.forecast-range-band')).to_have_count(1)
-                live=source.get('performance',{}).get(area,{}).get(target,{})
+                present=has_range(source,area,target)
+                expect(page.locator('.forecast-range-band')).to_have_count(int(present))
+                if not present:expect(page.locator('#forecast-range-toggle')).to_be_disabled()
+                live=selected_payload(source,target).get('performance',{}).get(area,{}).get(target,{})
                 undercoverage=(live.get('rangeHours',0)>=24 and live.get('rangeOrigins',0)>=3
                     and isinstance(live.get('rangeCoverage'),(int,float)) and live['rangeCoverage']<.75)
-                assert page.locator('#forecast-range-note').evaluate('(el)=>el.classList.contains("undercoverage")')==undercoverage
+                assert page.locator('#forecast-range-note').evaluate('(el)=>el.classList.contains("undercoverage")')==(undercoverage and present)
                 if target=='solar':expect(page.locator('#forecast-range-note')).to_contain_text('Daylight only')
                 if target=='load':
                     expect(page.locator('#forecast-explanation')).to_be_visible()
@@ -67,16 +84,17 @@ def check():
         with page.expect_download() as download:
             page.locator('#forecast-download').click()
         saved=json.loads(Path(download.value.path()).read_text())
-        assert saved['issuedAt']==source['latest']['issuedAt']
+        wind=selected_payload(source)
+        assert saved['issuedAt']==wind['latest']['issuedAt']
         assert len(saved['times'])==48
         assert saved['ranges']['issuedAt']==saved['issuedAt']
         page.locator('[data-forecast-view="comparison"]').click()
-        if source['comparison']:
+        if wind['comparison']:
             expect(page.locator('#forecast-timing')).to_contain_text('Comparing the forecast issued')
         else:
             expect(page.locator('#forecast-empty')).to_be_visible()
             expect(page.locator('#forecast-download')).to_be_disabled()
-        if not source.get('comparison',{} ) or not source['comparison'].get('ranges'):
+        if not wind.get('comparison',{} ) or not wind['comparison'].get('ranges'):
             expect(page.locator('.forecast-range-band')).to_have_count(0)
         page.locator('[data-forecast-view="outlook"]').click()
         for width in [390,768,1024]:
@@ -93,12 +111,14 @@ def check():
         expect(page.locator('.forecast-methodology')).to_have_attribute('open','')
         # Simulate source failure without altering any published forecasts.
         delayed=copy.deepcopy(source);delayed['status']='delayed'
+        if delayed.get('windOutlook'):delayed['windOutlook']['status']='delayed'
         page.route('**/data/forecasts.json',lambda route:route.fulfill(json=delayed))
         page.reload(wait_until='networkidle')
         expect(page.locator('#forecast-status')).to_contain_text('Update delayed')
         assert page.locator('.forecast-predicted').get_attribute('d')
         page.unroute('**/data/forecasts.json')
         unavailable=copy.deepcopy(source);unavailable.update(latest=None,comparison=None,status='unavailable')
+        if unavailable.get('windOutlook'):unavailable['windOutlook'].update(latest=None,comparison=None,status='unavailable')
         page.route('**/data/forecasts.json',lambda route:route.fulfill(json=unavailable))
         page.reload(wait_until='networkidle')
         expect(page.locator('#forecast-empty')).to_be_visible()

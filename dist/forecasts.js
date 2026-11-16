@@ -4,9 +4,10 @@ import {
   forecastStats,
   forecastTransition,
   rangeUndercoverage,
+  targetPayload,
   HOUR,
   usable,
-} from "./forecast-model.js?v=a2f93fae7179";
+} from "./forecast-model.js?v=c39570deb896";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -76,18 +77,19 @@ function stat(label, value, note) {
 }
 
 function render() {
-  const status = forecastState(payload);
+  const selectedPayload = targetPayload(payload, state.target);
+  const status = forecastState(selectedPayload);
   $("#forecast-status").dataset.status = status;
-  if (!payload?.latest) {
+  if (!selectedPayload?.latest) {
     text(
       "#forecast-status",
       "The next forecast is waiting for complete source data.",
     );
   } else {
-    const missing = payload.latest.quality?.[state.area]?.filledInputHours || 0;
+    const missing = selectedPayload.latest.quality?.[state.area]?.filledInputHours || 0;
     text(
       "#forecast-status",
-      `${status === "delayed" ? "Update delayed · Last forecast" : "Forecast issued"} ${utc(payload.latest.issuedAt)}${missing ? ` · ${missing} missing input hours filled from earlier readings` : ""}`,
+      `${selectedPayload.windUpdatePending ? "Previous wind model · " : ""}${status === "delayed" ? "Update delayed · Last forecast" : "Forecast issued"} ${utc(selectedPayload.latest.issuedAt)}${missing ? ` · ${missing} missing input hours filled from earlier readings` : ""}`,
     );
   }
   $$("[data-forecast-area]").forEach((button) =>
@@ -122,7 +124,7 @@ function render() {
       : "A forecast will appear when electricity and weather data are available.",
   );
   const stats = forecastStats(record, state.area, state.target);
-  const live = payload?.performance?.[state.area]?.[state.target];
+  const live = selectedPayload?.performance?.[state.area]?.[state.target];
   $("#forecast-stats").replaceChildren(
     ...(stats
       ? [
@@ -143,7 +145,7 @@ function render() {
   text(
     "#forecast-timing",
     record
-      ? `${state.view === "comparison" ? `Comparing the forecast issued ${utc(record.issuedAt)}. ` : ""}Hourly average power · points mark hour ends · all times UTC. Weather run: ${utc(record.weatherRun)}.`
+      ? `${state.view === "comparison" ? `Comparing the forecast issued ${utc(record.issuedAt)}. ` : ""}Hourly average power · points mark hour ends · all times UTC. ${weatherTiming(record)}`
       : "Hourly average power · points mark hour ends · all times UTC.",
   );
   $("#forecast-download").disabled = !record;
@@ -151,13 +153,15 @@ function render() {
   $("#forecast-range-toggle").disabled = !hasRange;
   $("#forecast-range-toggle").checked = state.range && hasRange;
   $("#forecast-range-key").hidden = !(state.range && hasRange);
-  const audit = payload?.rangeValidation?.series?.[state.area]?.[state.target];
+  const rangeTarget = $("#forecast-range-target");
+  if (rangeTarget) rangeTarget.hidden = !hasRange;
+  const audit = selectedPayload?.rangeValidation?.series?.[state.area]?.[state.target];
   let rangeNote =
-    "This outlook has no saved prediction range. Ranges are never added to old forecasts.";
+    record?.rangeUnavailableReason || "This outlook has no saved prediction range. Ranges are never added to old forecasts.";
   const undercoverage = hasRange && rangeUndercoverage(live);
   if (hasRange) {
     rangeNote = `${undercoverage ? "Recent observations fall outside this range more often than intended. " : ""}Experimental, 80% target for each hour. ${state.target === "solar" ? "Daylight only; overnight ranges did not pass validation. " : ""}`;
-    if (audit && record.ranges.version === payload.rangeValidation.version) {
+    if (audit && record.ranges.version === selectedPayload.rangeValidation.version) {
       rangeNote += `Historical ${state.target === "solar" ? "daylight " : ""}coverage: ${Math.round(audit.coverage * 100)}% across ${audit.origins} forecast dates. `;
     }
     rangeNote +=
@@ -167,8 +171,21 @@ function render() {
   }
   text("#forecast-range-note", rangeNote);
   $("#forecast-range-note").classList.toggle("undercoverage", undercoverage);
+  $("#forecast-range-note").classList.toggle("uncalibrated", Boolean(record?.rangeUnavailableReason));
   renderExplanation(record);
   draw(record, points);
+}
+
+function weatherTiming(record) {
+  if (state.target !== "wind" || !record.weatherSources) {
+    return `Weather run: ${utc(record.weatherRun)}.`;
+  }
+  const weight = record.dmiWeights[state.area];
+  const runs = [];
+  if (weight < 1 && record.weatherSources.ecmwf) runs.push(`ECMWF: ${utc(record.weatherSources.ecmwf.run)}`);
+  if (weight > 0 && record.weatherSources.dmi) runs.push(`DMI: ${utc(record.weatherSources.dmi.run)}`);
+  const recent = record.recentWind?.[state.area]?.observationEnd;
+  return `${runs.join(" · ")}.${recent ? ` Wind readings through ${utc(recent)}.` : ""}`;
 }
 
 function renderExplanation(record) {
@@ -445,8 +462,7 @@ for (const key of ["area", "target", "view"]) {
   );
 }
 $("#forecast-download").onclick = () => {
-  const record =
-    state.view === "comparison" ? payload.comparison : payload.latest;
+  const { record } = chartSeries(payload, state.area, state.target, state.view);
   if (!record) return;
   const url = URL.createObjectURL(
     new Blob([JSON.stringify(record, null, 2)], { type: "application/json" }),
