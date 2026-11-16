@@ -1,8 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {forecastState,chartSeries,forecastStats,forecastTransition,HOUR} from '../dist/forecast-model.js';
+import {forecastState,chartSeries,forecastStats,forecastTransition,rangeUndercoverage,HOUR} from '../dist/forecast-model.js';
 const record={origin:'2026-10-27T10:00:00Z',issuedAt:'2026-10-27T10:20:00Z',
   times:['2026-10-27T11:00:00Z','2026-10-27T12:00:00Z'],areas:{DK1:{solar:[0,100]}}};
+test('range warning needs enough recorded outcomes and a material coverage shortfall',()=>{
+  assert.equal(rangeUndercoverage({rangeHours:4000,rangeOrigins:100,rangeCoverage:.52}),true);
+  for(const stats of [undefined,{rangeHours:10,rangeOrigins:3,rangeCoverage:0},
+    {rangeHours:48,rangeOrigins:1,rangeCoverage:.4},{rangeHours:4000,rangeOrigins:100,rangeCoverage:null},
+    {rangeHours:4000,rangeOrigins:100,rangeCoverage:.8}]) assert.equal(rangeUndercoverage(stats),false);
+});
 test('old forecasts are visibly delayed even if the last job said ready',()=>{
   const p={status:'ready',latest:record};
   assert.equal(forecastState(p,Date.parse(record.issuedAt)+3*HOUR),'delayed');

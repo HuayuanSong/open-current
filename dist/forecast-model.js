@@ -1,6 +1,11 @@
 export const HOUR = 3600000;
 export const usable = (value) => typeof value === "number" && Number.isFinite(value);
 
+export function rangeUndercoverage(stats) {
+  return stats?.rangeHours >= 24 && stats?.rangeOrigins >= 3 &&
+    usable(stats.rangeCoverage) && stats.rangeCoverage < 0.75;
+}
+
 export function forecastTransition(points, origin) {
   const start = Date.parse(origin);
   const observed = points.find((point) => point.time === start);

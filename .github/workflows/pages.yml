@@ -111,6 +111,30 @@ jobs:
             .cache/forecast-serving/trial/baseline-context.json.gz
             .cache/forecast-serving/trial/record.json
           retention-days: 90
+      - name: Cache the pinned fresher-weather refit
+        uses: actions/cache@v4
+        with:
+          path: .cache/weather-retrain/models
+          key: wind-refit-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('research/forecasting/weather_retrain/model-release.json') }}
+      - name: Record fresher wind and five-minute corrections beside production
+        id: wind-update
+        continue-on-error: true
+        timeout-minutes: 5
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.wind_update
+        env:
+          FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
+      - name: Preserve wind comparison inputs and provenance
+        if: steps.wind-update.outputs.issued == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: wind-update-${{ github.run_id }}-${{ github.run_attempt }}
+          include-hidden-files: true
+          path: |
+            .cache/wind-update/live/evidence/inputs.npz
+            .cache/wind-update/live/evidence/sources.json.gz
+            .cache/wind-update/live/evidence/record.json
+            .cache/wind-update/live/evidence/status.json
+          retention-days: 90
       - name: Verify normalization and published data
         run: .cache/forecast-serving/main-env/bin/python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Publish freshness metadata

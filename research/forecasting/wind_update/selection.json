@@ -1,0 +1,63 @@
+{
+  "version": "wind-update-2026-11-16",
+  "protocolHash": "3b998f8348325f56ff8efcabe4f891999e6cf17ecc571e729523299127d9be63",
+  "rules": {
+    "DK1": {
+      "strength": 1,
+      "halfLifeHours": 2,
+      "trendWeight": 1
+    },
+    "DK2": {
+      "strength": 1,
+      "halfLifeHours": 1,
+      "trendWeight": 0
+    }
+  },
+  "ranges": {
+    "DK1": {
+      "method": "absolute",
+      "floorMW": 1.0,
+      "cells": {
+        "0": {
+          "low": -256.52349891869335,
+          "high": 256.52349891869335,
+          "observations": 168
+        },
+        "2": {
+          "low": -379.29685459638745,
+          "high": 379.29685459638745,
+          "observations": 504
+        },
+        "4": {
+          "low": -394.980107088575,
+          "high": 394.980107088575,
+          "observations": 672
+        }
+      }
+    },
+    "DK2": {
+      "method": "absolute",
+      "floorMW": 1.0,
+      "cells": {
+        "0": {
+          "low": -77.78011906500635,
+          "high": 77.78011906500635,
+          "observations": 168
+        },
+        "2": {
+          "low": -98.06658524970781,
+          "high": 98.06658524970781,
+          "observations": 504
+        },
+        "4": {
+          "low": -86.33656583105468,
+          "high": 86.33656583105468,
+          "observations": 672
+        }
+      }
+    }
+  },
+  "calibrationOrigins": 28,
+  "calibratedBefore": "2026-11-10",
+  "automaticPromotion": false
+}

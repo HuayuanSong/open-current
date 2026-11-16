@@ -11,6 +11,13 @@ and paired outcomes in the background. It uses frozen models and never replaces
 the dashboard's forecasts automatically. Its ledger persists inside the same
 published state archive, independently of the production ledger's retention.
 
+A separate [wind update comparison](../research/forecasting/wind_update/README.md)
+records fresher ECMWF inputs and corrections from five-minute wind production
+during normal refreshes. It preserves the public model and both earlier trials.
+The historical point forecasts improved, but candidate range coverage failed;
+the comparison is not automatically promoted. Its status and measured outcomes
+are published at `data/wind-update.json`.
+
 ## Serving and storage
 
 `python -m forecast.run --restore --strict` restores the previous public state,

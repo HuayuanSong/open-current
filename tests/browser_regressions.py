@@ -109,6 +109,31 @@ class BrowserRegressions(unittest.TestCase):
         expect(self.page.locator("#country-code")).to_have_text("DK")
         expect(self.page.locator("#download-data")).to_be_enabled()
 
+    def test_range_warning_tracks_selected_series_and_survives_range_toggle(self):
+        data = fixture("forecasts.json")
+        data.setdefault("performance", {}).setdefault("DK2", {})
+        for target, coverage in [("wind", .52), ("solar", .85)]:
+            data["performance"]["DK2"][target] = dict(
+                forecastHours=4000, origins=100, maeMW=100,
+                rangeHours=4000, rangeOrigins=100, rangeCoverage=coverage)
+        self.page.route("**/data/forecasts.json", lambda route: route.fulfill(json=data))
+        self.load()
+        self.page.locator('[data-forecast-area="DK2"]').click()
+        self.page.locator('[data-forecast-target="wind"]').click()
+        note = self.page.locator("#forecast-range-note")
+        expect(note).to_contain_text("more often than intended")
+        expect(note).to_contain_text("52%")
+        self.page.locator("#forecast-range-toggle").uncheck()
+        expect(note).to_contain_text("more often than intended")
+        self.page.locator('[data-forecast-target="solar"]').click()
+        expect(note).not_to_contain_text("more often than intended")
+        self.page.locator('[data-forecast-target="wind"]').click()
+        self.page.set_viewport_size({"width": 390, "height": 844})
+        self.page.locator("#forecast-range-toggle").check()
+        self.assertFalse(self.page.evaluate("document.documentElement.scrollWidth > innerWidth"))
+        (ROOT / "test-results").mkdir(exist_ok=True)
+        self.page.locator("#forecasts").screenshot(path=str(ROOT / "test-results/forecasts-warning-390.png"))
+
     def test_missing_generation_preserves_independent_feeds_and_forecasts(self):
         country = fixture("countries/dk.json")
         country["power"] = []

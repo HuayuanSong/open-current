@@ -1,0 +1,85 @@
+{
+  "version": "wind-update-2026-11-16",
+  "protocolHash": "3b998f8348325f56ff8efcabe4f891999e6cf17ecc571e729523299127d9be63",
+  "stateHash": "17e26015f7f41e19a5a249fbec32fe43b07e3a603889f5c51d00e42092b9cbc5",
+  "electricityHash": "1623b9d08d7f3dab64e23a896f1033885f63c25ce907e7f597d81b3053143aea",
+  "selectedRules": {
+    "DK1": {
+      "strength": 1,
+      "halfLifeHours": 2,
+      "trendWeight": 1
+    },
+    "DK2": {
+      "strength": 1,
+      "halfLifeHours": 1,
+      "trendWeight": 0
+    }
+  },
+  "developmentOrigins": 32,
+  "evaluationOrigins": 16,
+  "excluded": [],
+  "metrics": [
+    {
+      "area": "DK1",
+      "baseline": 722.6611875500533,
+      "corrected": 622.2303447516953,
+      "fresh_wind": 623.6153626839684
+    },
+    {
+      "area": "DK2",
+      "baseline": 115.7522981479788,
+      "corrected": 100.58039035708532,
+      "fresh_wind": 101.51249050354568
+    }
+  ],
+  "bands": [
+    {
+      "area": "DK1",
+      "band": "1-6",
+      "baseline": 233.89793321335557,
+      "corrected": 216.45862966706284,
+      "fresh_wind": 227.5387731252482
+    },
+    {
+      "area": "DK1",
+      "band": "7-24",
+      "baseline": 511.7118499288477,
+      "corrected": 443.3351477527497,
+      "fresh_wind": 443.3351477527497
+    },
+    {
+      "area": "DK1",
+      "band": "25-48",
+      "baseline": 1003.064004350132,
+      "corrected": 857.8446712720624,
+      "fresh_wind": 857.8446712720624
+    },
+    {
+      "area": "DK2",
+      "band": "1-6",
+      "baseline": 70.48059281884457,
+      "corrected": 59.89011179478396,
+      "fresh_wind": 67.34691296646673
+    },
+    {
+      "area": "DK2",
+      "band": "7-24",
+      "baseline": 96.7321929709272,
+      "corrected": 81.54716139775289,
+      "fresh_wind": 81.54716139775289
+    },
+    {
+      "area": "DK2",
+      "band": "25-48",
+      "baseline": 141.33530336305105,
+      "corrected": 125.02788171715999,
+      "fresh_wind": 125.02788171715999
+    }
+  ],
+  "rangeCoverage": {
+    "DK1": 0.3606770833333333,
+    "DK2": 0.5416666666666666
+  },
+  "prospectivePromotionEligible": false,
+  "interpretation": "Historical comparison uses revised observations and assumed weather publication times. November outcomes have already been inspected in the project; historical results are development diagnostics, not independent prospective validation. New paired forecasts must be saved before outcomes. Existing trials remain unchanged."
+}

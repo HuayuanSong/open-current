@@ -44,6 +44,10 @@ def check():
                 expect(page.locator(f'[data-forecast-target="{target}"]')).to_have_attribute('aria-pressed','true')
                 assert page.locator('.forecast-predicted').get_attribute('d')
                 expect(page.locator('.forecast-range-band')).to_have_count(1)
+                live=source.get('performance',{}).get(area,{}).get(target,{})
+                undercoverage=(live.get('rangeHours',0)>=24 and live.get('rangeOrigins',0)>=3
+                    and isinstance(live.get('rangeCoverage'),(int,float)) and live['rangeCoverage']<.75)
+                assert page.locator('#forecast-range-note').evaluate('(el)=>el.classList.contains("undercoverage")')==undercoverage
                 if target=='solar':expect(page.locator('#forecast-range-note')).to_contain_text('Daylight only')
                 if target=='load':
                     expect(page.locator('#forecast-explanation')).to_be_visible()

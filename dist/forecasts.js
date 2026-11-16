@@ -3,9 +3,10 @@ import {
   chartSeries,
   forecastStats,
   forecastTransition,
+  rangeUndercoverage,
   HOUR,
   usable,
-} from "./forecast-model.js?v=b0ffa21872d5";
+} from "./forecast-model.js?v=a2f93fae7179";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -153,8 +154,9 @@ function render() {
   const audit = payload?.rangeValidation?.series?.[state.area]?.[state.target];
   let rangeNote =
     "This outlook has no saved prediction range. Ranges are never added to old forecasts.";
+  const undercoverage = hasRange && rangeUndercoverage(live);
   if (hasRange) {
-    rangeNote = `Experimental, 80% target for each hour. ${state.target === "solar" ? "Daylight only; overnight ranges did not pass validation. " : ""}`;
+    rangeNote = `${undercoverage ? "Recent observations fall outside this range more often than intended. " : ""}Experimental, 80% target for each hour. ${state.target === "solar" ? "Daylight only; overnight ranges did not pass validation. " : ""}`;
     if (audit && record.ranges.version === payload.rangeValidation.version) {
       rangeNote += `Historical ${state.target === "solar" ? "daylight " : ""}coverage: ${Math.round(audit.coverage * 100)}% across ${audit.origins} forecast dates. `;
     }
@@ -164,6 +166,7 @@ function render() {
         : "Live coverage: collecting outcomes.";
   }
   text("#forecast-range-note", rangeNote);
+  $("#forecast-range-note").classList.toggle("undercoverage", undercoverage);
   renderExplanation(record);
   draw(record, points);
 }

@@ -60,6 +60,7 @@ flowchart TB
         models["Isolated CPU model inference<br/>LightGBM · XGBoost · ridge<br/>Weather MLP · Chronos-2 · TinyTimeMixer"]
         blend["Fixed nine-family ensemble<br/>Wind, solar and demand · 48 hours"]
         evaluate["Archive forecasts and ranges<br/>Score against later observations"]
+        windtest["Separate wind comparison<br/>Latest ECMWF + five-minute correction<br/>No automatic model promotion"]
     end
 
     archive["Static JSON + forecast archive<br/>Readings, predictions and retained history"]
@@ -78,6 +79,10 @@ flowchart TB
     inputs -->|Observations| evaluate
     collect --> archive
     evaluate --> archive
+    weather --> windtest
+    collect -->|Five-minute wind observations| windtest
+    models -->|Reuse identical inference inputs| windtest
+    windtest -->|Separate comparison records| archive
     archive -.->|Restore history| inputs
     archive --> pages
     pages -->|Static files only| browser
@@ -105,6 +110,13 @@ Prediction ranges use mature out-of-sample errors; issued values and bounds are
 saved rather than recalculated retrospectively. The separate
 [prospective trial](forecast/trial/README.md) records challengers and outcomes in
 its own ledger without automatically replacing this production ensemble.
+
+The [wind update comparison](research/forecasting/wind_update/README.md) runs
+during ordinary refreshes, using fresher ECMWF inputs and five-minute wind
+measurements for a six-hour correction. It records results separately from the
+public model. Historical point errors improved, but its prediction-range check
+failed, so it remains under evaluation. Public charts flag substantial recent
+undercoverage of their existing ranges.
 
 - `scripts/fetch.py`: three independent queues (generation, physical flows, licensed prices), followed by the faster Energinet feeds; requests paced at least 31 seconds apart per Energy-Charts endpoint; retries honour `Retry-After`.
 - `scripts/normalize.py`: source-unit checks, explicit generation classification, missing-value preservation, historical revision merging, sorted UTC timestamps, compact map summaries.

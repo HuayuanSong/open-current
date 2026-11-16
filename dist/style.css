@@ -2179,6 +2179,7 @@ body {
 .forecast-options input { width: 20px; height: 20px; accent-color: var(--green); margin: 0; cursor: pointer; }
 .forecast-options label span { color: var(--muted); }
 .forecast-range-note { padding: 0 24px 18px; margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.forecast-range-note.undercoverage { margin: 0 24px 18px; padding: 12px 16px; border-left: 3px solid #b37831; background: #f8eedc; color: #805126; }
 .forecast-explanation { padding: 0 24px; border-top: 1px solid var(--line); }
 .forecast-explanation summary { padding: 18px 0; font-size: 17px; cursor: pointer; color: var(--ink); }
 .forecast-explanation-content { padding-bottom: 24px; font-size: 16px; line-height: 1.6; }
@@ -2238,6 +2239,7 @@ body {
   .forecast-footer p { max-width: 100%; }
   .forecast-options { padding: 14px 14px 0; }
   .forecast-range-note { padding: 0 18px 16px; }
+  .forecast-range-note.undercoverage { margin: 0 18px 16px; padding: 12px; }
   .forecast-explanation { padding: 0 18px; }
   .forecast-explanation-values { grid-template-columns: 1fr; gap: 0; }
   .forecast-contribution { grid-template-columns: minmax(110px,1.5fr) minmax(55px,1fr) 70px; gap: 10px; font-size: 15px; }
