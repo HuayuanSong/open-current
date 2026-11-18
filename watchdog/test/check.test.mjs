@@ -169,6 +169,23 @@ test("wind recovery waits for source publication and runs even with a fresh snap
   assert.equal(mock.dispatches().length, 1);
 });
 
+test("a late wind issue covers its own hour and leaves the next hour eligible", async () => {
+  const hour = Date.parse("2026-11-18T00:00:00Z");
+  const stamp = (offset) => new Date(hour + offset * MINUTE).toISOString();
+  const s = store();
+  const data = payload(hour);
+  data.windForecast = { areas: { DK1: { issuedAt: stamp(-1) }, DK2: { issuedAt: stamp(-2) } } };
+  const mock = source(data);
+  assert.equal((await check(env, s, hour + 4 * MINUTE, mock.fetcher)).action, "checked");
+  assert.equal((await check(env, s, hour + 19 * MINUTE, mock.fetcher)).action, "recovery_dispatched");
+  data.windForecast.areas.DK2.issuedAt = stamp(23);
+  assert.equal((await check(env, s, hour + 34 * MINUTE, mock.fetcher)).action, "cooldown");
+  data.windForecast.areas.DK1.issuedAt = stamp(39);
+  assert.equal((await check(env, s, hour + 49 * MINUTE, mock.fetcher)).action, "checked");
+  assert.equal(s.load().attempts, 0);
+  assert.equal(mock.dispatches().length, 1);
+});
+
 test("Europe recovery has its own attempt budget and a completed artifact waits for import", async () => {
   const at = NOW + 19 * MINUTE;
   const s = store();

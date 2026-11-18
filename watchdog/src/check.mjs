@@ -4,7 +4,8 @@ export const POLICY = Object.freeze({
   publicationAlertAfter: 120 * MINUTE,
   forecastAlertAfter: 180 * MINUTE,
   sourceAlertAfter: 120 * MINUTE,
-  windRefreshAfter: 55 * MINUTE,
+  windWindowStartMinute: 17,
+  windWindowEndMinute: 49,
   collectionRefreshAfter: 90 * MINUTE,
   collectionAlertAfter: 150 * MINUTE,
   europeSourceAlertAfter: 240 * MINUTE,
@@ -107,7 +108,11 @@ export function assess(payload, now) {
     ? (regionalIssues.some((t) => t === null) ? null : Math.min(...regionalIssues))
     : timestamp(payload.windForecast?.issuedAt, now);
   const windAge = age(windIssue);
-  const windDue = tracksWind && (windIssue === null || now - windIssue >= POLICY.windRefreshAfter);
+  // A wind issue must precede its first target hour end, so its issue hour identifies
+  // its reference hour. A late issue in one hour cannot satisfy the next window.
+  const hour = 60 * MINUTE;
+  const windReference = Math.floor((now - POLICY.windWindowStartMinute * MINUTE) / hour) * hour;
+  const windDue = tracksWind && (windIssue === null || windIssue < windReference);
   const tracksCollection = Object.hasOwn(payload, "europeCollection");
   const collection = timestamp(payload.europeCollection?.collectedAt, now);
   const collectionDue = tracksCollection && (collection === null || now - collection >= POLICY.collectionRefreshAfter);
@@ -248,7 +253,7 @@ export async function check(env, store, now = Date.now(), fetcher = fetch) {
       if (result.collection.error) result.error = result.collection.error;
     }
     const minute = new Date(now).getUTCMinutes();
-    const eligible = !h.tracksWind || (minute >= 17 && minute <= 49);
+    const eligible = !h.tracksWind || (minute >= POLICY.windWindowStartMinute && minute <= POLICY.windWindowEndMinute);
     const importReady = result.collection?.action === "awaiting_publication";
     if (h.publicationStale || h.windDue || importReady) {
       if (eligible || h.snapshotAgeMinutes > POLICY.publicationAlertAfter / MINUTE) {

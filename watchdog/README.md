@@ -4,7 +4,7 @@ A Cloudflare Worker checks the published snapshot, Danish forecasts and independ
 
 ## Freshness and recovery
 
-Checks run at minutes **04, 19, 34 and 49 UTC**. A publisher can be recovered after 60 minutes or when a regional wind issue reaches 55 minutes. Routine dispatches use minutes 17–49 so the hourly observation buffer has elapsed and the runner has time to finish. A publication over two hours old can trigger recovery at any check.
+Checks run at minutes **04, 19, 34 and 49 UTC**. The watchdog can recover a publication after 60 minutes. At minute 17 it also starts checking whether both Danish regions have a wind forecast for the new reference hour. Routine dispatches use minutes 17–49 so the hourly observation buffer has elapsed and the runner has time to finish. A publication over two hours old can trigger recovery at any check.
 
 If the last imported European collection is 90 minutes old, the watchdog checks GitHub for a completed artifact or an active collector. A fresh artifact triggers publication. An overdue collector can be dispatched independently. Source timestamps exceeding normal provider lag trigger alerts while the collector keeps its normal pacing.
 
