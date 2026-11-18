@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   readingAt,
   priceAt,
+  priceSteps,
   summaryAt,
   parseState,
   powerText,
@@ -51,4 +52,13 @@ test("missing power stays missing and signed flows preserve their sign", () => {
   assert.equal(powerText(null), "—");
   assert.equal(powerText(0), "0 MW");
   assert.equal(powerText(-1500), "-1.50 GW");
+});
+
+test("price paths respect the last interval and leave missing intervals empty", () => {
+  const q = 900000;
+  const series = {intervalMinutes:15, rows:[{t:0,value:111.81},{t:q,value:209.35},{t:3*q,value:-2}]};
+  assert.equal(priceAt(series, q-1).value,111.81);
+  assert.equal(priceAt(series,2*q),null);
+  assert.deepEqual(priceSteps(series),[{t:0,v:111.81},{t:q,v:209.35},{t:2*q,v:209.35},
+    {t:2*q,v:null},{t:3*q,v:-2},{t:4*q,v:-2}]);
 });

@@ -30,7 +30,7 @@ def configuration():
     selection = json.loads((HERE / "selection.json").read_text())
     if selection["resultsHash"] != compare.digest(HERE / "results.json"):
         raise ValueError("Wind selection and evaluation report differ")
-    names = ["forecast/fresh_wind.py", "forecast/weather_sources.py", "forecast/wind_models.py",
+    names = ["forecast/fresh_wind.py", "forecast/weather_sources.py", "forecast/weather_metadata.py", "forecast/wind_models.py",
              "forecast/wind_nowcast.py", "forecast/features.py", "forecast/score.py",
              "research/forecasting/fresh_wind/selection.json",
              "research/forecasting/weather_retrain/model-manifest.json"]
@@ -65,10 +65,12 @@ def model_members(arrays, work):
     return members, dict(reusedWorkers=False, workers=timings)
 
 
-def weighted_wind(predictions, weights):
+def weighted_wind(predictions, weights, areas=None):
     original = predictions["baseline"]
     result = original.copy()
     for ai, area in enumerate(data.AREAS):
+        if areas is not None and area not in areas:
+            continue
         weight = weights[area]
         if not np.isfinite(weight) or not 0 <= weight <= 1:
             raise ValueError("Invalid DMI wind weight")
@@ -97,13 +99,17 @@ def issue(state, selection, fingerprint, work, *, diagnostic=False):
     for source in weather_sources.MODELS:
         weather_sources.refresh(state, source, data.now(), times)
     selected_at = data.now()
-    needed = set()
-    for weight in selection["dmiWeights"].values():
-        if weight < 1:
-            needed.add("ecmwf")
-        if weight > 0:
-            needed.add("dmi")
-    entries = {source: weather_sources.select(state, source, selected_at, times) for source in sorted(needed)}
+    required = {area: {source for source, share in (("ecmwf", 1-weight), ("dmi", weight)) if share > 0}
+                for area, weight in selection["dmiWeights"].items()}
+    entries, errors = {}, {}
+    for source in sorted(set.union(*required.values())):
+        try:
+            entries[source] = weather_sources.select(state, source, selected_at, times)
+        except ValueError as exc:
+            errors[source] = str(exc)
+    available = [area for area, sources in required.items() if sources <= entries.keys()]
+    if not available:
+        raise ValueError("No region has all required weather inputs: " + ", ".join(errors.values()))
     raw, retrieved = measurements(selected_at)
     recent = recent_wind(raw, data.now())
     identifier = canonical_hash(dict(version=selection["version"], origin=meta["origin"],
@@ -121,7 +127,7 @@ def issue(state, selection, fingerprint, work, *, diagnostic=False):
         inputs[source] = weather_sources.future_inputs(arrays, entry["data"], times, meta["featureNames"])
         predictions[source] = predict_wind(inputs[source], members, manifest["featureNames"],
                                            compare.CACHE / "models/latest", blend)
-    mixed = weighted_wind(predictions, selection["dmiWeights"])
+    mixed = weighted_wind(predictions, selection["dmiWeights"], available)
     corrected = adjust(mixed, meta["times"], recent, selection["correctionRules"])
     np.testing.assert_array_equal(corrected[:, :, 1:], predictions["baseline"][:, :, 1:])
     np.testing.assert_array_equal(corrected[:, 6:, 0], mixed[:, 6:, 0])
@@ -138,8 +144,8 @@ def issue(state, selection, fingerprint, work, *, diagnostic=False):
         **{k: v for k, v in meta.items() if k != "featureNames"},
         baselineWeatherRun=meta["weatherRun"],
         areas={area: {target: corrected[ai, :, ti].astype(float).tolist() for ti, target in enumerate(data.TARGETS)}
-               for ai, area in enumerate(data.AREAS)},
-        weatherSources={s: {k: v for k, v in e.items() if k != "data"} for s, e in entries.items()},
+               for ai, area in enumerate(data.AREAS) if area in available},
+        missingWeather=errors, weatherSources={s: {k: v for k, v in e.items() if k != "data"} for s, e in entries.items()},
         dmiWeights=selection["dmiWeights"], recentWind=recent, runtime=runtime,
         scope="Wind only. Solar and demand use the separately archived daily ensemble.",
         ranges=dict(version=selection["version"], issuedAt=issued.isoformat(), areas={}),
@@ -180,7 +186,7 @@ def main():
     checked = data.now()
     attempt["at"] = checked.isoformat()
     state["windServing"] = dict(version=selection["version"], lastAttempt=attempt,
-                                dmiWeights=selection["dmiWeights"])
+                                dmiWeights=selection["dmiWeights"], compatibleVersions=selection.get("compatibleVersions", []))
     if not args.probe:
         state["updatedAt"] = checked.isoformat()
         cutoff = checked - pd.Timedelta(days=35)

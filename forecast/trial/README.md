@@ -103,3 +103,6 @@ cache, Excel/coordinate libraries, or training infrastructure.
 Operational references: [GitHub scheduling](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule),
 [Open-Meteo single runs](https://open-meteo.com/en/docs/single-runs-api),
 [model availability](https://open-meteo.com/en/docs/model-updates).
+
+
+The published summary reports the maximum feasible issue count as each window closes. On 18 November this fell below the preregistered minimum. Issuance and descriptive scoring continue through the original dates. From this release, a new frozen observation includes the actual source retrieval timestamp. The summary counts earlier observations with undocumented retrieval times separately.

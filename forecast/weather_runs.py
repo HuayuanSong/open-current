@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import requests
 
+from .weather_metadata import validate_locations
 from .features import CONFIG
 
 MODEL = "ecmwf_ifs"
@@ -48,8 +49,7 @@ def parameters(run):
 
 
 def validate_points(points, required_times=None):
-    if not isinstance(points, list) or len(points) != len(CONFIG["locations"]):
-        raise ValueError("Unexpected weather locations")
+    validate_locations(points)
     for point in points:
         hourly = point["hourly"]
         times = pd.to_datetime(hourly["time"], utc=True)

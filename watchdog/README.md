@@ -1,36 +1,14 @@
 # Freshness watchdog
 
-A Cloudflare Worker independently checks the published electricity snapshot every
-15 minutes. It starts the existing GitHub refresh workflow when publication is
-over 60 minutes old and no refresh is active. Models, source collection and Pages
-hosting continue to run in the existing pipeline.
+A Cloudflare Worker checks the published snapshot, Danish forecasts and independent European collection every 15 minutes. GitHub Actions collects and publishes the electricity data. [Live status](https://open-current-watchdog.naermad.workers.dev/status) · [Health](https://open-current-watchdog.naermad.workers.dev/health) · [Check history](https://open-current-watchdog.naermad.workers.dev/history)
 
-Live monitoring: [status](https://open-current-watchdog.naermad.workers.dev/status),
-[health](https://open-current-watchdog.naermad.workers.dev/health) and
-[check history](https://open-current-watchdog.naermad.workers.dev/history).
+## Freshness and recovery
 
-## Recovery and monitoring
+Checks run at minutes **04, 19, 34 and 49 UTC**. A publisher can be recovered after 60 minutes or when a regional wind issue reaches 55 minutes. Routine dispatches use minutes 17–49 so the hourly observation buffer has elapsed and the runner has time to finish. A publication over two hours old can trigger recovery at any check.
 
-- Checks run at minutes **11, 26, 41 and 56 UTC**.
-- `dist/data/health.json` keeps the original snapshot, forecast issue and source
-  observation times. Deploying code does not make old readings fresh.
-- All active GitHub run states are checked before dispatching `pages.yml` on `main`.
-- One SQLite-backed Durable Object coordinates this repository. A persisted lease
-  prevents overlapping checks. Attempts are recorded **before** dispatch, so an
-  ambiguous network timeout cannot bypass the cooldown after a restart.
-- Recovery has a 45-minute cooldown and at most three attempts per outage.
-  A fresh snapshot resets the budget. Invalid metadata and GitHub errors fail closed.
-- Stale source readings alone do not trigger another collection.
-- Recovery dispatches use the same publication policy as scheduled refreshes:
-  a forecast or background-trial failure does not discard valid new observations.
-  The previous forecast retains its original issue time and delay notice.
-- Seven days of timestamped check results are retained for review.
+If the last imported European collection is 90 minutes old, the watchdog checks GitHub for a completed artifact or an active collector. A fresh artifact triggers publication. An overdue collector can be dispatched independently. Source timestamps exceeding normal provider lag trigger alerts while the collector keeps its normal pacing.
 
-Publication older than two hours, forecasts older than three hours or past their
-horizon, and Danish source readings older than two hours after a recent collection
-raise an alert. Repeated metadata failures and exhausted recovery attempts also
-raise alerts. European source ages are reported independently because their
-normal reporting delays differ.
+The Durable Object serializes checks, records attempts before dispatch and limits retries to three per outage with a 45-minute cooldown. It keeps seven days of checks. Alerts cover a publication over two hours old, a baseline or regional wind issue over three hours old, an imported European collection over 150 minutes old, and delayed provider readings. The Danish source threshold is two hours. The European threshold is a four-hour median across countries with generation readings after a recent collection. Missing health metadata and exhausted recovery attempts are recorded separately.
 
 An alert dispatches `watchdog-alert.yml`, a deliberately failing GitHub Actions
 run with an explanation. Alert delivery is deduplicated per incident and retries

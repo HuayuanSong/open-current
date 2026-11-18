@@ -15,12 +15,16 @@ ROOT=Path(__file__).resolve().parents[1]
 URL=os.environ.get('GRID_TEST_URL','http://127.0.0.1:4322/')
 OUT=ROOT/'test-results'
 
-def selected_payload(source,target='wind'):
+def selected_payload(source,target='wind',area='DK2'):
     wind=source.get('windOutlook')
-    return wind if target=='wind' and wind and wind.get('latest') else source
+    if target != 'wind' or not wind:
+        return source
+    if regional := wind.get('latestByArea',{}).get(area):
+        return {**wind,'latest':regional}
+    return wind if wind.get('latest') else source
 
 def has_range(source,area,target):
-    record=selected_payload(source,target).get('latest') or {}
+    record=selected_payload(source,target,area).get('latest') or {}
     band=record.get('ranges',{}).get('areas',{}).get(area,{}).get(target,{})
     return any(lo is not None and hi is not None for lo,hi in zip(band.get('lower',[]),band.get('upper',[])))
 
@@ -72,6 +76,7 @@ def check():
                         page.locator('#forecast-explanation summary').click()
                     expect(page.locator('.forecast-explanation-content')).to_contain_text('LightGBM tree component')
                     for item in source['latest']['explanations']['areas'][area]['load']:
+                        if source['latest']['times'][item['lead']-1] <= source['latest']['issuedAt']: continue
                         page.locator('#forecast-explanation-hour').select_option(str(item['lead']))
                         if item['status']=='ready':expect(page.locator('.forecast-contribution')).to_have_count(5)
                         else:expect(page.locator('#forecast-explanation-status')).to_contain_text('changes too much')
@@ -91,12 +96,14 @@ def check():
         page.locator('[data-forecast-view="comparison"]').click()
         if page.locator('[data-forecast-comparison-model="current"]').is_visible():
             page.locator('[data-forecast-comparison-model="current"]').click()
-        if wind['comparison']:
+        pair=source.get('windComparison',{}).get('DK2',{}).get('comparison')
+        comparison=pair['current'] if pair else wind.get('comparison')
+        if comparison:
             expect(page.locator('#forecast-timing')).to_contain_text('Comparing the forecast issued')
         else:
             expect(page.locator('#forecast-empty')).to_be_visible()
             expect(page.locator('#forecast-download')).to_be_disabled()
-        if not wind.get('comparison',{} ) or not wind['comparison'].get('ranges'):
+        if not comparison or not comparison.get('ranges'):
             expect(page.locator('.forecast-range-band')).to_have_count(0)
         page.locator('[data-forecast-view="outlook"]').click()
         for width in [390,768,1024]:
@@ -120,7 +127,7 @@ def check():
         assert page.locator('.forecast-predicted').get_attribute('d')
         page.unroute('**/data/forecasts.json')
         unavailable=copy.deepcopy(source);unavailable.update(latest=None,comparison=None,status='unavailable')
-        if unavailable.get('windOutlook'):unavailable['windOutlook'].update(latest=None,comparison=None,status='unavailable')
+        if unavailable.get('windOutlook'):unavailable['windOutlook'].update(latest=None,latestByArea={},comparison=None,status='unavailable')
         page.route('**/data/forecasts.json',lambda route:route.fulfill(json=unavailable))
         page.reload(wait_until='networkidle')
         expect(page.locator('#forecast-empty')).to_be_visible()

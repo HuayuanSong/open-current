@@ -97,3 +97,6 @@ Cached replay batches resume only when the input, protocol and model hashes matc
 The last command writes only to `.cache/wind-update/live/probe/`. It requires a
 recent source hour whose first target has not yet ended. Scheduled production
 uses `python -m forecast.wind_update` after restoring the current public archive.
+
+
+The 18 November operational revision verifies weather locations and units and records when Energinet supplied each observation. The ledger records the exact fingerprint transition. Previously issued predictions retain their original fingerprints. Decision metrics use complete trajectories with documented source retrieval times, and the report also counts complete trajectories including legacy observations.

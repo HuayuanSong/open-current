@@ -23,6 +23,18 @@ class NormalizationTests(unittest.TestCase):
             "data": [{"timestamp": time, "values": values}],
         }
 
+    def test_empty_european_generation_publishes_available_danish_readings(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            (base / "data/countries").mkdir(parents=True)
+            stamp = int(datetime.now(timezone.utc).timestamp()*1000)-300000
+            (base/"data/denmark.json").write_text(json.dumps({"areas":{"DK1":{"power":[{"t":stamp,"total":123}],"co2":[]}}}))
+            with patch.object(normalize,"DATA",base/"data"), patch.object(normalize,"CACHE",base/"cache"):
+                normalize.main()
+            index=json.loads((base/"data/index.json").read_text())
+            self.assertEqual(index["coverage"],0)
+            self.assertEqual(json.loads((base/"data/denmark.json").read_text())["areas"]["DK1"]["power"][0]["total"],123)
+
     def test_storage_and_auxiliary_series_do_not_inflate_shares(self):
         raw = self.power(
             {

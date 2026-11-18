@@ -18,6 +18,7 @@ from urllib.error import HTTPError
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import verify_publication as publication
+import forecast_checkpoint as checkpoint
 
 
 class PublicationTests(unittest.TestCase):
@@ -55,6 +56,21 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(len(errors), 1)
         self.assertIn("data/forecasts.json: public checksum differs", errors[0])
 
+    def test_older_archive_cannot_bootstrap_a_new_publication(self):
+        target = self.site / "target"
+        target.mkdir()
+        for name in checkpoint.FILES:
+            (target / name).write_bytes(b"original")
+        def copy_verified(repo, dest):
+            for name in checkpoint.FILES:
+                (dest / name).write_bytes(b"current")
+        def remote(request, **kwargs):
+            return io.BytesIO(b"oldfile" if "state.json" in request.full_url else b"current")
+        with patch.object(checkpoint, "download", side_effect=copy_verified), patch.object(checkpoint, "urlopen", side_effect=remote):
+            with self.assertRaisesRegex(ValueError, "refusing archive rollback"):
+                checkpoint.restore("owner/repo", "https://example.test", target)
+        self.assertTrue(all((target / name).read_bytes() == b"original" for name in checkpoint.FILES))
+
     def test_each_public_file_must_match(self):
         for name in publication.FILES:
             with self.subTest(name=name):
@@ -70,7 +86,7 @@ class PublicationTests(unittest.TestCase):
         for error in [HTTPError("https://example.test", 503, "unavailable", {}, None),
                       TimeoutError("timed out"), IncompleteRead(b"partial", 30)]:
             with self.subTest(error=error), patch.object(publication, "urlopen", side_effect=error):
-                self.assertEqual(len(publication.check_once(self.manifest, "https://example.test/")), 4)
+                self.assertEqual(len(publication.check_once(self.manifest, "https://example.test/")), len(publication.FILES))
 
     def test_oversized_response_is_not_read_without_a_bound(self):
         response = io.BytesIO(b"x" * 1000)

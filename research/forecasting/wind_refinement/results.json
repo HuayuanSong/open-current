@@ -1,12 +1,12 @@
 {
-  "protocolHash": "daac08f3fe5cf7a2cc5c3b7a7b91ae79a481298fc36d0e15515564e9f591995e",
-  "modelSelectionHash": "2d5fdb1d686bed80c75386c31a14f8aeb91cb433167467e5b0767a499982e3ab",
+  "protocolHash": "f9754892f72721700503754f560cc5575bab03cd62fb1ae5d03ce6451620be53",
+  "modelSelectionHash": "7cafcb2995c8b1a888d83449b76a1d12541b182f976ca826325723618c6295b2",
   "evaluationOrigins": 16,
   "shortTerm": {
     "DK1": {
       "baselineMAE": 214.89437834280054,
-      "challengerMAE": 209.9738446800412,
-      "improvementPct": 2.289745176539737,
+      "challengerMAE": 209.40443898596564,
+      "improvementPct": 2.55471520435836,
       "baselineByLead": [
         67.66385385525281,
         223.28566110394272,
@@ -16,24 +16,24 @@
         271.05966496312953
       ],
       "challengerByLead": [
-        57.8543352977523,
-        165.43141128538713,
-        245.31753822035208,
-        238.75730203751397,
-        274.9964586926344,
-        277.4860225466072
+        62.26804545191969,
+        161.86403421259223,
+        238.86289096874376,
+        242.9718830664963,
+        279.637981690277,
+        270.82179852576485
       ],
       "rampHours": 8,
       "rampBaselineMAE": 571.5002815822577,
-      "rampChallengerMAE": 545.2070602330948,
+      "rampChallengerMAE": 558.3537206438026,
       "accuracyPass": false,
       "leadPass": false,
       "longHorizonUnchanged": true
     },
     "DK2": {
       "baselineMAE": 59.89011179478396,
-      "challengerMAE": 44.23930725933244,
-      "improvementPct": 26.13253518223455,
+      "challengerMAE": 50.413548460695246,
+      "improvementPct": 15.823252036263625,
       "baselineByLead": [
         15.213911427370473,
         42.404371679487376,
@@ -43,18 +43,18 @@
         96.43065448106269
       ],
       "challengerByLead": [
-        15.574754954174809,
-        27.226584155848613,
-        34.29488086371424,
-        49.005188859984344,
-        60.55036936861548,
-        78.78406535365718
+        28.27898553820297,
+        35.6280168600157,
+        40.7124316776936,
+        47.94713908558624,
+        68.00368016390946,
+        81.91103743876347
       ],
       "rampHours": 11,
       "rampBaselineMAE": 129.43583575182038,
-      "rampChallengerMAE": 94.28475256086386,
+      "rampChallengerMAE": 89.5516692021942,
       "accuracyPass": true,
-      "leadPass": true,
+      "leadPass": false,
       "longHorizonUnchanged": true
     }
   },

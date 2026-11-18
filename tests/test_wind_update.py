@@ -108,7 +108,7 @@ class WindUpdateTests(unittest.TestCase):
     def test_first_mature_observation_is_retained_and_targets_freeze_independently(self):
         trial = dict(records=[dict(times=self.times)], observations={})
         stamp = self.times[0]
-        rows = [dict(time=stamp, area="DK1", wind=100, solar=None)]
+        rows = [dict(time=stamp, area="DK1", wind=100, solar=None, retrievedAt=(pd.Timestamp(stamp)+pd.Timedelta(hours=24)).isoformat())]
         candidate.freeze_observations(trial, rows, pd.Timestamp(stamp) + pd.Timedelta(hours=23))
         self.assertEqual(trial["observations"], {})
         candidate.freeze_observations(trial, rows, pd.Timestamp(stamp) + pd.Timedelta(hours=24))

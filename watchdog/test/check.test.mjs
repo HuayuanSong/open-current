@@ -152,3 +152,60 @@ test("redirects fail closed instead of forwarding credentials", async () => {
   assert.equal(result.error, "github_http_302");
   assert.equal(mock.dispatches().length, 0);
 });
+
+test("wind recovery waits for source publication and runs even with a fresh snapshot", async () => {
+  const s = store();
+  const at = NOW + 11 * MINUTE;
+  const data = payload(at);
+  data.windForecast = { issuedAt: new Date(at - 125 * MINUTE).toISOString(),
+    lastAttempt: { status: "waiting-for-source-hour" } };
+  const mock = source(data);
+  assert.equal((await check(env, s, at, mock.fetcher)).action, "waiting_for_source_window");
+  const result = await check(env, s, NOW + 19 * MINUTE, mock.fetcher);
+  assert.equal(result.action, "recovery_dispatched");
+  assert.equal(result.health.windAttempt, "waiting-for-source-hour");
+  assert.equal(mock.dispatches().length, 1);
+  await check(env, s, NOW + 34 * MINUTE, mock.fetcher);
+  assert.equal(mock.dispatches().length, 1);
+});
+
+test("Europe recovery has its own attempt budget and a completed artifact waits for import", async () => {
+  const at = NOW + 19 * MINUTE;
+  const s = store();
+  const data = payload(at);
+  data.europeCollection = { collectedAt: new Date(at - 360 * MINUTE).toISOString() };
+  const mock = source(data);
+  const one = await check(env, s, at, mock.fetcher);
+  assert.equal(one.reason, "europe_collection_stale");
+  assert.equal(one.collection.action, "recovery_dispatched");
+  assert.equal(one.action, "checked");
+  assert.equal(mock.calls.filter(x => x.url.includes("collect-europe.yml/dispatches")).length, 1);
+  const two = await check(env, s, at + 15 * MINUTE, mock.fetcher);
+  assert.equal(two.collection.action, "cooldown");
+  const fetcher = (url, init) => url.includes("status=success")
+    ? Promise.resolve(Response.json({ workflow_runs: [{ updated_at: new Date(at).toISOString() }] }))
+    : mock.fetcher(url, init);
+  const three = await check(env, s, at + 30 * MINUTE, fetcher);
+  assert.equal(three.collection.action, "awaiting_publication");
+  assert.equal(three.action, "recovery_dispatched");
+});
+
+test("fresh collection with old provider data alerts without collecting again", async () => {
+  const data = payload();
+  data.europeCollection = { collectedAt: new Date(NOW - 10 * MINUTE).toISOString() };
+  data.sources.energyCharts = { dk: {power: null}, de: {power: NOW - 420*MINUTE}, fr: {power: NOW - 300*MINUTE} };
+  const mock = source(data);
+  const result = await check(env, store(), NOW, mock.fetcher);
+  assert.equal(result.reason, "europe_source_delayed");
+  assert.equal(result.health.europeMedianPowerAgeMinutes, 360);
+  assert.equal(result.action, "checked");
+  assert.equal(mock.calls.filter(x => x.url.includes("collect-europe")).length, 0);
+});
+
+test("the oldest wind region can raise its own alert", () => {
+  const data = payload();
+  data.windForecast = { issuedAt: new Date(NOW).toISOString(), areas: {
+    DK1: { issuedAt: new Date(NOW - 240*MINUTE).toISOString() }, DK2: { issuedAt: new Date(NOW).toISOString() }
+  } };
+  assert.equal(assess(data, NOW).reason, "wind_forecast_stale");
+});

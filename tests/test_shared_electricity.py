@@ -60,7 +60,7 @@ class SharedElectricityTests(unittest.TestCase):
         self.path.unlink()
         with patch.object(data, "ROOT", self.root), patch.object(
             data, "request", return_value=self.payload
-        ) as get:
+        ) as get, patch.object(data, "now", return_value=pd.Timestamp(self.retrieved)):
             direct_frame = data.electricity(direct, self.at)
         get.assert_called_once()
         pd.testing.assert_frame_equal(shared_frame, direct_frame)

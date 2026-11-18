@@ -11,7 +11,7 @@ import time
 from urllib.request import Request, urlopen
 
 
-FILES = ("data/health.json", "data/index.json", "data/forecasts.json", "data/denmark.json")
+FILES = ("data/health.json", "data/index.json", "data/forecasts.json", "data/denmark.json", "data/forecast-state.json.gz")
 
 
 def create_manifest(site):
@@ -34,7 +34,7 @@ def load_manifest(path):
         raise ValueError("Invalid publication manifest schema")
     files = manifest.get("files")
     if not isinstance(files, dict) or set(files) != set(FILES):
-        raise ValueError("Publication manifest must include all four data files")
+        raise ValueError("Publication manifest must include the complete data file set")
     for details in files.values():
         if (
             not isinstance(details, dict)
@@ -85,7 +85,7 @@ def verify(manifest, base_url, attempts=7, interval=30):
     for attempt in range(1, attempts + 1):
         errors = check_once(manifest, base_url)
         if not errors:
-            print("Verified: all four public data files match the uploaded snapshot.", flush=True)
+            print("Verified: all public data files match the uploaded snapshot.", flush=True)
             return True
         print(f"Publication check {attempt}/{attempts}: " + "; ".join(errors), flush=True)
         if attempt < attempts:

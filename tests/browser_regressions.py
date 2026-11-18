@@ -23,6 +23,7 @@ def fixture(name):
         # These fixtures exercise the original forecast and fallback behavior.
         # Updated wind has a separate fixture below and a real-data browser check.
         data.pop("windOutlook", None)
+        data.pop("windComparison", None)
     return data
 
 
@@ -113,6 +114,39 @@ class BrowserRegressions(unittest.TestCase):
         self.page.goto(self.url, wait_until="networkidle")
         expect(self.page.locator("#country-code")).to_have_text("DK")
         expect(self.page.locator("#download-data")).to_be_enabled()
+
+    def test_map_and_country_survive_first_load_denmark_outage(self):
+        self.page.route("**/data/denmark.json", lambda route: route.fulfill(status=503, body="unavailable"))
+        self.load()
+        expect(self.page.locator(".country-shape").first).to_be_visible()
+        expect(self.page.locator("#danish-areas")).to_contain_text("unavailable")
+        self.page.locator("#country-select").select_option("de")
+        expect(self.page.locator("#country-code")).to_have_text("DE")
+
+    def test_price_inspection_uses_market_interval_for_pointer_and_keyboard(self):
+        country = fixture("countries/dk.json")
+        start = 1794602700000
+        q = 900000
+        for price in country["prices"].values():
+            price.update(intervalMinutes=15, rows=[{"t":start, "value":111.81},{"t":start+q, "value":209.35},
+                                                 {"t":start+3*q, "value":-2}])
+        self.page.route("**/data/countries/dk.json", lambda route: route.fulfill(json=country))
+        self.load()
+        rect = self.page.locator('#history-chart rect[fill="transparent"]')
+        rect.scroll_into_view_if_needed()
+        box = rect.bounding_box()
+        self.page.mouse.move(box["x"]+box["width"]*.2, box["y"]+box["height"]/2)
+        tip=self.page.locator("#chart-tooltip")
+        expect(tip).to_contain_text("111.8")
+        chart=self.page.locator("#history-chart")
+        chart.focus()
+        chart.press("Home")
+        chart.press("ArrowRight")
+        expect(tip).to_contain_text("209.35")
+        chart.press("ArrowRight")
+        expect(tip).to_contain_text("No reading")
+        chart.press("End")
+        expect(tip).to_contain_text("-2")
 
     def test_range_warning_tracks_selected_series_and_survives_range_toggle(self):
         data = fixture("forecasts.json")
@@ -402,7 +436,7 @@ class BrowserRegressions(unittest.TestCase):
             and response.status == 503
         ):
             self.page.clock.fast_forward(300001)
-        expect(self.page.locator("#collection-time")).to_have_text(original_label)
+        expect(self.page.locator("#collection-time")).not_to_have_text(original_label)
         with self.page.expect_response(
             lambda response: response.url.endswith("/data/index.json")
         ):

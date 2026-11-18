@@ -16,6 +16,7 @@ import pandas as pd
 
 from . import data, intervals, weather_runs
 from .features import AREAS
+from .observation_time import capture_time
 from .score import combine
 from .trial.ledger import canonical_hash
 from .wind_nowcast import adjust, recent_wind
@@ -34,7 +35,7 @@ def configuration():
     if selection["protocolHash"] != compare.digest(HERE / "protocol.json"):
         raise ValueError("Wind selection and protocol differ")
     sources = ["forecast/wind_update.py", "forecast/wind_nowcast.py", "forecast/weather_runs.py",
-               "forecast/data.py", "forecast/intervals.py", "forecast/score.py", "forecast/features.py",
+               "forecast/data.py", "forecast/observation_time.py", "forecast/weather_metadata.py", "forecast/intervals.py", "forecast/score.py", "forecast/features.py",
                "research/forecasting/wind_update/protocol.json", "research/forecasting/wind_update/selection.json",
                "research/forecasting/weather_retrain/model-manifest.json"]
     fingerprint = canonical_hash({name: compare.digest(data.ROOT / name) for name in sources})
@@ -52,6 +53,13 @@ def initialize(state, protocol, fingerprint):
             fingerprint=trial["fingerprint"], lastAttempt=trial["lastAttempt"],
             replacedAt=data.now().isoformat()))
         trial["fingerprint"] = fingerprint
+    if trial["version"] == protocol["version"] and trial["fingerprint"] != fingerprint:
+        # Only the reviewed operational transition may retain this experiment.
+        # Each issued record keeps its original fingerprint and predictions.
+        revision = json.loads((HERE / "operational-revision.json").read_text())
+        if (trial["fingerprint"], fingerprint) == (revision["from"], revision["to"]):
+            trial.setdefault("operationalRevisions", []).append({**revision, "appliedAt": data.now().isoformat()})
+            trial["fingerprint"] = fingerprint
     if trial["version"] != protocol["version"] or trial["fingerprint"] != fingerprint:
         raise ValueError("Wind candidate changed; retain existing evidence and start a new version")
     for record in trial["records"]:
@@ -65,11 +73,11 @@ def freeze_observations(trial, hourly, at):
     for row in hourly:
         if row["time"] not in wanted or row["area"] not in AREAS:
             continue
-        age = (at - pd.Timestamp(row["time"])).total_seconds() / 3600
+        captured = capture_time(row, at, 24, 72)
         value = row.get("wind")
-        if 24 <= age <= 72 and value is not None and np.isfinite(value) and value >= 0:
+        if captured is not None and value is not None and np.isfinite(value) and value >= 0:
             trial["observations"].setdefault(row["time"], {}).setdefault(
-                row["area"], dict(value=float(value), capturedAt=at.isoformat()))
+                row["area"], dict(value=float(value), capturedAt=captured, captureSource="energinet-retrieval"))
 
 
 def measurements(at):
@@ -179,10 +187,15 @@ def issue(state, trial, protocol, selection, work, *, diagnostic=False):
 def report(trial, protocol, at):
     complete = [r for r in trial["records"] if not r.get("diagnosticOnly") and all(
         area in trial["observations"].get(t, {}) for t in r["times"] for area in AREAS)]
+    all_complete = len(complete)
+    complete = [r for r in complete if all(trial["observations"][t][area].get("captureSource") == "energinet-retrieval"
+                                          for t in r["times"] for area in AREAS)]
     result = dict(version=protocol["version"], checkedAt=at.isoformat(), automaticPromotion=False,
+                  completeIncludingLegacy=all_complete,
                   status="collecting", reviewAfter=protocol["reviewAfter"],
                   issuedOrigins=len(trial["records"]), completeOrigins=len(complete),
                   distinctDays=len({r["origin"][:10] for r in complete}), lastAttempt=trial["lastAttempt"],
+                  legacyObservationCount=sum("captureSource" not in obs for areas in trial["observations"].values() for obs in areas.values()),
                   latest=trial["records"][-1] if trial["records"] else None, metrics={},
                   interpretation="Separate experimental wind candidates, not the dashboard forecast. Scores use complete paired 48-hour trajectories and first observations captured 24–72 hours later. Overlapping origins are dependent.")
     for area in AREAS:

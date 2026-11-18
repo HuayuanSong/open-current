@@ -292,6 +292,7 @@ def normalize_danish(now_ms, cutoff):
         "Preliminary operational CO2 intensity of electricity consumption; not lifecycle CO2e."
     )
     write_json(DATA / "denmark.json", output)
+    return output
 
 
 def main():
@@ -300,6 +301,7 @@ def main():
     cutoff = int((now - timedelta(days=7)).timestamp() * 1000)
     countries = {}
     errors = []
+    has_prices = False
     previous_index = read(DATA / "index.json", {})
     europe_collection = read(CACHE / "europe-collection.json", previous_index.get("europeCollection"))
     for code, (name, lon, lat) in COUNTRIES.items():
@@ -351,6 +353,7 @@ def main():
                 "rows": merge(old.get("rows", []), new, cutoff),
                 "intervalMinutes": interval,
             }
+        has_prices = has_prices or any(any(number(r.get("value")) for r in zone["rows"]) for zone in result["prices"].values())
         write_json(path, result)
         countries[code] = {k: result[k] for k in ["name", "coordinates"]}
         countries[code]["power"] = result["power"][-1] if result["power"] else None
@@ -366,11 +369,15 @@ def main():
             hour = row["t"] // 3600000 * 3600000
             hourly.setdefault(hour, {})["flows"] = {"t": row["t"], "net": row["net"]}
         countries[code]["history"] = [{"t": t, **v} for t, v in sorted(hourly.items())]
-    normalize_danish(now_ms, cutoff)
-    if not any(c["power"] for c in countries.values()):
-        raise SystemExit(
-            "No valid generation snapshots; refusing to publish an empty snapshot"
-        )
+    danish = normalize_danish(now_ms, cutoff)
+    has_danish = any(any(number(r.get("total")) or number(r.get("wind")) or number(r.get("load")) for r in area["power"])
+                     or any(number(r.get("value")) for r in area["co2"]) for area in danish["areas"].values())
+    if not (has_prices or has_danish or any(c["power"] or c["flows"] for c in countries.values())):
+        last = read(DATA / "forecasts.json", {}).get("latest") or {}
+        times = last.get("times") or []
+        if not times or timestamp(times[-1]) <= now_ms or not last.get("areas"):
+            raise SystemExit("No usable electricity readings, prices or active outlook")
+
     write_json(
         DATA / "index.json",
         {

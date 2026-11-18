@@ -28,7 +28,11 @@ def build_health(index, forecasts, danish, at=None):
             "horizonEnd": (latest.get("times") or [None])[-1],
             "status": forecasts.get("status"),
         },
+        "europeCollection": {"collectedAt": (index.get("europeCollection") or {}).get("collectedAt")},
         "windForecast": {
+            "lastAttempt": wind.get("lastAttempt"),
+            "areas": {area: {"issuedAt": (wind.get("latestByArea", {}).get(area) or wind_latest).get("issuedAt")}
+                      for area in ("DK1", "DK2")},
             "checkedAt": wind.get("checkedAt"),
             "issuedAt": wind_latest.get("issuedAt"),
             "origin": wind_latest.get("origin"),

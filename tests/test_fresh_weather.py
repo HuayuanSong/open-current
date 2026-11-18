@@ -9,6 +9,7 @@ import pandas as pd
 import requests
 
 from forecast import weather_sources as sources
+from forecast.weather_metadata import UNITS
 
 
 class FreshWeatherTests(unittest.TestCase):
@@ -18,7 +19,8 @@ class FreshWeatherTests(unittest.TestCase):
         weather_times = pd.date_range("2026-11-16T09:00Z", periods=72, freq="h")
         hourly = {"time": weather_times.strftime("%Y-%m-%dT%H:%M").tolist()}
         hourly.update({name: [5.] * 72 for name in sources.CONFIG["variables"]})
-        self.points = [dict(hourly=copy.deepcopy(hourly)) for _ in sources.CONFIG["locations"]]
+        self.points = [dict(hourly=copy.deepcopy(hourly), latitude=loc["latitude"], longitude=loc["longitude"],
+                            utc_offset_seconds=0, hourly_units=dict(UNITS)) for loc in sources.CONFIG["locations"]]
         self.entry = dict(model=sources.MODELS["dmi"], run="2026-11-16T09:00:00+00:00",
                           availableAt="2026-11-16T12:06:00+00:00",
                           retrievedAt="2026-11-16T12:20:00+00:00", data=self.points)

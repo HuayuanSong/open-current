@@ -10,15 +10,17 @@ import requests
 
 from forecast import data, weather_runs
 from forecast.features import CONFIG
+from forecast.weather_metadata import UNITS
 
 
 def points(run, wind=6):
     times = pd.date_range(run, periods=120, freq="h")
     return [
-        {"hourly": {"time": [t.isoformat() for t in times], **{
+        {**{k: loc[k] for k in ("latitude", "longitude")}, "utc_offset_seconds": 0, "hourly_units": dict(UNITS),
+         "hourly": {"time": [t.isoformat() for t in times], **{
             name: [float(wind if name == "wind_speed_100m" else 1)] * len(times)
             for name in CONFIG["variables"]
-        }}} for _ in CONFIG["locations"]
+        }}} for loc in CONFIG["locations"]
     ]
 
 

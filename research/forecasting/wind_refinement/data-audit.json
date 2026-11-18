@@ -49,7 +49,7 @@
     ".cache/wind-update/electricity.json.gz": "1623b9d08d7f3dab64e23a896f1033885f63c25ce907e7f597d81b3053143aea",
     ".cache/weather-retrain/dataset.npz": "9e9b02b878519be9ea1855a97b874c06763159c073ea5cc6dc1979a549bdc341"
   },
-  "origins": 1003,
+  "origins": 977,
   "excluded": [
     {
       "origin": "2025-01-09T15:00:00+00:00",
@@ -62,6 +62,10 @@
     {
       "origin": "2025-01-14T09:00:00+00:00",
       "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-01-19T15:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
     },
     {
       "origin": "2025-01-26T21:00:00+00:00",
@@ -102,6 +106,10 @@
     {
       "origin": "2025-03-20T15:00:00+00:00",
       "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-03-30T15:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
     },
     {
       "origin": "2025-04-03T15:00:00+00:00",
@@ -148,6 +156,14 @@
       "reason": "Incomplete three-hour wind history"
     },
     {
+      "origin": "2025-06-18T03:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2025-06-18T15:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
       "origin": "2025-06-26T03:00:00+00:00",
       "reason": "Five-minute wind observations are stale for DK2"
     },
@@ -176,6 +192,14 @@
       "reason": "No recent wind observations for DK1"
     },
     {
+      "origin": "2025-08-10T09:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2025-08-10T21:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
       "origin": "2025-08-12T09:00:00+00:00",
       "reason": "Five-minute wind observations are stale for DK2"
     },
@@ -188,8 +212,20 @@
       "reason": "Incomplete three-hour wind history"
     },
     {
+      "origin": "2025-09-08T15:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
       "origin": "2025-10-02T15:00:00+00:00",
       "reason": "Incomplete three-hour wind history"
+    },
+    {
+      "origin": "2025-10-27T09:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2025-10-27T21:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
     },
     {
       "origin": "2025-11-08T09:00:00+00:00",
@@ -212,6 +248,14 @@
       "reason": "Incomplete three-hour wind history"
     },
     {
+      "origin": "2026-01-07T09:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-01-07T21:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
       "origin": "2026-01-20T15:00:00+00:00",
       "reason": "Incomplete three-hour wind history"
     },
@@ -228,8 +272,32 @@
       "reason": "Incomplete three-hour wind history"
     },
     {
+      "origin": "2026-03-16T09:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-03-16T21:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
       "origin": "2026-03-21T03:00:00+00:00",
       "reason": "Incomplete recent wind observations for DK2"
+    },
+    {
+      "origin": "2026-04-09T09:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-04-09T21:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-04-16T03:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-04-16T15:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
     },
     {
       "origin": "2026-04-17T09:00:00+00:00",
@@ -272,6 +340,30 @@
       "reason": "Incomplete three-hour wind history"
     },
     {
+      "origin": "2026-06-13T15:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-06-14T09:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-06-18T09:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-06-18T21:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-06-27T03:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-06-27T15:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
       "origin": "2026-06-30T09:00:00+00:00",
       "reason": "Incomplete three-hour wind history"
     },
@@ -292,6 +384,14 @@
       "reason": "Incomplete three-hour wind history"
     },
     {
+      "origin": "2026-07-18T09:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
+      "origin": "2026-07-18T21:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
       "origin": "2026-07-26T09:00:00+00:00",
       "reason": "Incomplete three-hour wind history"
     },
@@ -308,6 +408,10 @@
       "reason": "Incomplete three-hour wind history"
     },
     {
+      "origin": "2026-10-26T09:00:00+00:00",
+      "reason": "Missing recent hourly wind input"
+    },
+    {
       "origin": "2026-10-28T09:00:00+00:00",
       "reason": "No recent wind observations for DK1"
     },
@@ -321,5 +425,5 @@
     }
   ],
   "features": 44,
-  "datasetHash": "7684a53236a509d4ea423bcd42d2215bc7c053ccdb64ba452d9ce460b3f651e6"
+  "datasetHash": "b922e4aacad8e798ca73ae6d5f31d250a8349d4e81a0902913bfe129f354ed1a"
 }

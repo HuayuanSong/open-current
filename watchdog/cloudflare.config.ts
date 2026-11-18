@@ -12,7 +12,7 @@ export default defineConfig({
       GITHUB_TOKEN: bindings.secret(),
     },
     exports: { FreshnessMonitor: exports.durableObject({ storage: "sqlite" }) },
-    triggers: [triggers.scheduled({ schedule: "11,26,41,56 * * * *" })],
+    triggers: [triggers.scheduled({ schedule: "4,19,34,49 * * * *" })],
     observability: {
       enabled: true,
       logs: { enabled: true, headSamplingRate: 1, invocationLogs: true },

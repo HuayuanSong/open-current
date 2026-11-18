@@ -4,6 +4,10 @@ export const POLICY = Object.freeze({
   publicationAlertAfter: 120 * MINUTE,
   forecastAlertAfter: 180 * MINUTE,
   sourceAlertAfter: 120 * MINUTE,
+  windRefreshAfter: 55 * MINUTE,
+  collectionRefreshAfter: 90 * MINUTE,
+  collectionAlertAfter: 150 * MINUTE,
+  europeSourceAlertAfter: 240 * MINUTE,
   cooldown: 45 * MINUTE,
   maxAttempts: 3,
 });
@@ -97,10 +101,28 @@ export function assess(payload, now) {
     const value = sourceAges.energinet[area]?.[feed];
     return value == null || value > POLICY.sourceAlertAfter / MINUTE;
   }));
+  const tracksWind = payload.windForecast != null;
+  const regionalIssues = Object.values(payload.windForecast?.areas || {}).map((r) => timestamp(r?.issuedAt, now));
+  const windIssue = regionalIssues.length
+    ? (regionalIssues.some((t) => t === null) ? null : Math.min(...regionalIssues))
+    : timestamp(payload.windForecast?.issuedAt, now);
+  const windAge = age(windIssue);
+  const windDue = tracksWind && (windIssue === null || now - windIssue >= POLICY.windRefreshAfter);
+  const tracksCollection = Object.hasOwn(payload, "europeCollection");
+  const collection = timestamp(payload.europeCollection?.collectedAt, now);
+  const collectionDue = tracksCollection && (collection === null || now - collection >= POLICY.collectionRefreshAfter);
+  const powerAges = Object.values(sourceAges.energyCharts).map((feed) => feed.power)
+    .filter(Number.isFinite).sort((a, b) => a - b);
+  const middle = Math.floor(powerAges.length / 2);
+  const medianPowerAge = powerAges.length % 2 ? powerAges[middle]
+    : powerAges.length ? (powerAges[middle - 1] + powerAges[middle]) / 2 : null;
   let reason = null;
   if (now - snapshot > POLICY.publicationAlertAfter) reason = "publication_stale";
   else if (forecastStale) reason = "forecast_stale";
+  else if (tracksWind && (windAge === null || windAge * MINUTE > POLICY.forecastAlertAfter)) reason = "wind_forecast_stale";
+  else if (tracksCollection && (collection === null || now - collection > POLICY.collectionAlertAfter)) reason = "europe_collection_stale";
   else if (!publicationStale && sourceDelayed) reason = "source_delayed";
+  else if (tracksCollection && !collectionDue && (medianPowerAge === null || medianPowerAge * MINUTE > POLICY.europeSourceAlertAfter)) reason = "europe_source_delayed";
   return {
     snapshotAt: new Date(snapshot).toISOString(),
     snapshotAgeMinutes: age(snapshot),
@@ -109,6 +131,13 @@ export function assess(payload, now) {
     forecastHorizonEnd: Number.isFinite(horizon) ? new Date(horizon).toISOString() : null,
     forecastStatus: payload.forecast?.status || "unknown",
     sourceAgeMinutes: sourceAges,
+    windIssuedAt: windIssue === null ? null : new Date(windIssue).toISOString(),
+    windAgeMinutes: windAge,
+    windAttempt: payload.windForecast?.lastAttempt?.status || null,
+    windDue, tracksWind, collectionDue,
+    europeCollectedAt: collection === null ? null : new Date(collection).toISOString(),
+    europeCollectionAgeMinutes: age(collection),
+    europeMedianPowerAgeMinutes: medianPowerAge,
     publicationStale,
     reason,
   };
@@ -124,9 +153,9 @@ function headers(token) {
   };
 }
 
-async function activeRun(token, fetcher) {
+async function activeRun(workflow, token, fetcher) {
   const responses = await Promise.all(ACTIVE_STATUSES.map((status) => request(
-    `${API}pages.yml/runs?branch=main&status=${status}&per_page=1`,
+    `${API}${workflow}/runs?branch=main&status=${status}&per_page=1`,
     { headers: headers(token) }, fetcher,
   )));
   for (const result of responses) {
@@ -146,6 +175,46 @@ async function dispatch(workflow, inputs, token, fetcher) {
   }, fetcher);
 }
 
+async function recover(workflow, inputs, budget, persist, now, token, fetcher) {
+  try {
+    if ((budget.attempts || 0) >= POLICY.maxAttempts) return { action: "recovery_exhausted" };
+    if (budget.lastAttemptAt && now - budget.lastAttemptAt < POLICY.cooldown) return { action: "cooldown" };
+    const active = await activeRun(workflow, token, fetcher);
+    if (active) return { action: "workflow_busy", runUrl: `https://github.com/HuayuanSong/open-current/actions/runs/${active.id}` };
+    budget.attempts = (budget.attempts || 0) + 1;
+    budget.lastAttemptAt = now;
+    persist();
+    const run = await dispatch(workflow, inputs, token, fetcher);
+    const result = { action: "recovery_dispatched" };
+    if (Number.isSafeInteger(run?.workflow_run_id)) result.runUrl = `https://github.com/HuayuanSong/open-current/actions/runs/${run.workflow_run_id}`;
+    return result;
+  } catch (error) {
+    return { action: "github_error", error: error instanceof RemoteError ? error.message : "github_unavailable" };
+  }
+}
+
+async function recoverCollection(health, state, persist, now, token, fetcher) {
+  const budget = state.collectionRecovery ||= {};
+  if (budget.collectedAt !== health.europeCollectedAt) {
+    Object.assign(budget, { attempts: 0, lastAttemptAt: null, collectedAt: health.europeCollectedAt });
+  }
+  if (!health.collectionDue) return { action: "current" };
+  try {
+    // A completed artifact may still be waiting for the next Pages publisher.
+    const runs = await request(`${API}collect-europe.yml/runs?branch=main&status=success&per_page=1`,
+      { headers: headers(token) }, fetcher);
+    if (!Array.isArray(runs?.workflow_runs)) throw new RemoteError("github");
+    const completed = timestamp(runs.workflow_runs[0]?.updated_at, now);
+    if (completed !== null && now - completed < POLICY.collectionRefreshAfter
+        && (health.europeCollectedAt === null || completed > Date.parse(health.europeCollectedAt))) {
+      return { action: "awaiting_publication", completedAt: completed };
+    }
+    return await recover("collect-europe.yml", {}, budget, persist, now, token, fetcher);
+  } catch (error) {
+    return { action: "github_error", error: error instanceof RemoteError ? error.message : "github_unavailable" };
+  }
+}
+
 /** Persist attempts before network side effects, including ambiguous timeouts. */
 export async function check(env, store, now = Date.now(), fetcher = fetch) {
   const state = store.load();
@@ -157,11 +226,11 @@ export async function check(env, store, now = Date.now(), fetcher = fetch) {
     }, fetcher);
     result.health = assess(payload, now);
     state.healthFailures = 0;
-    if (!result.health.publicationStale) {
+    if (!result.health.publicationStale && !result.health.windDue) {
       state.attempts = 0;
       state.lastAttemptAt = null;
-      if (!result.health.reason) state.alertSent = false;
     }
+
   } catch (error) {
     state.healthFailures = (state.healthFailures || 0) + 1;
     result.error = error instanceof RemoteError ? error.message : "health_invalid";
@@ -171,33 +240,31 @@ export async function check(env, store, now = Date.now(), fetcher = fetch) {
   // Missing/invalid metadata is an alert, never permission to dispatch blindly.
   if (!env.GITHUB_TOKEN) {
     result.action = "credential_required";
-  } else if (result.health?.publicationStale) {
-    try {
-      const active = await activeRun(env.GITHUB_TOKEN, fetcher);
-      if (active) {
-        result.action = "workflow_busy";
-        result.runUrl = `https://github.com/HuayuanSong/open-current/actions/runs/${Number(active.id)}`;
-      } else if ((state.attempts || 0) >= POLICY.maxAttempts) {
-        result.action = "recovery_exhausted";
-      } else if (state.lastAttemptAt && now - state.lastAttemptAt < POLICY.cooldown) {
-        result.action = "cooldown";
-      } else {
-        state.attempts = (state.attempts || 0) + 1;
-        state.lastAttemptAt = now;
-        store.save(state);
-        const run = await dispatch("pages.yml", { refresh: true }, env.GITHUB_TOKEN, fetcher);
-        result.action = "recovery_dispatched";
-        if (Number.isSafeInteger(run?.workflow_run_id)) {
-          result.runUrl = `https://github.com/HuayuanSong/open-current/actions/runs/${run.workflow_run_id}`;
+  } else if (result.health) {
+    const h = result.health;
+    const persist = () => store.save(state);
+    if (h.collectionDue || state.collectionRecovery) {
+      result.collection = await recoverCollection(h, state, persist, now, env.GITHUB_TOKEN, fetcher);
+      if (result.collection.error) result.error = result.collection.error;
+    }
+    const minute = new Date(now).getUTCMinutes();
+    const eligible = !h.tracksWind || (minute >= 17 && minute <= 49);
+    const importReady = result.collection?.action === "awaiting_publication";
+    if (h.publicationStale || h.windDue || importReady) {
+      if (eligible || h.snapshotAgeMinutes > POLICY.publicationAlertAfter / MINUTE) {
+        let budget = state;
+        if (importReady && !h.publicationStale && !h.windDue) {
+          if (state.importRecovery?.completedAt !== result.collection.completedAt) state.importRecovery = { completedAt: result.collection.completedAt };
+          budget = state.importRecovery;
         }
+        Object.assign(result, await recover("pages.yml", { refresh: true }, budget, persist, now, env.GITHUB_TOKEN, fetcher));
+      } else {
+        result.action = "waiting_for_source_window";
       }
-    } catch (error) {
-      result.action = "github_error";
-      result.error = error instanceof RemoteError ? error.message : "github_unavailable";
     }
   }
   result.attempts = state.attempts || 0;
-  result.reason = result.action === "recovery_exhausted" ? "recovery_exhausted"
+  result.reason = (result.action === "recovery_exhausted" || result.collection?.action === "recovery_exhausted") ? "recovery_exhausted"
     : result.health?.reason || (state.healthFailures >= 2 ? "health_unavailable" : null);
 
   if (result.reason && env.GITHUB_TOKEN && !state.alertSent
@@ -217,6 +284,7 @@ export async function check(env, store, now = Date.now(), fetcher = fetch) {
     }
   }
   if (result.health && !result.health.publicationStale && !result.reason) {
+    state.alertSent = false;
     state.alertAttempts = 0;
     state.lastAlertAttemptAt = null;
   }

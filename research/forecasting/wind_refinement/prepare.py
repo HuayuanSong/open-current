@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from forecast.wind_short_term import measurements, features
+from forecast.wind_short_term import measurements, features, require_observed_wind
 from research.forecasting.weather_retrain.common import digest, write_json
 
 HERE = Path(__file__).resolve().parent
@@ -45,8 +45,7 @@ def main():
         at = origin + pd.Timedelta(minutes=30)
         times = pd.date_range(origin + pd.Timedelta(hours=1), periods=6, freq="h")
         try:
-            if not np.isfinite(arrays["observed512"][start:start+2, -24:, 0]).all():
-                raise ValueError("Missing recent hourly wind input")
+            require_observed_wind(arrays["observed512"][start:start+2])
             recent = measurements(raw.loc[at-pd.Timedelta(hours=4):at].to_dict("records"), at)
             x, columns = features(arrays["history"][start:start+2], arrays["fresh"][start:start+2], names, recent, times)
             matrices.extend(x)

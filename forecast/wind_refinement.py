@@ -76,6 +76,8 @@ def issue(state, work, protocol, fingerprint):
         return "no-matching-public-wind-issue"
     if base.get("sha256") != canonical_hash({k: v for k, v in base.items() if k != "sha256"}):
         raise ValueError("Public wind evidence checksum differs")
+    if any(area not in base["areas"] for area in data.AREAS):
+        return "waiting-for-both-regions"
     if pd.Timestamp(base["times"][0]) <= at or at - pd.Timestamp(base["issuedAt"]) > pd.Timedelta(minutes=15):
         return "public-wind-issue-too-old"
     ledger = state.setdefault("windResearch", {})
@@ -102,8 +104,7 @@ def issue(state, work, protocol, fingerprint):
         githubRunId=os.environ.get("GITHUB_RUN_ID"))
     models, selection = wind_short_term.load_models()
     try:
-        if not np.isfinite(arrays["observed512"][:, -24:, 0]).all():
-            raise ValueError("Missing recent hourly wind input")
+        wind_short_term.require_observed_wind(arrays["observed512"])
         selected_at = pd.Timestamp(base["recentWind"]["DK1"]["selectedAt"])
         recent = wind_short_term.measurements(sources["electricity"], selected_at)
         names = json.loads((data.ROOT / "research/forecasting/weather_retrain/model-manifest.json").read_text())["featureNames"]["future"]

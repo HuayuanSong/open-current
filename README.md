@@ -65,7 +65,7 @@ flowchart TB
         evaluate["Archive forecasts and ranges<br/>Score against later observations"]
         windtest["Separate wind comparison<br/>Latest ECMWF + five-minute correction<br/>No automatic model promotion"]
         freshwind["Public wind update<br/>Refitted components + regional ECMWF/DMI mix<br/>Recent-power correction · separate issue archive"]
-        research["Internal wind challengers<br/>1–6h LightGBM + conditional ranges<br/>Timestamped weather ensembles · no auto-promotion"]
+        research["Internal wind challengers<br/>1–6h regional regressors + conditional ranges<br/>Timestamped weather ensembles · no auto-promotion"]
     end
 
     archive["Static JSON + forecast archive<br/>Readings, predictions and retained history"]
@@ -121,14 +121,10 @@ error by about 14% / 13% in a short November replay; this is not a guarantee of
 live accuracy. Solar and demand retain the original model. Wind has its own
 issue archive, source timestamps, comparisons and live error statistics.
 
-The wind comparison view lets you inspect the current or previous model. While
-the current model has fewer than 24 matched observed hours, it initially shows
-the previous model when that has more comparison history. Each view keeps its
-own model's values, statistics, saved ranges and downloads. Isolated observations
-are shown as dots, including during a new model's first hours.
+The wind comparison view uses one reference hour and the same observed target hours for both models. It reports paired mean absolute error by region and lead, the distinct observed hours, and how often each model issued. Until both models have a common issue, their historical comparisons remain available. Each download retains the exact original predictions, issue time and saved ranges.
 
 The [short-term wind and uncertainty experiments](research/forecasting/wind_refinement/README.md)
-run separately from that public forecast. A small LightGBM challenger uses recent
+run separately from that public forecast. A regional LightGBM or ridge challenger uses recent
 five-minute production changes for the next six hours. Timestamped weather-ensemble
 means/spreads are collected for conditional range evaluation. Neither the challenger
 nor unvalidated ranges automatically replaces what visitors see.
@@ -191,11 +187,12 @@ new completed European collection, and refreshes forecast inputs.
 
 Forecast inference runs in GitHub Actions on CPU; Pages serves the resulting JSON. It uses the development-selected blend of tree, linear, weather MLP, Chronos-2 and TinyTimeMixer models, with frozen weights and no scheduled retraining. Two isolated Python 3.12 environments keep model dependencies compatible. An immutable, checksummed GitHub Release stores model weights, and the published site preserves 35 days of issued forecasts across runner cache eviction. Models refresh only when a new source hour or weather run is available. Failed updates keep the previous forecast and its original issue time.
 
-Standard hosted runners are free for public repositories within applicable GitHub terms. The data pipeline uses the automatically provided GitHub deployment token; source APIs require no credentials. Artifacts expire after one day, the website retains seven days of data, and asset filenames in HTML are fingerprinted to prevent stale UI caching.
+Standard hosted runners are free for public repositories within applicable GitHub terms. The data pipeline uses the automatically provided GitHub deployment token; source APIs require no credentials. European feed and Pages artifacts are kept for one day. Independent forecast checkpoints are kept for seven days. The website retains seven days of electricity readings and fingerprints frontend assets.
+
+Before a build, the publisher compares the live forecast archive and panel with the independent checkpoint from the most recent successful main-branch Pages run. A mismatch stops the build before the archive is replaced. Earlier deployments can bootstrap the checkpoint from their immutable Pages artifact.
 
 After deployment, the workflow verifies the public `health.json`, `index.json`,
-`forecasts.json` and `denmark.json` against SHA-256 checksums recorded before
-upload. It checks up to seven times, 30 seconds apart, to allow publication to
+`forecasts.json`, `forecast-state.json.gz` and `denmark.json` against SHA-256 checksums recorded before upload. It checks up to seven times, 30 seconds apart, to allow publication to
 propagate. If publication fails or the files still differ, it waits one minute
 and republishes the same artifact **once**, without repeating collection or model inference, then
 checks again. A persistent mismatch fails the workflow. This verifies that the
@@ -204,10 +201,12 @@ readings fresh or guarantee propagation to every CDN location simultaneously.
 
 GitHub's scheduler is best effort, so collection can be delayed or skipped. Public-repository schedules can be disabled after **60 days of repository inactivity**; if this happens, re-enable the workflow in Actions. The site marks delayed readings and warns when the prepared snapshot is over two hours old. It remains readable during upstream outages. Keep an eye on failed runs: this is not a guaranteed real-time service.
 
-An independent [Cloudflare watchdog](watchdog/README.md) checks publication every
-15 minutes and can dispatch the existing refresh when the snapshot is over an
-hour old. It preserves a seven-day check history, prevents duplicate launches,
-limits retries, and reports forecast and upstream freshness separately. Freshness
+The Cloudflare watchdog checks every 15 minutes. It can recover an overdue
+European collector, import a completed collection and refresh regional wind
+forecasts after the source-hour buffer. Attempts are bounded and the check
+history covers seven days. [Watchdog thresholds and recovery](watchdog/README.md)
+
+Freshness
 alerts appear as failed GitHub Actions runs; email delivery follows your GitHub
 notification settings. It needs its own deployment and a repository-scoped
 GitHub token. The original half-hourly GitHub schedule remains enabled.

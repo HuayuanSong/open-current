@@ -34,15 +34,18 @@ class FreshWindTests(unittest.TestCase):
                     for a in wind.data.AREAS]
         self.state = dict(hourly=[], forecasts=[{"original": True}], trial={"original": True}, windUpdate={"original": True})
 
-    def execute_issue(self, state=None, *, late=False):
+    def execute_issue(self, state=None, *, late=False, missing_dmi=False):
         state = state if state is not None else self.state
         with tempfile.TemporaryDirectory() as folder, ExitStack() as stack:
             stack.enter_context(patch.object(wind.data, "now", return_value=self.at))
             stack.enter_context(patch.object(wind.data, "inputs", return_value=(self.arrays, copy.deepcopy(self.meta))))
             stack.enter_context(patch.object(wind.weather_sources, "refresh"))
-            stack.enter_context(patch.object(wind.weather_sources, "select", side_effect=lambda _, s, *args: dict(
-                model=wind.weather_sources.MODELS[s], run="2026-11-17T06:00:00+00:00", data=[],
-                availableAt="2026-11-17T09:00:00+00:00", retrievedAt="2026-11-17T09:20:00+00:00")))
+            def source(_, s, *args):
+                if missing_dmi and s == "dmi":
+                    raise ValueError("DMI unavailable")
+                return dict(model=wind.weather_sources.MODELS[s], run="2026-11-17T06:00:00+00:00", data=[],
+                            availableAt="2026-11-17T09:00:00+00:00", retrievedAt="2026-11-17T09:20:00+00:00")
+            stack.enter_context(patch.object(wind.weather_sources, "select", side_effect=source))
             stack.enter_context(patch.object(wind.weather_sources, "future_inputs", return_value=self.arrays))
             stack.enter_context(patch.object(wind, "measurements", return_value=(self.raw, self.at.isoformat())))
             stack.enter_context(patch.object(wind, "ensure_models"))
@@ -51,7 +54,7 @@ class FreshWindTests(unittest.TestCase):
             stack.enter_context(patch.object(wind.compare, "ensure", return_value=Path(folder)))
             stack.enter_context(patch.object(wind, "model_members", return_value=({}, {})))
             stack.enter_context(patch.object(wind, "combine", return_value=(self.base, {})))
-            predictions = stack.enter_context(patch.object(wind, "predict_wind", side_effect=[self.dmi, self.ecmwf]))
+            predictions = stack.enter_context(patch.object(wind, "predict_wind", side_effect=[self.ecmwf] if missing_dmi else [self.dmi, self.ecmwf]))
             # Source names are sorted: dmi, then ecmwf.
             if late:
                 count = 0
@@ -82,6 +85,19 @@ class FreshWindTests(unittest.TestCase):
         self.assertEqual(record["ranges"]["areas"], {})
         self.assertEqual(record["weatherSources"]["dmi"]["model"], wind.weather_sources.MODELS["dmi"])
         self.assertEqual(record["sha256"], wind.canonical_hash({k: v for k, v in record.items() if k != "sha256"}))
+
+    def test_missing_dmi_only_blocks_west_wind(self):
+        self.assertEqual(self.execute_issue(missing_dmi=True), "issued")
+        issued = self.state["windForecasts"][0]
+        self.assertEqual(set(issued["areas"]), {"DK2"})
+        self.assertEqual(issued["areas"]["DK2"]["wind"][6:], self.ecmwf[1, 6:, 0].tolist())
+        self.assertEqual(issued["missingWeather"], {"dmi": "DMI unavailable"})
+        live = dict(hourly=[], forecasts=[], windForecasts=[issued],
+                    windServing=dict(version=self.selection["version"], lastAttempt={"status":"issued"}))
+        fresh = publish.payload(live, self.at, "baseline")["windOutlook"]
+        self.assertIsNone(fresh["latest"])
+        self.assertEqual(fresh["latestByArea"]["DK2"]["id"], issued["id"])
+        self.assertEqual(fresh["waitingForWeather"], ["DK1"])
 
     def test_duplicate_issue_preserves_original_values(self):
         self.execute_issue()

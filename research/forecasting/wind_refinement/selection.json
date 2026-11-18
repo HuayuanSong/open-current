@@ -1,6 +1,6 @@
 {
-  "version": "wind-refinement-2026-11-16",
-  "protocolHash": "daac08f3fe5cf7a2cc5c3b7a7b91ae79a481298fc36d0e15515564e9f591995e",
+  "version": "wind-refinement-2026-11-18",
+  "protocolHash": "f9754892f72721700503754f560cc5575bab03cd62fb1ae5d03ce6451620be53",
   "featureNames": [
     "lead",
     "hoursFromMeasurement",
@@ -47,23 +47,23 @@
     "year_sin",
     "year_cos"
   ],
-  "datasetHash": "7684a53236a509d4ea423bcd42d2215bc7c053ccdb64ba452d9ce460b3f651e6",
+  "datasetHash": "b922e4aacad8e798ca73ae6d5f31d250a8349d4e81a0902913bfe129f354ed1a",
   "models": {
     "DK1": {
       "family": "lightgbm",
       "setting": 15,
       "file": "DK1.txt",
-      "sha256": "b201d4bb60d072adef2ea3c8340e665c974730300bd6b6928ef847939fdab955",
-      "fittingOrigins": 1003,
-      "maximumLabel": "2026-10-26T15:00:00+00:00"
+      "sha256": "298452109ba20bc8a79ff18cc0bb3835bb90c84a89fdd1daac026813e7038d53",
+      "fittingOrigins": 977,
+      "maximumLabel": "2026-10-21T21:00:00+00:00"
     },
     "DK2": {
-      "family": "lightgbm",
-      "setting": 15,
-      "file": "DK2.txt",
-      "sha256": "566ad682b50aa558c32d324f17f7c7bce6dcd7777112f336c14d2fb177027443",
-      "fittingOrigins": 1003,
-      "maximumLabel": "2026-10-26T15:00:00+00:00"
+      "family": "ridge",
+      "setting": 100,
+      "file": "DK2.json",
+      "sha256": "5029f84f50df7fc98ebf211404cc398ff27f4c004c28fb13c26ff515ef34c815",
+      "fittingOrigins": 977,
+      "maximumLabel": "2026-10-21T21:00:00+00:00"
     }
   },
   "developmentScores": [
@@ -71,64 +71,64 @@
       "area": "DK1",
       "family": "ridge",
       "setting": 10,
-      "maeMW": 247.3332079446105,
-      "fittingOrigins": 898,
+      "maeMW": 243.15654422543187,
+      "fittingOrigins": 873,
       "validationOrigins": 98
     },
     {
       "area": "DK1",
       "family": "ridge",
       "setting": 100,
-      "maeMW": 245.5490097147155,
-      "fittingOrigins": 898,
+      "maeMW": 241.67591147773436,
+      "fittingOrigins": 873,
       "validationOrigins": 98
     },
     {
       "area": "DK1",
       "family": "lightgbm",
       "setting": 7,
-      "maeMW": 224.93823023709598,
-      "fittingOrigins": 898,
+      "maeMW": 221.33482757058096,
+      "fittingOrigins": 873,
       "validationOrigins": 98
     },
     {
       "area": "DK1",
       "family": "lightgbm",
       "setting": 15,
-      "maeMW": 214.6832592170563,
-      "fittingOrigins": 898,
+      "maeMW": 214.03730513214083,
+      "fittingOrigins": 873,
       "validationOrigins": 98
     },
     {
       "area": "DK2",
       "family": "ridge",
       "setting": 10,
-      "maeMW": 82.16866466329056,
-      "fittingOrigins": 898,
+      "maeMW": 82.02760582424904,
+      "fittingOrigins": 873,
       "validationOrigins": 98
     },
     {
       "area": "DK2",
       "family": "ridge",
       "setting": 100,
-      "maeMW": 81.49011403444825,
-      "fittingOrigins": 898,
+      "maeMW": 81.35205091366335,
+      "fittingOrigins": 873,
       "validationOrigins": 98
     },
     {
       "area": "DK2",
       "family": "lightgbm",
       "setting": 7,
-      "maeMW": 82.86477212913674,
-      "fittingOrigins": 898,
+      "maeMW": 82.66568048683901,
+      "fittingOrigins": 873,
       "validationOrigins": 98
     },
     {
       "area": "DK2",
       "family": "lightgbm",
       "setting": 15,
-      "maeMW": 81.46580269380722,
-      "fittingOrigins": 898,
+      "maeMW": 82.19584327083071,
+      "fittingOrigins": 873,
       "validationOrigins": 98
     }
   ],

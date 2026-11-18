@@ -50,6 +50,12 @@ def refresh(state, source, at, times, request=data.request):
         for key, entry in state.get("weatherRuns", {}).items():
             if eligible(entry, source, at):
                 cache.setdefault(key, entry)
+    # A cache predating location and unit checks must be replaceable on the next fetch.
+    for key, entry in list(cache.items()):
+        try:
+            weather_runs.validate_locations(entry.get("data"))
+        except ValueError:
+            del cache[key]
     status = dict(checkedAt=at.isoformat(), model=MODELS[source], error=None)
     begin = time.monotonic()
     try:

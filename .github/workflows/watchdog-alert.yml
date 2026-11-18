@@ -10,6 +10,9 @@ on:
         options:
           - publication_stale
           - forecast_stale
+          - wind_forecast_stale
+          - europe_collection_stale
+          - europe_source_delayed
           - source_delayed
           - health_unavailable
           - recovery_exhausted
@@ -39,6 +42,9 @@ jobs:
           reasons = {
               "publication_stale": "No electricity snapshot has been published for over two hours.",
               "forecast_stale": "The latest forecast was issued over three hours ago or its horizon has expired.",
+              "wind_forecast_stale": "The public wind outlook is missing or over three hours old in a region.",
+              "europe_collection_stale": "The imported European collection is missing or over two and a half hours old.",
+              "europe_source_delayed": "European generation readings are missing or their median age exceeds four hours after a recent collection.",
               "source_delayed": "A recent collection still contains delayed Danish source readings.",
               "health_unavailable": "The watchdog could not validate published freshness metadata in consecutive checks.",
               "recovery_exhausted": "Three automatic recovery attempts did not restore fresh publication.",

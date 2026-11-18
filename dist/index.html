@@ -10,10 +10,10 @@
     />
     <title>Open Current — Europe’s electricity, connected</title>
     <link rel="icon" href="icon.svg?v=6969a3192d60" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=e4174b4a4a4a" />
+    <link rel="stylesheet" href="style.css?v=d8375ed00379" />
     <script src="vendor/d3.v7.min.js" defer></script>
-    <script type="module" src="app.js?v=98e5585e7393"></script>
-    <script type="module" src="forecasts.js?v=ca09771a998a"></script>
+    <script type="module" src="app.js?v=5b1b82508034"></script>
+    <script type="module" src="forecasts.js?v=23606a19e988"></script>
   </head>
   <body>
     <a class="skip-link" href="#explorer">Skip to electricity explorer</a>
@@ -275,7 +275,7 @@
             role="img"
             aria-label="Historical electricity readings for the selected country"
           ></svg>
-          <div id="chart-tooltip" class="map-tooltip" hidden></div>
+          <div id="chart-tooltip" role="status" class="map-tooltip" hidden></div>
           <p id="chart-empty" hidden>No readings available for this view. Select another country on the map or from the country menu to keep exploring.</p>
         </div>
         <div class="chart-footer">
@@ -307,7 +307,7 @@
       <section id="forecasts" class="forecast-section" aria-labelledby="forecast-heading">
         <div class="section-heading forecast-heading">
           <div><p class="eyebrow">WEATHER, MEET THE GRID</p><h2 id="forecast-heading">Denmark, looking ahead.</h2>
-            <p class="forecast-intro">Wind, solar and electricity demand. An hourly outlook for the next 48 hours.</p></div>
+            <p class="forecast-intro">Wind, solar and electricity demand. An hourly outlook up to 48 hours ahead.</p></div>
           <span class="forecast-badge">Experimental</span>
         </div>
         <div class="forecast-surface">
@@ -357,16 +357,25 @@
               <a href="https://github.com/HuayuanSong/open-current/tree/main/research/forecasting/uncertainty" target="_blank" rel="noopener noreferrer">Read the explanation and range checks ↗</a>
             </div>
           </details>
+          <details id="wind-matched-detail" hidden>
+            <summary>Compare wind errors on the same hours</summary>
+            <p id="wind-matched-count"></p>
+            <table><caption>Mean absolute error by forecast lead. Lower is better.</caption>
+              <thead><tr><th>Lead</th><th>Previous model</th><th>Current model</th><th>Paired hours</th></tr></thead>
+              <tbody id="wind-matched-scores"></tbody>
+            </table>
+          </details>
           <div class="forecast-footer"><p id="forecast-timing">All times UTC. Values are hourly average power.</p><button class="text-button" id="forecast-download" disabled>Download forecast ↓</button></div>
         </div>
         <details class="forecast-methodology">
           <summary>How these forecasts work</summary>
           <div>
+            <p id="weather-trial-status" hidden></p>
             <p>These are experimental predictions for Denmark’s two electricity regions. An ensemble combines tree models and pretrained time-series models using Energinet’s electricity readings and weather forecasts supplied by Open-Meteo. Demand includes system losses.</p>
             <p>Wind uses the newest complete ECMWF runs available from the provider. West Denmark also includes DMI weather; the refitted weather branch combines 75% ECMWF and 25% DMI. East Denmark retains ECMWF because DMI increased its error in our checks. Recent five-minute wind-production readings adjust the next six hours. Solar and demand retain their existing models and daily weather inputs.</p>
             <p>Updates are attempted every 30 minutes. The models predict hourly averages and normally issue a new outlook when a new complete source hour is available. Every forecast keeps its original issue time and values, so later observations can be compared fairly.</p>
             <p>Missing recent readings can delay an update. At most three older missing input hours per week may be filled using earlier observations; the panel reports when this happens. Larger gaps keep the last valid outlook visible with a delay notice.</p>
-            <p>The original ensemble benchmark covered 13 October 2026 forecast dates per region. The wind update was selected on earlier November dates and checked on 16 later forecast origins, reducing mean error by about 14% in West Denmark and 13% in East Denmark. That short retrospective check used assumed historical weather-release times and revised observations; it does not establish year-round accuracy. Live errors above use only forecasts actually issued by the displayed model version.</p>
+            <p>The original ensemble benchmark covered 13 October 2026 forecast dates per region. The wind update was selected on earlier November dates and checked on 16 later forecast origins, reducing mean error by about 14% in West Denmark and 13% in East Denmark. That short retrospective check used assumed historical weather-release times and revised observations; it does not establish year-round accuracy. Wind errors compare both models on the same reference hour, forecast lead and observed reading. Each reference hour contributes at most one pair. Other targets use their own issued forecasts.</p>
             <p>Prediction ranges target 80% coverage for individual hours, not the whole 48-hour path. Rolling calibration uses only completed past forecasts and observations. The range audit reused 13 October dates and does not establish guaranteed or year-round coverage. Solar ranges are shown only in daylight: overnight source readings failed the coverage checks. A range is saved when issued and is never added retrospectively to an old forecast.</p>
             <p>Prediction ranges are currently unavailable for the updated wind model because its calibration checks failed. The previous model’s ranges are not reused around changed predictions. Solar and demand retain their saved ranges and measured coverage.</p>
             <p>Demand explanations passed reference-sample stability checks for the tree component. Wind and solar explanations failed and are not published. The explanation does not represent the full ensemble or establish causal effects.</p>

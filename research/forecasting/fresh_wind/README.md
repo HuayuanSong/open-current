@@ -68,8 +68,7 @@ This is a short retrospective diagnostic, with revised electricity observations
 and assumed historical weather availability of eight hours for ECMWF and four
 for DMI. November outcomes have already been inspected in this project, and the
 overlapping 48-hour forecasts are dependent. These are not independent live or
-year-round accuracy claims. Live error statistics start with the new version's
-actually issued forecasts and exclude the original model and diagnostic probes.
+year-round accuracy claims. The live comparison pairs the first current issue per reference hour with the latest original issue available at that time. Both are scored on the same region, target hour and lead. Availability and distinct observed hours appear alongside the errors. The 18 November serving revision retains the 16 November .1 model weights and correction rules. If DMI becomes unavailable, East can issue on ECMWF while West retains its last valid issue. Both compatible revisions contribute to the matched sample.
 
 New 80%-target ranges fitted on the earlier development outcomes covered only
 **35.2% / 54.2%** of the later outcomes. They are **not published**. Wind displays

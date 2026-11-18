@@ -23,7 +23,7 @@ class WindRefinementTests(unittest.TestCase):
             OnshoreWindPower=100+i, OffshoreWindPower=300) for i, t in enumerate(
                 pd.date_range(self.at-pd.Timedelta(hours=4), self.at, freq="5min")) for area in data.AREAS]
         self.names = json.loads((data.ROOT / "research/forecasting/weather_retrain/model-manifest.json").read_text())["featureNames"]["future"]
-        self.arrays = dict(history=np.full((2, 168, 3), 100.), observed512=np.full((2, 512, 3), 100.),
+        self.arrays = dict(history=np.full((2, 168, 3), 100.), observed512=np.ones((2, 512, 3)),
                            ecmwf_future=np.ones((2, 48, len(self.names))))
         self.protocol = json.loads((short.HERE / "protocol.json").read_text())
 
@@ -85,7 +85,7 @@ class WindRefinementTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory(); self.addCleanup(temporary.cleanup)
         folder = Path(temporary.name)
         arrays = copy.deepcopy(self.arrays)
-        if missing_history: arrays["observed512"][0,-1,0] = np.nan
+        if missing_history: arrays["observed512"][0,-1,0] = 0
         np.savez_compressed(folder / "inputs.npz", **arrays)
         with gzip.open(folder / "sources.json.gz", "wt") as f: json.dump(dict(electricity=self.raw), f)
         base = dict(id="public", modelVersion="public-wind-v1", diagnosticOnly=False,

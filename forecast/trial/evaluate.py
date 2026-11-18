@@ -16,9 +16,23 @@ def week_interval(rows,samples,seed):
     if not good.any():return None
     return np.quantile(100*(1-draw[good,1]/draw[good,0]),[.025,.975]).tolist()
 
+def issue_coverage(trial, at):
+    p = trial["protocol"]
+    planned = dates(p)
+    elapsed = sum(day + pd.Timedelta(hours=p["originHourUTC"]+1) <= at for day in planned)
+    already_closed = sum(pd.Timestamp(r["origin"]) + pd.Timedelta(hours=1) <= at for r in trial["records"])
+    missed = max(0, elapsed - already_closed)
+    maximum = len(planned) - missed
+    required = int(np.ceil(len(planned) * p["minimumIssueCoverage"]))
+    return dict(scheduledOrigins=len(planned), elapsedIssueWindows=elapsed, issuedOrigins=len(trial["records"]),
+                missedIssueWindows=missed, maximumPossibleIssues=maximum, requiredIssues=required,
+                coverageReachable=maximum >= required)
+
+
 def metrics(trial,at):
-    p=trial['protocol'];at=pd.Timestamp(at);planned=dates(p);end=review_after(p)
-    elapsed=int(sum(d+pd.Timedelta(hours=p['originHourUTC']+1)<=at for d in planned))
+    p=trial['protocol'];at=pd.Timestamp(at);end=review_after(p)
+    coverage=issue_coverage(trial,at)
+    unreachable=not coverage['coverageReachable']
     complete_trial=at>=end;out={};observations=trial['observations']
     for candidate in ['primary',*p['secondaryCandidates']]:
         out[candidate]={}
@@ -55,7 +69,7 @@ def metrics(trial,at):
                     bands.append(dict(start=lo+1,end=hi,baselineMAE=b/(n*(hi-lo)) if n else None,
                                       candidateMAE=c/(n*(hi-lo)) if n else None,reductionPct=100*(1-c/b) if b>0 else None))
                 reduction=100*(1-new/old) if old>0 else None
-                sufficient=n>=p['minimumCompleteOrigins'] and weeks>=p['minimumCalendarWeeks'] and issued/len(planned)>=p['minimumIssueCoverage']
+                sufficient=n>=p['minimumCompleteOrigins'] and weeks>=p['minimumCalendarWeeks'] and issued>=coverage['requiredIssues']
                 meets=(sufficient and reduction is not None and reduction>=p['minimumMAEReductionPct'] and
                        all(b['reductionPct'] is not None and b['reductionPct']>=-p['maximumLeadBandRegressionPct'] for b in bands))
                 day_hours=sum(r['daylightHours'] for r in rows)
@@ -66,11 +80,11 @@ def metrics(trial,at):
                     daylightBaselineMAEMW=sum(r['daylightBaselineError'] for r in rows)/day_hours if day_hours and target=='solar' else None,
                     daylightCandidateMAEMW=sum(r['daylightCandidateError'] for r in rows)/day_hours if day_hours and target=='solar' else None,
                     leadBands=bands,descriptiveWeekBootstrap95Pct=week_interval(rows,p['bootstrapWeekSamples'],p['seed']),
-                    decision='collecting' if not complete_trial else 'insufficient_data' if not sufficient else 'review_candidate' if meets else 'retain_baseline')
+                    decision='coverage_unreachable' if unreachable and not complete_trial else 'collecting' if not complete_trial else 'insufficient_data' if not sufficient else 'review_candidate' if meets else 'retain_baseline')
     return dict(version=p['version'],checkedAt=at.isoformat(),originStart=p['originStart'],originEndExclusive=p['originEndExclusive'],
-        reviewAfter=end.isoformat(),scheduledOrigins=len(planned),elapsedIssueWindows=elapsed,issuedOrigins=len(trial['records']),
-        missedIssueWindows=max(0,elapsed-sum(pd.Timestamp(r['origin'])+pd.Timedelta(hours=1)<=at for r in trial['records'])),
-        status='review_ready' if complete_trial else 'collecting' if trial['records'] else 'waiting_for_first_issue',
+        reviewAfter=end.isoformat(),**coverage,
+        legacyObservationCount=sum('captureSource' not in v for areas in observations.values() for targets in areas.values() for v in targets.values()),
+        status='review_ready' if complete_trial else 'coverage_unreachable' if unreachable else 'collecting' if trial['records'] else 'waiting_for_first_issue',
         automaticPromotion=False,primaryRecipe=p['primaryRecipe'],metrics=out,
         lastAttempt=trial['attempts'][-1] if trial['attempts'] else None,
         lastIssue={k:trial['records'][-1].get(k) for k in ['origin','issuedAt','githubRunId','sourceErrors']} if trial['records'] else None,

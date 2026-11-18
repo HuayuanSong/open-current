@@ -1,6 +1,7 @@
 """Append-only issued forecasts and first eligible observation snapshots."""
 import hashlib
 import json
+from ..observation_time import capture_time
 import numpy as np
 import pandas as pd
 from forecast.features import AREAS,TARGETS
@@ -70,8 +71,8 @@ def freeze_observations(trial,hourly,at):
     for row in hourly:
         stamp=pd.Timestamp(row['time']).isoformat();area=row['area']
         if area not in AREAS or stamp not in wanted:continue
-        age=(at-pd.Timestamp(stamp)).total_seconds()/3600
-        if not p['observationMinAgeHours']<=age<=p['observationMaxAgeHours']:continue
+        captured = capture_time(row, at, p['observationMinAgeHours'], p['observationMaxAgeHours'])
+        if captured is None:continue
         # Freeze each series independently; missing solar must not suppress wind.
         slot=trial['observations'].setdefault(stamp,{})
         values=slot.setdefault(area,{})
@@ -79,7 +80,7 @@ def freeze_observations(trial,hourly,at):
             value=row.get(target)
             if target in values or value is None or not np.isfinite(value):continue
             if value<0 or (target=='load' and value==0):continue
-            values[target]={'value':float(value),'capturedAt':at.isoformat()}
+            values[target]={'value':float(value),'capturedAt':captured,'captureSource':'energinet-retrieval'}
 
 def attempt(trial,at,status,message=None):
     # Successful/failed issuance attempts only, not every off-hours cron tick.

@@ -29,30 +29,21 @@ Incomplete histories produce an explicit fallback to the existing public model.
 Ridge (two regularization strengths) and LightGBM (7/15 leaves, 250 trees) were
 compared. Development training labels precede August 2026; selection uses
 August/September outcomes. Final fitting uses labels before November, with the
-last available training label on October 26. Both areas selected 15-leaf
-LightGBM. Each final model uses **1,003 historical origins**; 67 attempted origins
-were excluded for missing inputs. See `data-audit.json`, `selection.json` and
-the frozen settings in `protocol.json`.
+last available training label on October 21. The 18 November revision requires
+24 observed wind hours in both areas. Of 1,070 attempted origins, 977 met the
+input criteria and 93 were excluded. The final selections were 15-leaf LightGBM
+for West and ridge regression with alpha 100 for East. Earlier issued research
+predictions retain their version and are evaluated separately.
 
-The November 10–13 diagnostic has 16 origins and compares with the newly
-deployed current-weather wind forecast, including its existing correction:
-
-| Region | Current 1–6h MAE | Challenger MAE | Reduction | Local checks |
+| Region | Current 1–6h MAE | Challenger MAE | Reduction | Checks over 16 origins, 10–13 November |
 | --- | ---: | ---: | ---: | --- |
-| West / DK1 | 214.89 MW | 209.97 MW | 2.29% | Failed minimum gain and lead checks |
-| East / DK2 | 59.89 MW | 44.24 MW | 26.13% | Passed local checks |
+| West / DK1 | 214.89 MW | 209.40 MW | 2.55% | Below the minimum gain and lead criteria |
+| East / DK2 | 59.89 MW | 50.41 MW | 15.82% | Passed the aggregate criterion and missed the first-hour criterion |
 
-Errors on the small sharp-change subset fell from 571.50 to 545.21 MW in DK1
-(8 hours) and from 129.44 to 94.28 MW in DK2 (11 hours). These subsets are too
-small for a general ramp-performance claim. First-hour DK2 error increased
-slightly (15.21 to 15.57 MW), within the predeclared 5% lead tolerance.
-No fallback was needed in these 16 diagnostic origins.
-
-Two later November 14 stress cases gave mixed results (`stress-results.json`).
-DK1 improved in both (243.47 → 218.67 MW and 421.51 → 242.04 MW). DK2 improved
-at 09 UTC (83.24 → 71.79 MW) but worsened substantially at 03 UTC
-(100.19 → 142.27 MW). Settings were not changed after this check. This is a
-concrete reason to retain the current public model while collecting live evidence.
+First-hour East error rose from 15.21 to 28.28 MW. On two later November 14 stress
+origins, West error fell from 243.47 to 193.32 MW and from 421.51 to 234.52 MW.
+East error rose from 100.19 to 134.98 MW and from 83.24 to 107.82 MW.
+The challenger continues as an internal prospective experiment.
 
 **These are retrospective results on previously inspected November dates.**
 Revised electricity observations and assumed historical weather release lags

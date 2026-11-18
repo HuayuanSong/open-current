@@ -9,7 +9,7 @@ from forecast import data, weather_sources, wind_ranges
 from forecast.fresh_wind import weighted_wind
 from forecast.intervals import interval_score
 from forecast.wind_nowcast import adjust, recent_wind
-from forecast.wind_short_term import measurements, features, predict, load_models
+from forecast.wind_short_term import require_observed_wind, measurements, features, predict, load_models
 from research.forecasting.fresh_wind import evaluate as previous
 from research.forecasting.weather_retrain.common import digest, write_json
 from .prepare import CACHE, HERE, ROOT, raw_history
@@ -40,6 +40,7 @@ def cases(*, stress=False):
         ramp = selected.copy()
         unavailable = None
         try:
+            require_observed_wind(base["observed512"])
             extended = measurements(records, at)
             matrix, columns = features(base["history"], future, names, extended, times)
             if columns != ramp_selection["featureNames"]:

@@ -65,7 +65,7 @@ class TrialTests(unittest.TestCase):
 
     def test_observation_age_revision_zero_and_timeout(self):
         r=record();append(self.trial,r,pd.Timestamp(r['issuedAt']));stamp=pd.Timestamp(r['times'][0])
-        row=dict(time=stamp.isoformat(),area='DK1',wind=0,solar=0,load=100)
+        row=dict(time=stamp.isoformat(),area='DK1',wind=0,solar=0,load=100,retrievedAt=(stamp+pd.Timedelta(hours=24)).isoformat())
         freeze_observations(self.trial,[row],stamp+pd.Timedelta(hours=23))
         self.assertFalse(self.trial['observations'])
         freeze_observations(self.trial,[row],stamp+pd.Timedelta(hours=24))
@@ -78,7 +78,7 @@ class TrialTests(unittest.TestCase):
 
     def fill(self,r,omit_last=False):
         for t in r['times'][:-1] if omit_last else r['times']:
-            hourly=[dict(time=t,area=a,wind=10,solar=10,load=10) for a in AREAS]
+            hourly=[dict(time=t,area=a,wind=10,solar=10,load=10,retrievedAt=(pd.Timestamp(t)+pd.Timedelta(hours=24)).isoformat()) for a in AREAS]
             freeze_observations(self.trial,hourly,pd.Timestamp(t)+pd.Timedelta(hours=24))
 
     def test_complete_paired_trajectory_and_known_improvement(self):

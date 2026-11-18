@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 import requests
 
+from .weather_metadata import validate_locations
 from .features import (
     AREAS,
     TARGETS,
@@ -157,7 +158,8 @@ def electricity(state, at):
     raw = pd.DataFrame(payload["records"])
     hourly = normalize_electricity(raw)
     # Discard the still-open hour. Incomplete closed hours remain missing.
-    hourly = hourly[hourly.time <= at.floor("h")]
+    hourly = hourly[hourly.time <= at.floor("h")].copy()
+    hourly["retrievedAt"] = retrieved_at
     previous = pd.DataFrame(state["hourly"])
     if len(previous):
         previous["time"] = pd.to_datetime(previous.time, utc=True)
@@ -170,6 +172,9 @@ def electricity(state, at):
     serial = hourly.copy()
     serial["time"] = serial.time.map(lambda x: x.isoformat())
     state["hourly"] = json.loads(serial.to_json(orient="records"))
+    for row in state["hourly"]:
+        if row["retrievedAt"] is None:
+            del row["retrievedAt"]  # Legacy retained rows have no known source retrieval.
     state["electricityRetrievedAt"] = retrieved_at
     if fetched:
         # Manual/deployment refreshes also share their raw readings with wind
@@ -185,7 +190,7 @@ def electricity(state, at):
             temporary.replace(path)
         except (OSError, ValueError) as error:
             print(f"Could not cache raw electricity readings: {error}", flush=True)
-    return hourly
+    return hourly.drop(columns=["retrievedAt"])
 
 
 def weather(state, at):
@@ -197,7 +202,11 @@ def weather(state, at):
         key = str(day.date())
         cached = state["weather"].get(key)
         if cached and cached.get("data"):
-            continue
+            try:
+                validate_locations(cached["data"])
+                continue
+            except (TypeError, ValueError):
+                cached = None  # Retry this initialization if an older cache used a different schema.
         # An old missing run remains recorded; retry a recent missing run later.
         if cached and day < latest - pd.Timedelta(days=1):
             continue
@@ -219,8 +228,7 @@ def weather(state, at):
                     cell_selection="nearest",
                 ),
             )
-            if not isinstance(points, list) or len(points) != 6:
-                raise ValueError("Unexpected weather locations")
+            validate_locations(points)
             state["weather"][key] = {"retrievedAt": now().isoformat(), "data": points}
         except (requests.RequestException, ValueError) as error:
             state["weather"][key] = {
@@ -287,8 +295,7 @@ def inputs(state, at, *, latest_weather=False):
     for run, entry in sorted(choices, key=lambda pair: pair[0], reverse=True):
         try:
             points = entry["data"]
-            if len(points) != len(CONFIG["locations"]):
-                continue
+            validate_locations(points)
             candidate_weather = [
                 weather_features(points[area_index * 3 : area_index * 3 + 3], times)[
                     0
@@ -296,9 +303,7 @@ def inputs(state, at, *, latest_weather=False):
                 for area_index in range(2)
             ]
         except (ValueError, TypeError, KeyError):
-            if latest_weather:
-                continue
-            raise
+            continue
         if all(np.isfinite(values).all() for values in candidate_weather):
             future_run = run
             future_points = points
@@ -320,6 +325,7 @@ def inputs(state, at, *, latest_weather=False):
         for key, entry in sorted(state["weather"].items()):
             if not entry.get("data"):
                 continue
+            validate_locations(entry["data"])
             run = pd.Timestamp(key, tz="UTC")
             historical_origin = run + pd.Timedelta(hours=12)
             valid_times = pd.date_range(

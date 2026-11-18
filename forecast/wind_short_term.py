@@ -25,6 +25,13 @@ def load_models():
     return loaded, selection
 
 
+def require_observed_wind(mask):
+    """The saved observation mask contains 0/1 values for each area, hour and target."""
+    recent = np.asarray(mask)[:, -24:, 0]
+    if recent.shape != (2, 24) or not (recent == 1).all():
+        raise ValueError("Missing recent hourly wind input")
+
+
 def measurements(records, at):
     """Three hours of complete five-minute readings with the live release buffer."""
     recent = recent_wind(records, at)

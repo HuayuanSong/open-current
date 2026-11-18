@@ -141,3 +141,13 @@ test('isolated observations remain visible, including zero and points between ga
   assert.deepEqual(isolatedPoints(points,'observed'),[points[0],points[5]]);
   assert.deepEqual(isolatedPoints([{observed:NaN},{observed:Infinity}],'observed'),[]);
 });
+
+test('elapsed targets keep their observations and never contribute to a forecast peak or band', () => {
+  const late = {...record, issuedAt: record.times[0], areas: {DK1:{solar:[9999, 40]}},
+    ranges: {areas: {DK1:{solar:{lower:[10, 20],upper:[10000, 60]}}}}};
+  const series = chartSeries({latest:late,observations:{DK1:[{time:late.times[0],solar:63}]}},'DK1','solar');
+  assert.equal(series.points[0].observed,63);
+  assert.equal(series.points[0].predicted,null);
+  assert.equal(series.points[0].lower,null);
+  assert.deepEqual(forecastStats(late,'DK1','solar'),{average:40,hours:1,peak:40,peakTime:late.times[1]});
+});

@@ -1,0 +1,5 @@
+{
+  "from": "183c187c5f79b8065a99b210bab6cb7dbb2093af0df08244076ac00ac20fe5ef",
+  "to": "36831fef19c138fef6668e796bb203d53892e91e25dc5666e03678b1d193771c",
+  "reason": "Verify weather response metadata and use per-reading Energinet retrieval time to freeze outcomes. Model parameters, forecast equations and protocol remain identical."
+}

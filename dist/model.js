@@ -71,6 +71,22 @@ export function priceAt(series, time = Date.now()) {
     ? row
     : null;
 }
+export function priceSteps(series) {
+  const points = [];
+  const duration = series.intervalMinutes * 60000;
+  let end = null, lastValue = null;
+  for (const row of series.rows) {
+    if (!valid(row.value)) continue;
+    if (end !== null && row.t > end) {
+      points.push({ t: end, v: lastValue }, { t: end, v: null });
+    }
+    points.push({ t: row.t, v: row.value });
+    end = row.t + duration;
+    lastValue = row.value;
+  }
+  if (end !== null) points.push({ t: end, v: lastValue });
+  return points;
+}
 export function summaryAt(country, hour = null) {
   if (hour === null) return country;
   const row = country.history?.find((r) => r.t === hour);

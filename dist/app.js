@@ -7,11 +7,12 @@ import {
   ageText,
   readingAt,
   priceAt,
+  priceSteps,
   summaryAt,
   metricValue,
   escapeHTML as esc,
   parseState,
-} from "./model.js?v=3d601174243d";
+} from "./model.js?v=2e726bd5a35d";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -705,6 +706,7 @@ function withGaps(rows) {
 }
 function renderChart() {
   const chart = d3.select("#history-chart");
+  chart.on("keydown", null).attr("tabindex", null);
   chart.selectAll("*").remove();
   $("#chart-tooltip").hidden = true;
   if (!countryData || countryData.code !== state.country) {
@@ -733,7 +735,7 @@ function renderChart() {
     .join("");
   $("#history-note").textContent =
     state.chart === "price"
-      ? "Includes published day-ahead prices. Excludes retail charges and taxes."
+      ? "Day-ahead prices exclude retail charges and taxes. Tap an interval or use the left and right arrow keys to inspect it."
       : "Gaps mean unavailable readings. Generation excludes storage discharge.";
   const all = series.flatMap((s) => s.rows.filter((r) => valid(r.v)));
   $("#chart-empty").hidden = all.length > 0;
@@ -742,7 +744,9 @@ function renderChart() {
     height = $("#chart-wrap").clientHeight,
     margin = { left: 52, right: 16, top: 18, bottom: 36 };
   chart.attr("viewBox", `0 0 ${width} ${height}`);
+  const price = state.chart === "price" ? countryData.prices[state.zone] : null;
   const extent = d3.extent(all, (r) => r.t);
+  if (price) extent[1] += price.intervalMinutes * 60000;
   if (extent[0] === extent[1]) extent[1] += hourMs;
   const x = d3
     .scaleUtc()
@@ -807,7 +811,7 @@ function renderChart() {
   series.forEach((s) =>
     chart
       .append("path")
-      .datum(withGaps(s.rows))
+      .datum(price ? priceSteps(price) : withGaps(s.rows))
       .attr("class", "chart-line")
       .attr("stroke", s.color)
       .attr("stroke-dasharray", s.key === "load" ? "5 4" : null)
@@ -815,6 +819,7 @@ function renderChart() {
         "d",
         d3
           .line()
+          .curve(price ? d3.curveStepAfter : d3.curveLinear)
           .defined((r) => valid(r.v))
           .x((r) => x(r.t))
           .y((r) => y(r.v)),
@@ -835,41 +840,53 @@ function renderChart() {
     .attr("y1", margin.top)
     .attr("y2", height - margin.bottom)
     .attr("visibility", "hidden");
-  chart
-    .append("rect")
-    .attr("x", margin.left)
-    .attr("y", margin.top)
-    .attr("width", width - margin.left - margin.right)
-    .attr("height", height - margin.top - margin.bottom)
+  let inspectedTime = null;
+  function inspect(t) {
+    inspectedTime = t;
+    const px = x(t);
+    const values = series.map((s) => {
+      if (price) {
+        const row = priceAt(price, t);
+        return { s, r: row ? { t: row.t, v: row.value } : null };
+      }
+      const i = d3.bisector((r) => r.t).center(s.rows, t);
+      const r = s.rows[i];
+      return { s, r: r && Math.abs(r.t - t) < hourMs ? r : null };
+    });
+    const observation = values.find((v) => v.r)?.r;
+    cross.attr("x1", px).attr("x2", px).attr("visibility", "visible");
+    const tip = $("#chart-tooltip");
+    const end = price && observation ? " – " + dateText(observation.t + price.intervalMinutes * 60000) : "";
+    tip.innerHTML = `<strong>${esc(dateText(observation?.t ?? t) + end)}</strong>` + values.map(({ s, r }) =>
+      `${esc(s.label)}: ${valid(r?.v) ? fmt(r.v, price ? 2 : 1) + (state.chart === "power" ? " GW" : state.chart === "share" ? "%" : " €/MWh") : "No reading"}`).join("<br>");
+    tip.style.left = Math.max(2, Math.min(width - 210, px + 12)) + "px";
+    tip.style.top = "12px";
+    tip.hidden = false;
+  }
+  if (price) {
+    chart.attr("tabindex", 0).on("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const step = price.intervalMinutes * 60000;
+      let t = inspectedTime === null ? extent[0] : Math.floor(inspectedTime / step) * step;
+      if (event.key === "Home") t = extent[0];
+      else if (event.key === "End") t = extent[1] - step;
+      else if (inspectedTime !== null) t += event.key === "ArrowLeft" ? -step : step;
+      inspect(Math.max(extent[0], Math.min(extent[1] - step, t)));
+    });
+  }
+  chart.append("rect")
+    .attr("x", margin.left).attr("y", margin.top)
+    .attr("width", width - margin.left - margin.right).attr("height", height - margin.top - margin.bottom)
     .attr("fill", "transparent")
-    .on("mousemove", (event) => {
-      const [px] = d3.pointer(event),
-        t = +x.invert(px),
-        values = series.map((s) => {
-          const i = d3.bisector((r) => r.t).center(s.rows, t);
-          const r = s.rows[i];
-          return { s, r: r && Math.abs(r.t - t) < hourMs ? r : null };
-        });
-      const observation = values.find((v) => v.r)?.r;
-      cross.attr("x1", px).attr("x2", px).attr("visibility", "visible");
-      const tip = $("#chart-tooltip");
-      tip.innerHTML =
-        `<strong>${esc(dateText(observation?.t ?? t))}</strong>` +
-        values
-          .map(
-            ({ s, r }) =>
-              `${esc(s.label)}: ${valid(r?.v) ? fmt(r.v, 1) + (state.chart === "power" ? " GW" : state.chart === "share" ? "%" : " €/MWh") : "No reading"}`,
-          )
-          .join("<br>");
-      tip.style.left = Math.max(2, Math.min(width - 210, px + 12)) + "px";
-      tip.style.top = "12px";
-      tip.hidden = false;
-    })
-    .on("mouseleave", () => {
+    .on("pointermove pointerdown", (event) => inspect(+x.invert(d3.pointer(event)[0])))
+    .on("pointerleave", (event) => {
+      if (event.pointerType === "touch") return;
       cross.attr("visibility", "hidden");
       $("#chart-tooltip").hidden = true;
     })
     .on("click", (event) => {
+      if (price && event.pointerType === "touch") return;
       const t = Math.floor(+x.invert(d3.pointer(event)[0]) / hourMs) * hourMs;
       if (hours.includes(t)) {
         stopPlaying();
@@ -879,7 +896,10 @@ function renderChart() {
 }
 function renderDanish() {
   $("#denmark-section").hidden = state.country !== "dk";
-  if (!danish) return;
+  if (!danish) {
+    $("#danish-areas").textContent = "Danish operational readings are unavailable. The next update will retry.";
+    return;
+  }
   $("#danish-areas").innerHTML = Object.entries(danish.areas)
     .map(([area, data]) => {
       const p = readingAt(data.power, state.time),
@@ -1053,62 +1073,82 @@ function renderCollection() {
   ).length;
   $("#coverage").textContent = `${complete} countries with a complete mix`;
   $("#collection-time").textContent =
-    "Snapshot prepared " + dateText(new Date(index.generatedAt).getTime());
+    "Snapshot prepared " + dateText(Date.parse(index.generatedAt)) +
+    (index.europeCollection?.collectedAt ? " · Europe collected " + dateText(Date.parse(index.europeCollection.collectedAt)) : "");
   const hoursOld =
     (Date.now() - new Date(index.generatedAt).getTime()) / hourMs;
+  const collected = Date.parse(index.europeCollection?.collectedAt);
+  const ageMinutes = (Date.now() - collected) / 60000;
+  const warning = $("#load-error");
   if (hoursOld > 2) {
-    $("#load-error").textContent =
-      `This snapshot was collected ${ageText(new Date(index.generatedAt).getTime())}. Automatic collection may be delayed. Every panel shows the time of its source reading.`;
-    $("#load-error").hidden = false;
-  } else $("#load-error").hidden = true;
+    warning.textContent = `The last snapshot was prepared ${ageText(Date.parse(index.generatedAt))}. Every panel shows the time of its source reading.`;
+  } else if (ageMinutes > 150) {
+    warning.textContent = `European collection is delayed. The last collection finished at ${dateText(collected)}. Danish readings update separately.`;
+  } else {
+    warning.hidden = true;
+    return;
+  }
+  warning.hidden = false;
 }
+let danishVersion = null;
+let refreshing = false;
+async function loadDanish(version) {
+  if (danishVersion === version) return;
+  try {
+    const next = await getJSON("data/denmark.json");
+    if (!next.areas || version !== index?.generatedAt) return;
+    danish = next;
+    danishVersion = version;
+  } catch {
+    // Keep timestamped readings while retrying the missing feed.
+  }
+  renderDanish();
+}
+
+async function loadMap(request) {
+  if (geography) return;
+  try {
+    const next = await request;
+    if (!next?.features?.length) return;
+    geography = next;
+    initMap();
+    renderMap();
+  } catch {
+    // Country selection and readings work while the map retries.
+  }
+}
+
 async function refresh() {
-  if (document.hidden) return;
+  if (document.hidden || refreshing) return;
+  refreshing = true;
+  const mapRequest = geography ? null : getJSON("data/europe.geojson").catch(() => null);
   try {
     const next = await getJSON("data/index.json");
-    if (next.generatedAt === index.generatedAt) {
-      renderCollection();
-      if (!countryData) await selectCountry(state.country, false);
-      return;
+    const first = !index;
+    const changed = first || next.generatedAt !== index.generatedAt;
+    if (changed) {
+      index = next;
+      countryCache.clear();
+      if (first) {
+        Object.assign(state, parseState(location.hash, Object.keys(index.countries)));
+        $("#country-select").innerHTML = Object.entries(index.countries)
+          .sort((a, b) => a[1].name.localeCompare(b[1].name))
+          .map(([code, c]) => `<option value="${code}">${esc(c.name)}</option>`).join("");
+        bindEvents();
+      }
+      initTimeline();
     }
-    const nextDanish = await getJSON("data/denmark.json");
-    index = next;
-    countryCache.clear();
-    danish = nextDanish;
-    initTimeline();
     renderCollection();
-    await selectCountry(state.country, false);
+    await Promise.all([loadMap(mapRequest), loadDanish(index.generatedAt), changed || !countryData ? selectCountry(state.country, false) : undefined]);
   } catch {
-    /* The current snapshot remains usable during an interrupted refresh. */
+    if (!index) {
+      $("#coverage").textContent = "Snapshot unavailable";
+      $("#load-error").textContent = "The electricity snapshot is unavailable. The next update will retry.";
+      $("#load-error").hidden = false;
+    }
+  } finally {
+    refreshing = false;
   }
 }
-async function start() {
-  try {
-    [index, geography, danish] = await Promise.all([
-      getJSON("data/index.json"),
-      getJSON("data/europe.geojson"),
-      getJSON("data/denmark.json"),
-    ]);
-    Object.assign(
-      state,
-      parseState(location.hash, Object.keys(index.countries)),
-    );
-    $("#country-select").innerHTML = Object.entries(index.countries)
-      .sort((a, b) => a[1].name.localeCompare(b[1].name))
-      .map(([code, c]) => `<option value="${code}">${esc(c.name)}</option>`)
-      .join("");
-    initTimeline();
-    initMap();
-    bindEvents();
-    renderCollection();
-    await selectCountry(state.country, false);
-    setInterval(refresh, 300000);
-  } catch (error) {
-    $("#load-error").textContent =
-      "The electricity snapshot could not be loaded. Check your connection and reload the page. Source data and collection scripts are available on GitHub.";
-    $("#load-error").hidden = false;
-    $("#coverage").textContent = "Snapshot unavailable";
-    console.error(error);
-  }
-}
-start();
+refresh();
+setInterval(refresh, 300000);

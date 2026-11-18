@@ -9,7 +9,7 @@ import {
   isolatedPoints,
   HOUR,
   usable,
-} from "./forecast-model.js?v=c39570deb896";
+} from "./forecast-model.js?v=b20537fd2349";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -103,6 +103,20 @@ function render() {
       `${selectedPayload.windUpdatePending ? "Previous wind model · " : ""}${status === "delayed" ? "Update delayed · Last forecast" : "Forecast issued"} ${utc(selectedPayload.latest.issuedAt)}${missing ? ` · ${missing} missing input hours filled from earlier readings` : ""}`,
     );
   }
+  if (!comparing && state.target === "wind" && selectedPayload?.lastAttempt?.status === "waiting-for-source-hour") {
+    $("#forecast-status").append(" · Waiting for the next complete source hour");
+  }
+  if (!comparing && state.target === "wind" && selectedPayload?.waitingForWeather?.includes(state.area)) {
+    $("#forecast-status").append(" · Waiting for regional weather inputs");
+  }
+  const trialNote = $("#weather-trial-status");
+  if (trialNote) {
+    const trial = payload?.weatherTrialCoverage;
+    trialNote.hidden = !trial;
+    if (trial) trialNote.textContent = `October weather trial · ${trial.issuedOrigins} of ${trial.scheduledOrigins} planned forecasts issued. ` +
+      (trial.coverageReachable ? `Its coverage threshold is ${trial.requiredIssues} issues.` :
+        `At most ${trial.maximumPossibleIssues} can still be issued in total. The ${trial.requiredIssues}-issue threshold is now unreachable. Outcomes continue to be recorded.`);
+  }
   $$("[data-forecast-area]").forEach((button) =>
     button.setAttribute(
       "aria-pressed",
@@ -130,7 +144,9 @@ function render() {
     comparisonNote.hidden = !comparing;
     const matched = matchedObservationCount(selectedPayload, state.area, state.target);
     const count = `${matched} matched observed ${matched === 1 ? "hour" : "hours"}`;
-    comparisonNote.textContent = selectedPayload?.comparisonSource === "previous"
+    comparisonNote.textContent = selectedPayload?.pairedComparison
+      ? `Both models use the same reference hour · ${count}.`
+      : selectedPayload?.comparisonSource === "previous"
       ? `Historical comparison from the previous wind model · ${count}. The 48-hour outlook uses the current model.`
       : `${count}${matched < 2 ? ". Observations are shown as dots until a line can be drawn." : "."}`;
   }
@@ -141,19 +157,37 @@ function render() {
       ? "We’re saving forecasts now. Comparisons will appear as the next hourly observations arrive."
       : "A forecast will appear when electricity and weather data are available.",
   );
-  const stats = forecastStats(record, state.area, state.target);
+  const stats = forecastStats(record, state.area, state.target, selectedPayload?.pairedCutoff || record?.issuedAt);
   const live = selectedPayload?.performance?.[state.area]?.[state.target];
+  const paired = state.target === "wind" ? payload?.windComparison?.[state.area] : null;
+  const matched = $("#wind-matched-detail");
+  if (matched) matched.hidden = !(comparing && paired);
+  if (matched && !matched.hidden) {
+    const detail = $("#wind-matched-scores");
+    detail.replaceChildren();
+    for (const [lead, row] of [["All leads", paired], ...paired.byLead.map((b) => [`${b.start}–${b.end} hours`, b])]) {
+      const tr = document.createElement("tr");
+      for (const value of [lead, power(row.previousMAE), power(row.currentMAE), String(row.hours)]) {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        tr.append(cell);
+      }
+      detail.append(tr);
+    }
+    text("#wind-matched-count", `${paired.origins} matched outlooks cover ${paired.distinctHours} distinct observed hours. In the last seven days the previous model issued for ${paired.previousOrigins} reference hours and the current model for ${paired.currentOrigins}.`);
+  }
   $("#forecast-stats").replaceChildren(
     ...(stats
       ? [
-          stat("48-hour average", power(stats.average), names[state.target]),
+          stat(`${stats.hours}-hour average`, power(stats.average), names[state.target]),
           stat("Forecast peak", power(stats.peak), utc(stats.peakTime)),
           stat(
-            "Live mean error",
+            paired ? "Matched wind error" : "Live mean error",
+            paired ? (paired.hours ? power(selectedPayload?.comparisonSource === "previous" ? paired.previousMAE : paired.currentMAE) : "Collecting outcomes") :
             live?.forecastHours >= 24
               ? power(live.maeMW)
               : "Collecting outcomes",
-            live?.forecastHours
+            paired ? `${paired.hours} paired forecast-hours · ${paired.distinctHours} distinct observed hours` : live?.forecastHours
               ? `${live.forecastHours} forecasted hours · ${live.origins} issued outlooks · last 7 days`
               : "Measured after forecasts are issued",
           ),
@@ -172,7 +206,11 @@ function render() {
   $("#forecast-range-toggle").checked = state.range && hasRange;
   $("#forecast-range-key").hidden = !(state.range && hasRange);
   const rangeTarget = $("#forecast-range-target");
-  if (rangeTarget) rangeTarget.hidden = !hasRange;
+  if (rangeTarget) {
+    rangeTarget.hidden = !hasRange;
+    if (hasRange) rangeTarget.textContent = live?.rangeHours >= 24
+      ? `${Math.round(live.rangeCoverage * 100)}% recent coverage · 80% target` : "80% coverage target";
+  }
   const audit = selectedPayload?.rangeValidation?.series?.[state.area]?.[state.target];
   let rangeNote =
     record?.rangeUnavailableReason || "This outlook has no saved prediction range. Ranges are never added to old forecasts.";
@@ -207,7 +245,7 @@ function weatherTiming(record) {
 }
 
 function renderExplanation(record) {
-  const items = record?.explanations?.areas?.[state.area]?.load;
+  const items = record?.explanations?.areas?.[state.area]?.load?.filter((item) => Date.parse(record.times[item.lead - 1]) > Date.parse(record.issuedAt));
   const visible = state.target === "load" && Boolean(items?.length);
   $("#forecast-explanation").hidden = !visible;
   if (!visible) return;
