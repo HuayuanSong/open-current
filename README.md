@@ -129,6 +129,10 @@ five-minute production changes for the next six hours. Timestamped weather-ensem
 means/spreads are collected for conditional range evaluation. Neither the challenger
 nor unvalidated ranges automatically replaces what visitors see.
 
+From 18 November to 2 December 2026, a separate West Denmark trial scores two
+first-hour estimates against the published wind forecast. Each refresh posts
+paired errors in its GitHub Actions summary. [First-hour trial and review](research/forecasting/wind_refinement/README.md#west-denmark-first-hour-trial)
+
 Forecast charts plot hourly averages at the end of each hour; tooltips show the
 covered interval. A faint dotted transition guide joins consecutive observed
 and forecast hours only when both values are available. It adds no forecast

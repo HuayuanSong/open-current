@@ -153,6 +153,23 @@ jobs:
         run: .cache/forecast-serving/main-env/bin/python -m forecast.fresh_wind
         env:
           FORECAST_TTM_PYTHON: .cache/forecast-serving/ttm-env/bin/python
+      - name: Score the West Denmark first-hour wind trial
+        id: west-first-hour
+        continue-on-error: true
+        timeout-minutes: 2
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.west_first_hour
+        env:
+          PUBLIC_WIND_ISSUED: ${{ steps.fresh-wind.outputs.issued }}
+      - name: Save the two-week first-hour wind review
+        if: steps.west-first-hour.outputs.reviewed == 'true'
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: west-first-hour-review
+          path: .cache/west-first-hour/review.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 90
       - name: Preserve public wind inputs and provenance
         if: steps.fresh-wind.outputs.issued == 'true'
         uses: actions/upload-artifact@v4

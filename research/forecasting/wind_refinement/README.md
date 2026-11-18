@@ -51,6 +51,35 @@ are used. Overlapping forecast hours are dependent. A new model is not promoted
 publicly on this evidence alone. The saved exports are parity-checked against
 their training models; scoring is CPU-only, with no scheduled retraining.
 
+## West Denmark first-hour trial
+
+The first wind forecast for an hour is issued while that hour is underway. This
+prospective comparison covers the 336 West Denmark hours beginning **18 November
+2026 at 14:00 UTC** through **2 December at 14:00 UTC**, exclusive of the final
+start time. Each hour contributes at most one case. Both alternatives use the
+electricity snapshot archived with the first public DK1 wind issue for that hour.
+
+| Estimate | Calculation |
+| --- | --- |
+| Public model | The first-hour wind value published by `fresh-wind-2026-11-18`. |
+| 15-minute hold | The mean production in the three most recent eligible five-minute intervals. |
+| Observed intervals + hold | Average the hour's twelve intervals, using available onshore plus offshore readings and filling the other intervals with the hold value. |
+
+The public model's ten-minute observation buffer applies to both alternatives.
+The trial verifies the snapshot checksum and the original hold level, then records
+the predictions before the target hour closes. Missing hours remain visible in
+the coverage count. The first complete DK1 hourly observation retrieved 15 minutes
+to 72 hours after its end is frozen for all three estimates. A later revision
+cannot change a recorded result.
+
+The first refresh on or after **2 December at 15:00 UTC (16:00 Copenhagen)** saves
+the review using outcomes retrieved by that deadline. It reports paired mean
+absolute error in MW, missed and unscored hours, and errors for each daily block.
+The result is descriptive and any production change requires a separate decision.
+Every refresh includes a progress summary. The review run also provides the
+`west-first-hour-review` JSON artifact for 90 days and the archived
+`westFirstHourTrial` ledger retains the results. [Refresh runs](https://github.com/HuayuanSong/open-current/actions/workflows/pages.yml)
+
 ## Conditional ranges
 
 The retrospective experiment compares absolute, signed, power-scaled and
