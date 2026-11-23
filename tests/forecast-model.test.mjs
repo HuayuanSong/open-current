@@ -136,6 +136,24 @@ test('comparison counts exclude retrospective, missing and not-yet-matured outco
   assert.equal(matchedObservationCount(payload,'DK1','solar'),0);
 });
 
+test('paired wind paths use the shared issue cutoff, retain zero and keep each range with its model', () => {
+  const previous = {...record, areas:{DK1:{wind:[40,120]}},
+    ranges:{areas:{DK1:{wind:{lower:[20,80],upper:[50,160]}}}}};
+  const current = {...record, issuedAt:record.times[0], areas:{DK1:{wind:[90,0]}}};
+  const observations = {DK1:record.times.map(time => ({time,wind:100}))};
+  const payload = {latest:previous, observations, windOutlook:{latest:current},
+    windComparison:{DK1:{comparison:{previous,current,issuedAfter:current.issuedAt}}}};
+  for (const model of ['current','previous']) {
+    const {points} = chartSeries(payload,'DK1','wind','comparison',model);
+    assert.deepEqual([points[0].observed,points[0].predicted,points[0].alternate,points[0].alternateUpper],
+      [100,null,null,null]);
+    const {predicted,alternate,upper,alternateUpper} = points[1];
+    assert.deepEqual([predicted,alternate,upper,alternateUpper],
+      model === 'current' ? [0,120,null,160] : [120,0,160,null]);
+  }
+  assert.ok(chartSeries(payload,'DK1','wind','outlook').points.every(point => !('alternate' in point)));
+});
+
 test('isolated observations remain visible, including zero and points between gaps',()=>{
   const points=[{observed:0},{observed:null},{observed:20},{observed:30},{observed:null},{observed:40}];
   assert.deepEqual(isolatedPoints(points,'observed'),[points[0],points[5]]);

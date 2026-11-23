@@ -30,6 +30,8 @@ export function viewPayload(payload, area, target, mode = "outlook", preference 
     const source = previous ? payload : current;
     const comparison = paired.comparison[previous ? "previous" : "current"];
     return { ...source, comparison, comparisonSource: previous ? "previous" : "current",
+      alternateComparison: paired.comparison[previous ? "current" : "previous"],
+      observations: payload.observations ?? current.observations,
       comparisonHasPrevious: true, pairedComparison: true, pairedCutoff: paired.comparison.issuedAfter };
   }
   const currentHours = matchedObservationCount(current, area, target);
@@ -75,25 +77,44 @@ export function forecastState(payload, now = Date.now()) {
   return "ready";
 }
 
+function issuedHours(record, area, target, cutoff) {
+  const hours = new Map();
+  if (!record) return hours;
+  const values = record.areas[area]?.[target];
+  const range = record.ranges?.areas?.[area]?.[target];
+  record.times.forEach((stamp, index) => {
+    const time = Date.parse(stamp);
+    if (time > cutoff) hours.set(time, {
+      predicted: values?.[index], lower: range?.lower?.[index], upper: range?.upper?.[index],
+    });
+  });
+  return hours;
+}
+
 export function chartSeries(payload, area, target, mode = "outlook", preference = "auto") {
   payload = viewPayload(payload, area, target, mode, preference);
   const record = mode === "comparison" ? payload?.comparison : payload?.latest;
   if (!record) return { record: null, points: [] };
   const observed = new Map((payload.observations?.[area] || []).map(r => [Date.parse(r.time), r[target]]));
   const issued = Date.parse(payload.pairedCutoff || record.issuedAt);
-  const forecast = new Map(record.times.map((t, i) => [Date.parse(t), record.areas[area][target][i]])
-    .filter(([time]) => time > issued));
-  const band=record.ranges?.areas?.[area]?.[target];
-  const bounds=new Map(record.times.map((t,i)=>[Date.parse(t),{lower:band?.lower?.[i],upper:band?.upper?.[i]}]));
+  const forecast = issuedHours(record, area, target, issued);
+  const alternate = issuedHours(payload.alternateComparison, area, target, issued);
   const origin = Date.parse(record.origin);
   const start = mode === "comparison" ? Date.parse(record.times[0]) : origin - 24 * HOUR;
   const end = Date.parse(record.times.at(-1));
   const times = new Set([...forecast.keys(), ...observed.keys()]);
-  const points = [...times].filter(t => t >= start && t <= end).sort((a,b) => a-b).map(time => ({time,
-    observed: usable(observed.get(time)) ? observed.get(time) : null,
-    predicted: usable(forecast.get(time)) ? forecast.get(time) : null,
-    lower: time > issued && usable(bounds.get(time)?.lower) ? bounds.get(time).lower : null,
-    upper: time > issued && usable(bounds.get(time)?.upper) ? bounds.get(time).upper : null}));
+  const points = [...times].filter(t => t >= start && t <= end).sort((a,b) => a-b).map(time => {
+    const hour = forecast.get(time);
+    const point = {time, observed: usable(observed.get(time)) ? observed.get(time) : null,
+      predicted: usable(hour?.predicted) ? hour.predicted : null,
+      lower: usable(hour?.lower) ? hour.lower : null, upper: usable(hour?.upper) ? hour.upper : null};
+    if (payload.pairedComparison) {
+      const other = alternate.get(time);
+      point.alternate = usable(other?.predicted) ? other.predicted : null;
+      point.alternateUpper = usable(other?.upper) ? other.upper : null;
+    }
+    return point;
+  });
   return {record, points};
 }
 

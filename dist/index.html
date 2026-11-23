@@ -10,10 +10,10 @@
     />
     <title>Open Current — Europe’s electricity, connected</title>
     <link rel="icon" href="icon.svg?v=6969a3192d60" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=d8375ed00379" />
+    <link rel="stylesheet" href="style.css?v=c7503487d81d" />
     <script src="vendor/d3.v7.min.js" defer></script>
     <script type="module" src="app.js?v=5b1b82508034"></script>
-    <script type="module" src="forecasts.js?v=23606a19e988"></script>
+    <script type="module" src="forecasts.js?v=239346963284"></script>
   </head>
   <body>
     <a class="skip-link" href="#explorer">Skip to electricity explorer</a>
@@ -328,10 +328,16 @@
               <button data-forecast-view="outlook" aria-pressed="true">48-hour outlook</button>
               <button data-forecast-view="comparison" aria-pressed="false">Forecast vs actual</button>
             </div>
-            <div class="forecast-legend"><span><i class="forecast-observed-key"></i>Observed</span><span><i class="forecast-predicted-key"></i>Forecast</span><span id="forecast-transition-key" title="Visual guide between consecutive observed and forecast hours" hidden><i class="forecast-transition-key"></i>Transition guide</span><span id="forecast-range-key" hidden><i class="forecast-range-key"></i>Prediction range</span></div>
+            <div class="forecast-legend">
+              <span><i class="forecast-observed-key"></i>Observed</span>
+              <span><i class="forecast-predicted-key"></i><span id="forecast-predicted-label">Forecast</span></span>
+              <span id="forecast-previous-key" hidden><i class="forecast-previous-key"></i>Previous wind model</span>
+              <span id="forecast-transition-key" title="Visual guide between consecutive observed and forecast hours" hidden><i class="forecast-transition-key"></i>Transition guide</span>
+              <span id="forecast-range-key" hidden><i class="forecast-range-key"></i><span id="forecast-range-label">Prediction range</span></span>
+            </div>
           </div>
           <div class="forecast-comparison-model" id="forecast-comparison-model" aria-label="Wind comparison model" hidden>
-            <span>Compare:</span>
+            <span id="forecast-model-picker-label">Show forecast</span>
             <button data-forecast-comparison-model="current" aria-pressed="false">Current wind model</button>
             <button data-forecast-comparison-model="previous" aria-pressed="false">Previous wind model</button>
           </div>

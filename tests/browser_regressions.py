@@ -280,6 +280,51 @@ class BrowserRegressions(unittest.TestCase):
         with self.page.expect_download() as download: self.page.locator('#forecast-download').click()
         self.assertEqual(json.loads(Path(download.value.path()).read_text()), fresh)
 
+    def test_paired_wind_models_share_axes_and_show_both_hourly_values(self):
+        data = transition_fixture()
+        previous = data["latest"]
+        current = copy.deepcopy(previous)
+        times = previous["times"]
+        previous["areas"]["DK2"]["wind"] = [510] * len(times)
+        previous["ranges"]["areas"]["DK2"]["wind"] = {"lower": [400] * len(times), "upper": [2200] * len(times)}
+        current["areas"]["DK2"]["wind"] = [590] * len(times)
+        current["ranges"] = {"areas": {}}
+        data["observations"]["DK2"] = [{"time": times[0], "wind": 592}]
+        data["checkedAt"] = times[2]
+        data["windOutlook"] = {"latest": current, "checkedAt": times[2], "status": "ready",
+                               "observations": data["observations"]}
+        data["windComparison"] = {"DK2": {
+            "comparison": {"current": current, "previous": previous, "issuedAfter": current["issuedAt"]},
+            "currentMAE": 2, "previousMAE": 82, "hours": 1, "origins": 1, "distinctHours": 1,
+            "currentOrigins": 1, "previousOrigins": 1, "byLead": [],
+        }}
+        self.page.route("**/data/forecasts.json", lambda route: route.fulfill(json=data))
+        self.load()
+        self.page.locator('[data-forecast-view="comparison"]').click()
+        chart = self.page.locator("#forecast-chart")
+        current_line, previous_line = [chart.locator(f".forecast-line.wind-{model}") for model in ("current", "previous")]
+        paths = [line.get_attribute("d") for line in (current_line, previous_line)]
+        self.assertNotEqual(paths[0], paths[1])
+        self.assertNotEqual(current_line.evaluate("el => getComputedStyle(el).strokeDasharray"),
+                            previous_line.evaluate("el => getComputedStyle(el).strokeDasharray"))
+        for model, score in [("current", "2 MW"), ("previous", "82 MW")]:
+            self.page.locator(f'[data-forecast-comparison-model="{model}"]').click()
+            expect(chart.locator(f".forecast-predicted.wind-{model}")).to_have_count(1)
+            self.assertEqual([line.get_attribute("d") for line in (current_line, previous_line)], paths)
+            expect(self.page.locator("#forecast-stats>div").last.locator("strong")).to_have_text(score)
+            chart.press("ArrowLeft")
+            tip = self.page.locator("#forecast-tooltip")
+            for label in ("Observed: 592 MW", "Current wind model: 590 MW", "Previous wind model: 510 MW", "80 MW higher"):
+                expect(tip).to_contain_text(label)
+            expect(chart.locator(".forecast-range-band")).to_have_count(int(model == "previous"))
+        expect(self.page.locator("#forecast-range-key")).to_have_text("Previous wind model range")
+        with self.page.expect_download() as download:
+            self.page.locator("#forecast-download").click()
+        self.assertEqual(json.loads(Path(download.value.path()).read_text()), previous)
+        self.page.locator('[data-forecast-target="solar"]').click()
+        expect(self.page.locator("#forecast-previous-key")).to_be_hidden()
+        expect(chart.locator(".forecast-alternate")).to_have_count(0)
+
     def test_missing_generation_preserves_independent_feeds_and_forecasts(self):
         country = fixture("countries/dk.json")
         country["power"] = []
@@ -611,7 +656,7 @@ class BrowserRegressions(unittest.TestCase):
                 expect(self.page.locator(".forecast-transition")).to_have_count(0)
                 expect(self.page.locator("#forecast-transition-key")).to_be_hidden()
 
-    def test_forecast_still_renders_with_cached_html_without_transition_legend(self):
+    def test_forecast_still_renders_with_cached_html_without_new_legend_elements(self):
         data = transition_fixture()
         self.page.route(
             "**/data/forecasts.json", lambda route: route.fulfill(json=data)
@@ -621,6 +666,8 @@ class BrowserRegressions(unittest.TestCase):
             "document.addEventListener('readystatechange', () => {"
             "if (document.readyState === 'interactive') {"
             "document.querySelector('#forecast-transition-key')?.remove();"
+            "for (const id of ['forecast-previous-key','forecast-predicted-label','forecast-range-label','forecast-model-picker-label'])"
+            " document.getElementById(id)?.remove();"
             "document.querySelector('#forecast-range-target')?.removeAttribute('id');}"
             "});"
         )
