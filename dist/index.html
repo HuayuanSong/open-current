@@ -10,10 +10,10 @@
     />
     <title>Open Current — Europe’s electricity, connected</title>
     <link rel="icon" href="icon.svg?v=6969a3192d60" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=72521934533c" />
+    <link rel="stylesheet" href="style.css?v=848c4002083e" />
     <script src="vendor/d3.v7.min.js" defer></script>
     <script type="module" src="app.js?v=5b1b82508034"></script>
-    <script type="module" src="forecasts.js?v=00675d79aa23"></script>
+    <script type="module" src="forecasts.js?v=25cbb4506ae7"></script>
   </head>
   <body>
     <a class="skip-link" href="#explorer">Skip to electricity explorer</a>
@@ -366,7 +366,7 @@
               <a href="https://github.com/HuayuanSong/open-current/tree/main/research/forecasting/uncertainty" target="_blank" rel="noopener noreferrer">Read the explanation and range checks ↗</a>
             </div>
           </details>
-          <details id="wind-matched-detail" class="forecast-error-detail" hidden>
+          <details id="wind-matched-detail" hidden>
             <summary>Compare wind errors on the same hours</summary>
             <p id="wind-matched-count"></p>
             <table><caption>Mean absolute error by forecast lead. Lower is better.</caption>
@@ -374,21 +374,6 @@
               <tbody id="wind-matched-scores"></tbody>
             </table>
             <p><a href="data/wind-model-review.json">13 December wind model review (JSON)</a></p>
-          </details>
-          <details id="day-ahead-benchmark" class="forecast-error-detail" hidden>
-            <summary>Compare day-ahead wind forecasts with Energinet</summary>
-            <p>Each evening we save Open Current’s forecast issued by 18:00 Copenhagen time, Energinet’s day-ahead forecast and their 50/50 average. All three are scored against the same East Denmark readings.</p>
-            <p id="day-ahead-status" role="status">Loading benchmark results…</p>
-            <table id="day-ahead-errors" hidden>
-              <caption>Average absolute error across matched hours. Lower is better.</caption>
-              <thead><tr><th scope="col">Forecast</th><th scope="col">Error</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">Open Current</th><td data-day-ahead-error="openCurrent"></td></tr>
-                <tr><th scope="row">Energinet</th><td data-day-ahead-error="energinet"></td></tr>
-                <tr><th scope="row">50/50 average</th><td data-day-ahead-error="halfAndHalf"></td></tr>
-              </tbody>
-            </table>
-            <p><a href="data/east-wind-day-ahead.json">Daily results (JSON)</a> · <a href="https://www.energidataservice.dk/tso-electricity/Forecasts_Hour">Energinet forecast data</a></p>
           </details>
           <div class="forecast-footer"><p id="forecast-timing">All times UTC. Values are hourly average power.</p><button class="text-button" id="forecast-download" disabled>Download forecast ↓</button></div>
         </div>

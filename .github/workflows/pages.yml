@@ -97,10 +97,6 @@ jobs:
       - name: Require successful scoring during deployment validation
         if: env.VALIDATE_DEPLOYMENT == 'true'
         run: test "${{ steps.forecast.outcome }}" = success
-      - name: Capture and score East Denmark day-ahead wind forecasts
-        continue-on-error: ${{ env.VALIDATE_DEPLOYMENT != 'true' }}
-        timeout-minutes: 2
-        run: .cache/forecast-serving/main-env/bin/python -m forecast.east_wind_day_ahead
       - name: Record prospective challengers and score matured outcomes
         id: trial
         continue-on-error: true

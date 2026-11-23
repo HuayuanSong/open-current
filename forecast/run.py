@@ -111,6 +111,7 @@ def main():
         print(f"Forecast update unavailable: {error}", file=sys.stderr, flush=True)
     checked = data.now()
     state["updatedAt"] = checked.isoformat()
+    state.pop("eastWindDayAhead", None)  # Older checkpoints contain this retired benchmark.
     retention_cutoff = checked - pd.Timedelta(days=35)
     state["forecasts"] = [
         r for r in state["forecasts"] if pd.Timestamp(r["issuedAt"]) >= retention_cutoff

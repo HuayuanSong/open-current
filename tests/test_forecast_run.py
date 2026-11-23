@@ -138,8 +138,10 @@ class ForecastRunTests(unittest.TestCase):
         return written, public, mocks, error
 
     def test_success_preserves_archive_and_serializes_all_six_series(self):
+        self.state["eastWindDayAhead"] = {}
         written, public, mocks, error = self.execute()
         self.assertIsNone(error)
+        self.assertNotIn("eastWindDayAhead", written[0])
         self.assertEqual(written[0]["forecasts"][0], self.original)
         self.assertEqual(written[0]["trial"], self.trial)
         latest = public[0]["latest"]
