@@ -514,8 +514,9 @@ class BrowserRegressions(unittest.TestCase):
         ):
             self.page.clock.fast_forward(300001)
         expect(self.page.locator("#collection-time")).not_to_have_text(original_label)
+        expect(self.page.locator("#download-data")).to_be_enabled()
         with self.page.expect_response(
-            lambda response: response.url.endswith("/data/index.json")
+            lambda response: response.url.endswith("/data/denmark.json") and response.ok
         ):
             self.page.clock.fast_forward(300001)
         expect(self.page.locator("#collection-time")).not_to_have_text(original_label)
