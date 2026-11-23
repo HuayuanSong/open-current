@@ -15,6 +15,7 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const d3 = window.d3;
 const previousToggle = $("#forecast-previous-toggle");
+const dayAheadBenchmark = $("#day-ahead-benchmark");
 const state = {
   area: "DK2",
   target: "wind",
@@ -184,6 +185,10 @@ function render() {
   const stats = forecastStats(record, state.area, state.target, selectedPayload?.pairedCutoff || record?.issuedAt);
   const live = selectedPayload?.performance?.[state.area]?.[state.target];
   const paired = state.target === "wind" ? payload?.windComparison?.[state.area] : null;
+  if (dayAheadBenchmark) {
+    dayAheadBenchmark.hidden = !(comparing && state.area === "DK2" && state.target === "wind");
+    if (dayAheadBenchmark.hidden) dayAheadBenchmark.open = false;
+  }
   const matched = $("#wind-matched-detail");
   if (matched) matched.hidden = !(comparing && paired);
   if (matched && !matched.hidden) {
@@ -590,8 +595,37 @@ $("#forecast-download").onclick = () => {
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
+let loadingBenchmark = false;
+async function refreshBenchmark() {
+  if (!dayAheadBenchmark?.open || dayAheadBenchmark.hidden || loadingBenchmark || document.hidden) return;
+  loadingBenchmark = true;
+  try {
+    const response = await fetch("data/east-wind-day-ahead.json", { cache: "no-cache" });
+    if (!response.ok) throw new Error(response.status);
+    const result = await response.json();
+    if (result.schema !== 1 || result.area !== "DK2") throw new Error("schema");
+    const coverage = `Days captured ${result.issuedDays} · Fully scored ${result.completeDays} · Missed evenings ${result.missedDays} · Matched hours ${result.pairedHours}.`;
+    let waiting = "";
+    if (result.status === "scheduled") waiting = ` First capture is due after ${utc(result.nextCutoff)}.`;
+    else if (!result.pairedHours) waiting = result.issuedDays
+      ? " Waiting for the first observed hour." : " Waiting for the first complete pair of forecasts.";
+    text("#day-ahead-status", `${coverage}${waiting} Updated ${utc(result.checkedAt)}.`);
+    for (const cell of $$("[data-day-ahead-error]")) {
+      const error = result.maeMW[cell.dataset.dayAheadError];
+      cell.textContent = usable(error) ? `${error.toFixed(1)} MW` : "—";
+    }
+    $("#day-ahead-errors").hidden = !result.pairedHours;
+  } catch {
+    if ($("#day-ahead-errors").hidden) text("#day-ahead-status", "Benchmark results are temporarily unavailable.");
+  } finally {
+    loadingBenchmark = false;
+  }
+}
+dayAheadBenchmark?.addEventListener("toggle", refreshBenchmark);
+
 async function refresh() {
   if (document.hidden) return;
+  refreshBenchmark();
   try {
     const response = await fetch("data/forecasts.json", { cache: "no-cache" });
     if (!response.ok) throw new Error(response.status);

@@ -8,6 +8,7 @@ import pandas as pd
 
 from . import data
 from .features import AREAS, H
+from .observation_time import valid_wind
 from .publish import paired_wind
 
 START = pd.Timestamp("2026-11-24T00:00Z")
@@ -22,10 +23,6 @@ MAX_LEAD_REGRESSION = 5
 MAX_ISSUANCE_GAP = 5
 MIN_COMPLETE_PAIRS = math.ceil(0.8 * SLOTS)
 ARCHIVE_KEY = "publicWindModelReview20261213"
-
-
-def valid_wind(value):
-    return type(value) in (int, float) and math.isfinite(value) and value >= 0
 
 
 def on_time_issues(records, version):

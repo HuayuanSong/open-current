@@ -65,6 +65,7 @@ flowchart TB
         evaluate["Archive forecasts and ranges<br/>Score against later observations"]
         windtest["Separate wind comparison<br/>Latest ECMWF + five-minute correction<br/>No automatic model promotion"]
         freshwind["Public wind update<br/>Refitted components + regional ECMWF/DMI mix<br/>Recent-power correction · separate issue archive"]
+        dayahead["East Denmark day-ahead benchmark<br/>Open Current · Energinet · 50/50 average"]
         research["Internal wind challengers<br/>1–6h regional regressors + conditional ranges<br/>Timestamped weather ensembles · no auto-promotion"]
     end
 
@@ -93,6 +94,9 @@ flowchart TB
     models -->|Reuse matching baseline inference| freshwind
     collect -->|Five-minute wind observations| freshwind
     freshwind -->|Wind outlook and measured errors| archive
+    energinet -->|Day-ahead wind forecast| dayahead
+    archive -->|Issued DK2 wind and hourly observations| dayahead
+    dayahead -->|Matched daily scores| archive
     freshwind -->|Unchanged public baseline| research
     ensembleweather --> research
     research -->|Separate research records and later-outcome checks| archive
@@ -122,6 +126,8 @@ live accuracy. Solar and demand retain the original model. Wind has its own
 issue archive, source timestamps, comparisons and live error statistics.
 
 **Forecast vs actual** opens with the current wind model and observations. Turn on **Show previous model** to compare the forecasts on one scale. Matched forecasts share a reference hour and observed target hours. If no matching issue exists, the switch opens the separately labelled historical forecast. The details report seven-day mean absolute error by region and lead, distinct observed hours and how often each model issued. Downloads retain the selected forecast’s original values and ranges. The 13 December review evaluates whether to retire the optional line in each region. [Review criteria](research/forecasting/fresh_wind/README.md#13-december-public-model-review) · [Review status and results](https://huayuansong.github.io/open-current/data/wind-model-review.json)
+
+In **East Denmark → Wind → Forecast vs actual**, expand **Compare day-ahead wind forecasts with Energinet** to see how Open Current, Energinet and their 50/50 average perform on the same hours. The benchmark saves the three forecasts each evening for the following Danish calendar day and reports average absolute error in MW. [Daily results](https://huayuansong.github.io/open-current/data/east-wind-day-ahead.json) · [Capture and scoring rules](forecast/README.md#east-denmark-day-ahead-wind-benchmark)
 
 The [short-term wind and uncertainty experiments](research/forecasting/wind_refinement/README.md)
 run separately from that public forecast. A regional LightGBM or ridge challenger uses recent

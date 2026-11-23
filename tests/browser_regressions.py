@@ -115,6 +115,37 @@ class BrowserRegressions(unittest.TestCase):
         expect(self.page.locator("#country-code")).to_have_text("DK")
         expect(self.page.locator("#download-data")).to_be_enabled()
 
+    def test_east_day_ahead_benchmark_scores_and_empty_state_are_scoped_to_the_comparison(self):
+        report = dict(schema=1, area="DK2", issuedDays=1, completeDays=0, missedDays=0, pairedHours=0,
+                      checkedAt="2026-11-23T18:00:00Z", maeMW=dict(openCurrent=None, energinet=None, halfAndHalf=None))
+        requests = []
+        def serve(route):
+            requests.append(route.request.url)
+            route.fulfill(json=report)
+        self.page.route("**/data/east-wind-day-ahead.json", serve)
+        self.page.set_viewport_size({"width": 390, "height": 844})
+        self.load()
+        detail = self.page.locator("#day-ahead-benchmark")
+        expect(detail).to_be_hidden()
+        self.page.locator('[data-forecast-view="comparison"]').click()
+        expect(detail).to_be_visible()
+        self.assertFalse(requests)
+        detail.locator("summary").click()
+        expect(detail).to_contain_text("Waiting for the first observed hour")
+        expect(detail.locator("table")).to_be_hidden()
+        self.page.locator('[data-forecast-area="DK1"]').click()
+        expect(detail).to_be_hidden()
+        report.update(completeDays=1, pairedHours=24, maeMW=dict(openCurrent=110.24, energinet=100.03, halfAndHalf=0.0))
+        self.page.locator('[data-forecast-area="DK2"]').click()
+        detail.locator("summary").click()
+        expect(detail.locator("table")).to_be_visible()
+        expect(detail.locator('[data-day-ahead-error="openCurrent"]')).to_have_text("110.2 MW")
+        expect(detail.locator('[data-day-ahead-error="energinet"]')).to_have_text("100.0 MW")
+        expect(detail.locator('[data-day-ahead-error="halfAndHalf"]')).to_have_text("0.0 MW")
+        self.assertFalse(self.page.evaluate("document.documentElement.scrollWidth > innerWidth"))
+        self.page.locator('[data-forecast-target="solar"]').click()
+        expect(detail).to_be_hidden()
+
     def test_map_and_country_survive_first_load_denmark_outage(self):
         self.page.route("**/data/denmark.json", lambda route: route.fulfill(status=503, body="unavailable"))
         self.load()

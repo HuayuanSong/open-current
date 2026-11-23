@@ -25,6 +25,14 @@ the comparison is not automatically promoted. The separately versioned public
 wind update includes DMI and has its own records. Comparison status and outcomes
 are published at `data/wind-update.json`.
 
+## East Denmark day-ahead wind benchmark
+
+Starting with delivery on 24 November 2026, the Pages refresh captures three forecasts each evening for DK2. It selects the latest regional Open Current wind issue in the restored archive with an issue time at or before 18:00 in Copenhagen. Energinet publishes the next day’s hourly `ForecastDayAhead` at 18:00. The first complete response retrieved between release and local midnight supplies its onshore and offshore wind values. Their sum in MWh per hour is average MW. The third forecast is the arithmetic mean of Open Current and Energinet for each hour. Energinet excludes the Thor wind farm in West Denmark from this dataset. [Energinet dataset and methodology](https://www.energidataservice.dk/tso-electricity/Forecasts_Hour)
+
+Capture requires the full next calendar day. That means 23, 24 or 25 hourly intervals depending on daylight saving time. The collector aligns Energinet’s interval starts with Open Current’s interval ends in UTC. A missing component or an unavailable release can be retried until midnight. An evening that passes without a complete pair is counted as missed. The benchmark stores the Open Current model version, original issue time and hash, the capture time, both wind components and all three forecasts.
+
+For each forecast hour the first complete DK2 wind reading seen by the benchmark with a retrieval time at least 15 minutes after hour end is frozen for all three scores. Each matched hour contributes once to mean absolute error in MW, including available hours from days still being scored. The daily report counts completed days and missed evenings. The comparison runs alongside the production model and has no automatic promotion rule. [Daily results](https://huayuansong.github.io/open-current/data/east-wind-day-ahead.json) · [Hourly evidence under `eastWindDayAhead`](https://huayuansong.github.io/open-current/data/forecast-state.json.gz)
+
 ## Serving and storage
 
 `python -m forecast.run --restore --strict` restores the previous public state,
