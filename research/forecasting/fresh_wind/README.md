@@ -80,6 +80,16 @@ Full evidence: [protocol](protocol.json), [results](results.json),
 [selected policy](selection.json), [range check](range-check.json), and
 [additional stress cases](stress-results.json).
 
+## 13 December public model review
+
+The current forecast is the default in both regions. The optional **Show previous model** line remains available for comparison. The 13 December 2026 review concerns that line. The separate weather, wind-correction and West Denmark first-hour trials follow their own protocols.
+
+The evaluation covers 408 hourly reference times from 24 November through 10 December, inclusive, in UTC. An on-time issue contains 48 hourly wind predictions for the region and was saved before its first target hour ended. The comparison uses the first on-time `fresh-wind-2026-11-18` issue and the latest `ensemble-v2-2026-10-27` issue already available for that reference hour. Each region contributes at most one pair per reference hour. Diagnostic runs are excluded.
+
+At the first refresh on or after **13 December at 00:00 UTC (01:00 in Denmark)**, the review uses the preliminary Energinet hourly readings in the restored archive, retrieved at least 15 minutes after the hour ended and available at review time. Each scored pair must have observations for all 48 hours. The frozen report measures both models on the same readings. Forecasts with overlapping horizons can share observed weather.
+
+Each region needs at least **327 complete pairs** (80% of planned hours). To qualify for retiring the previous line, the current model must reduce mean absolute error by at least **5%** overall. In each of the 1–6, 7–24 and 25–48 hour bands its error may be at most **5%** above the previous model’s. Its on-time issuance rate may trail the previous rate by at most **five percentage points**, using all 408 planned hours as the denominator. The report provides a recommendation for manual review. The final refresh saves the source snapshot and report in GitHub Actions, and subsequent publications carry the original result forward. [Review status and results](https://huayuansong.github.io/open-current/data/wind-model-review.json)
+
 ## Operation and reproducibility
 
 `python -m forecast.fresh_wind` runs after the original ensemble and existing

@@ -10,10 +10,10 @@
     />
     <title>Open Current — Europe’s electricity, connected</title>
     <link rel="icon" href="icon.svg?v=6969a3192d60" type="image/svg+xml" />
-    <link rel="stylesheet" href="style.css?v=c7503487d81d" />
+    <link rel="stylesheet" href="style.css?v=848c4002083e" />
     <script src="vendor/d3.v7.min.js" defer></script>
     <script type="module" src="app.js?v=5b1b82508034"></script>
-    <script type="module" src="forecasts.js?v=239346963284"></script>
+    <script type="module" src="forecasts.js?v=25cbb4506ae7"></script>
   </head>
   <body>
     <a class="skip-link" href="#explorer">Skip to electricity explorer</a>
@@ -336,13 +336,16 @@
               <span id="forecast-range-key" hidden><i class="forecast-range-key"></i><span id="forecast-range-label">Prediction range</span></span>
             </div>
           </div>
+          <div class="forecast-options">
+            <label id="forecast-previous-option" hidden><input id="forecast-previous-toggle" type="checkbox" aria-controls="forecast-chart forecast-comparison-model" /> Show previous model</label>
+            <label><input id="forecast-range-toggle" type="checkbox" checked aria-describedby="forecast-range-note" /> Show prediction range <span id="forecast-range-target">(80% target)</span></label>
+          </div>
           <div class="forecast-comparison-model" id="forecast-comparison-model" aria-label="Wind comparison model" hidden>
             <span id="forecast-model-picker-label">Show forecast</span>
             <button data-forecast-comparison-model="current" aria-pressed="false">Current wind model</button>
             <button data-forecast-comparison-model="previous" aria-pressed="false">Previous wind model</button>
           </div>
           <p class="forecast-comparison-note" id="forecast-comparison-note" aria-live="polite" hidden></p>
-          <div class="forecast-options"><label><input id="forecast-range-toggle" type="checkbox" checked aria-describedby="forecast-range-note" /> Show prediction range <span id="forecast-range-target">(80% target)</span></label></div>
           <div class="forecast-chart-wrap" id="forecast-chart-wrap">
             <svg id="forecast-chart" role="img" tabindex="0" aria-label="Danish electricity forecast. Use left and right arrow keys to inspect hourly values."></svg>
             <p class="forecast-empty" id="forecast-empty" hidden></p>
@@ -370,6 +373,7 @@
               <thead><tr><th>Lead</th><th>Previous model</th><th>Current model</th><th>Paired hours</th></tr></thead>
               <tbody id="wind-matched-scores"></tbody>
             </table>
+            <p><a href="data/wind-model-review.json">13 December wind model review (JSON)</a></p>
           </details>
           <div class="forecast-footer"><p id="forecast-timing">All times UTC. Values are hourly average power.</p><button class="text-button" id="forecast-download" disabled>Download forecast ↓</button></div>
         </div>

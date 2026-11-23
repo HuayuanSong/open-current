@@ -27,6 +27,16 @@ test('waiting for the first valid wind issue labels the existing model without i
   assert.equal(selected.status,'ready');
   assert.equal(selected.windUpdatePending,true);
 });
+test('a missing current wind comparison offers the older issue only when selected',()=>{
+  const previous={...record,areas:{DK1:{wind:[0,20]}}};
+  const payload={latest:previous,comparison:previous,windOutlook:{latest:null,comparison:null}};
+  const current=viewPayload(payload,'DK1','wind','comparison','current');
+  assert.equal(current.comparison,null);
+  assert.equal(current.comparisonHasPrevious,true);
+  assert.equal(current.comparisonSource,'current');
+  assert.equal(chartSeries(payload,'DK1','wind','comparison','previous').record,previous);
+  assert.equal(viewPayload(payload,'DK2','wind','comparison','current').comparisonHasPrevious,false);
+});
 test('range warning needs enough recorded outcomes and a material coverage shortfall',()=>{
   assert.equal(rangeUndercoverage({rangeHours:4000,rangeOrigins:100,rangeCoverage:.52}),true);
   for(const stats of [undefined,{rangeHours:10,rangeOrigins:3,rangeCoverage:0},

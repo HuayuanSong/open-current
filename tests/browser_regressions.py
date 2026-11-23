@@ -207,7 +207,8 @@ class BrowserRegressions(unittest.TestCase):
         self.assertEqual(saved["modelVersion"], "fresh-wind-fixture")
         self.assertEqual(saved["ranges"]["areas"], {})
         self.page.locator('[data-forecast-view="comparison"]').click()
-        self.page.locator('[data-forecast-comparison-model="current"]').click()
+        expect(self.page.locator("#forecast-previous-toggle")).not_to_be_checked()
+        expect(self.page.locator("#forecast-status")).to_contain_text("Current wind model")
         expect(self.page.locator("#forecast-empty")).to_be_visible()
         self.page.locator('[data-forecast-target="solar"]').click()
         expect(self.page.locator("#forecast-empty")).to_be_hidden()
@@ -247,13 +248,19 @@ class BrowserRegressions(unittest.TestCase):
         self.page.route("**/data/forecasts.json", lambda route: route.fulfill(json=data))
         self.load()
         self.page.locator('[data-forecast-view="comparison"]').click()
+        toggle = self.page.get_by_role("checkbox", name="Show previous model")
+        expect(toggle).not_to_be_checked()
+        expect(self.page.locator('#forecast-status')).to_contain_text('Current wind model')
+        toggle.check()
         expect(self.page.locator('#forecast-status')).to_contain_text('Previous wind model')
+        expect(self.page.locator('.forecast-line')).to_have_count(2)
+        expect(self.page.locator('#forecast-comparison-model')).to_be_hidden()
         expect(self.page.locator('#forecast-comparison-note')).to_contain_text('25 matched observed hours')
         expect(self.page.locator('#forecast-stats')).to_contain_text('77 MW')
         self.assertIn('L', self.page.locator('.forecast-observed').get_attribute('d'))
         with self.page.expect_download() as download: self.page.locator('#forecast-download').click()
         self.assertEqual(json.loads(Path(download.value.path()).read_text()), old)
-        self.page.locator('[data-forecast-comparison-model="current"]').click()
+        toggle.uncheck()
         expect(self.page.locator('#forecast-status')).to_contain_text('Current wind model')
         expect(self.page.locator('#forecast-comparison-note')).to_contain_text('1 matched observed hour.')
         expect(self.page.locator('.forecast-observed-point')).to_have_count(1)
@@ -272,8 +279,9 @@ class BrowserRegressions(unittest.TestCase):
         self.page.locator('[data-forecast-target="solar"]').click()
         expect(self.page.locator('#forecast-comparison-model')).to_be_hidden()
         self.page.locator('[data-forecast-target="wind"]').click()
-        self.page.locator('[data-forecast-comparison-model="previous"]').click()
+        toggle.check()
         self.page.locator('[data-forecast-view="outlook"]').click()
+        expect(self.page.locator('#forecast-previous-option')).to_be_hidden()
         expect(self.page.locator('#forecast-comparison-model')).to_be_hidden()
         expect(self.page.locator('#forecast-comparison-note')).to_be_hidden()
         expect(self.page.locator('#forecast-range-toggle')).to_be_disabled()
@@ -285,9 +293,9 @@ class BrowserRegressions(unittest.TestCase):
         previous = data["latest"]
         current = copy.deepcopy(previous)
         times = previous["times"]
-        previous["areas"]["DK2"]["wind"] = [510] * len(times)
+        previous["areas"]["DK2"]["wind"] = [510, 520] + [510] * (len(times) - 2)
         previous["ranges"]["areas"]["DK2"]["wind"] = {"lower": [400] * len(times), "upper": [2200] * len(times)}
-        current["areas"]["DK2"]["wind"] = [590] * len(times)
+        current["areas"]["DK2"]["wind"] = [590, 610] + [590] * (len(times) - 2)
         current["ranges"] = {"areas": {}}
         data["observations"]["DK2"] = [{"time": times[0], "wind": 592}]
         data["checkedAt"] = times[2]
@@ -303,6 +311,17 @@ class BrowserRegressions(unittest.TestCase):
         self.page.locator('[data-forecast-view="comparison"]').click()
         chart = self.page.locator("#forecast-chart")
         current_line, previous_line = [chart.locator(f".forecast-line.wind-{model}") for model in ("current", "previous")]
+        toggle = self.page.get_by_role("checkbox", name="Show previous model")
+        expect(toggle).not_to_be_checked()
+        expect(current_line).to_be_visible()
+        expect(previous_line).to_have_count(0)
+        expect(self.page.locator("#forecast-comparison-model")).to_be_hidden()
+        chart.press("ArrowLeft")
+        expect(self.page.locator("#forecast-tooltip")).to_contain_text("Current wind model: 590 MW")
+        expect(self.page.locator("#forecast-tooltip")).not_to_contain_text("Previous wind model")
+        single_path = current_line.get_attribute("d")
+        toggle.check()
+        expect(self.page.locator("#forecast-previous-key")).to_be_visible()
         paths = [line.get_attribute("d") for line in (current_line, previous_line)]
         self.assertNotEqual(paths[0], paths[1])
         self.assertNotEqual(current_line.evaluate("el => getComputedStyle(el).strokeDasharray"),
@@ -321,7 +340,20 @@ class BrowserRegressions(unittest.TestCase):
         with self.page.expect_download() as download:
             self.page.locator("#forecast-download").click()
         self.assertEqual(json.loads(Path(download.value.path()).read_text()), previous)
+        toggle.uncheck()
+        expect(previous_line).to_have_count(0)
+        self.assertEqual(current_line.get_attribute("d"), single_path)
+        expect(self.page.locator("#forecast-range-toggle")).to_be_disabled()
+        expect(self.page.locator("#forecast-stats>div").last.locator("strong")).to_have_text("2 MW")
+        with self.page.expect_download() as download:
+            self.page.locator("#forecast-download").click()
+        self.assertEqual(json.loads(Path(download.value.path()).read_text()), current)
+        toggle.check()
+        self.page.reload(wait_until="networkidle")
+        self.page.locator('[data-forecast-view="comparison"]').click()
+        expect(toggle).not_to_be_checked()
         self.page.locator('[data-forecast-target="solar"]').click()
+        expect(self.page.locator("#forecast-previous-option")).to_be_hidden()
         expect(self.page.locator("#forecast-previous-key")).to_be_hidden()
         expect(chart.locator(".forecast-alternate")).to_have_count(0)
 
@@ -666,6 +698,7 @@ class BrowserRegressions(unittest.TestCase):
             "document.addEventListener('readystatechange', () => {"
             "if (document.readyState === 'interactive') {"
             "document.querySelector('#forecast-transition-key')?.remove();"
+            "document.querySelector('#forecast-previous-option')?.remove();"
             "for (const id of ['forecast-previous-key','forecast-predicted-label','forecast-range-label','forecast-model-picker-label'])"
             " document.getElementById(id)?.remove();"
             "document.querySelector('#forecast-range-target')?.removeAttribute('id');}"

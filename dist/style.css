@@ -2163,6 +2163,7 @@ body {
 .forecast-legend i { width: 22px; border-top: 3px solid var(--ink); }
 .forecast-legend .forecast-predicted-key { border-top: 3px dashed var(--green); }
 .forecast-legend .forecast-previous-key { border-top: 3px dotted var(--orange); }
+.forecast-legend .wind-previous .forecast-predicted-key { border-top: 3px dotted var(--orange); }
 .forecast-chart-wrap { position: relative; padding: 12px 12px 0; min-height: 300px; }
 #forecast-chart { width: 100%; display: block; overflow: visible; }
 .forecast-axis { font: 14px DDIN, Arial, sans-serif; color: var(--muted); }
@@ -2177,7 +2178,7 @@ body {
 .forecast-legend .wind-previous .forecast-range-key { background: #b16b4029; border-color: var(--orange); }
 .forecast-legend [hidden], #forecast-explanation[hidden] { display: none; }
 .forecast-legend { flex-wrap: wrap; }
-.forecast-options { padding: 12px 24px 0; }
+.forecast-options { display: flex; flex-wrap: wrap; gap: 8px 24px; padding: 12px 24px 0; }
 .forecast-comparison-model { display: flex; align-items: center; gap: 8px; padding: 12px 24px 0; flex-wrap: wrap; }
 .forecast-comparison-model button { font-size: 16px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 3px; }
 .forecast-comparison-model button[aria-pressed="true"] { color: var(--paper); background: var(--ink); }

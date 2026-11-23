@@ -6,7 +6,7 @@ import json
 import pandas as pd
 
 from .data import PUBLIC_PATH
-from .features import AREAS, TARGETS
+from .features import AREAS, H, TARGETS
 from .intervals import validation
 from .trial.evaluate import issue_coverage
 
@@ -149,10 +149,10 @@ def base_payload(state, at, version, error=None, compatible=(), *, both_regions=
     return result
 
 
-def paired_wind(previous, current, hourly, at):
+def paired_wind(previous, current, hourly, at, *, issued_since=None, require_full_horizon=False):
     """Compare one prospectively issued pair per region and reference hour."""
     cutoff = at - pd.Timedelta(minutes=15)
-    start = at - pd.Timedelta(days=7)
+    start = at - pd.Timedelta(days=7) if issued_since is None else issued_since
     actual = {(r["area"], r["time"]): r.get("wind") for r in hourly}
     result = {}
     for area in AREAS:
@@ -176,22 +176,23 @@ def paired_wind(previous, current, hourly, at):
             baseline = max(prior, key=lambda r: r["issuedAt"])
             if baseline["times"] != challenger["times"]:
                 continue
-            paired = False
+            outcomes = []
             for i, stamp in enumerate(challenger["times"]):
                 valid = pd.Timestamp(stamp)
                 value = actual.get((area, stamp))
-                if value is None or not issued < valid <= cutoff:
-                    continue
+                if value is not None and issued < valid <= cutoff:
+                    outcomes.append((i, stamp, value))
+            if not outcomes or (require_full_horizon and len(outcomes) != H):
+                continue
+            for i, stamp, value in outcomes:
                 band = sums[0 if i < 6 else 1 if i < 24 else 2]
                 band[0] += 1
                 band[1] += abs(baseline["areas"][area]["wind"][i] - value)
                 band[2] += abs(challenger["areas"][area]["wind"][i] - value)
                 hours.add(stamp)
-                paired = True
-            if paired:
-                origins += 1
-                if pd.Timestamp(origin) >= at - pd.Timedelta(hours=71):
-                    comparisons.append((origin, baseline, challenger))
+            origins += 1
+            if pd.Timestamp(origin) >= at - pd.Timedelta(hours=71):
+                comparisons.append((origin, baseline, challenger))
         def metric(total):
             n, a, b = total
             return dict(hours=n, previousMAE=a/n if n else None, currentMAE=b/n if n else None)

@@ -121,7 +121,7 @@ error by about 14% / 13% in a short November replay; this is not a guarantee of
 live accuracy. Solar and demand retain the original model. Wind has its own
 issue archive, source timestamps, comparisons and live error statistics.
 
-The wind comparison view uses one reference hour and the same observed target hours for both models. It reports paired mean absolute error by region and lead, the distinct observed hours, and how often each model issued. Until both models have a common issue, their historical comparisons remain available. Each download retains the exact original predictions, issue time and saved ranges.
+**Forecast vs actual** opens with the current wind model and observations. Turn on **Show previous model** to compare the forecasts on one scale. Matched forecasts share a reference hour and observed target hours. If no matching issue exists, the switch opens the separately labelled historical forecast. The details report seven-day mean absolute error by region and lead, distinct observed hours and how often each model issued. Downloads retain the selected forecast’s original values and ranges. The 13 December review evaluates whether to retire the optional line in each region. [Review criteria](research/forecasting/fresh_wind/README.md#13-december-public-model-review) · [Review status and results](https://huayuansong.github.io/open-current/data/wind-model-review.json)
 
 The [short-term wind and uncertainty experiments](research/forecasting/wind_refinement/README.md)
 run separately from that public forecast. A regional LightGBM or ridge challenger uses recent

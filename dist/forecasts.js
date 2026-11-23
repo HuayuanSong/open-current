@@ -9,16 +9,18 @@ import {
   isolatedPoints,
   HOUR,
   usable,
-} from "./forecast-model.js?v=7f1a1f9cd736";
+} from "./forecast-model.js?v=e8e44dbadd98";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const d3 = window.d3;
+const previousToggle = $("#forecast-previous-toggle");
 const state = {
   area: "DK2",
   target: "wind",
   view: "outlook",
   comparisonModel: "auto",
+  showPrevious: false,
   range: true,
   explainLead: 24,
 };
@@ -80,12 +82,20 @@ function stat(label, value, note) {
   return element;
 }
 
+function comparisonPreference() {
+  if (!previousToggle) return state.comparisonModel;
+  if (!state.showPrevious) return "current";
+  return payload?.windComparison?.[state.area]?.comparison ? state.comparisonModel : "previous";
+}
+
 function render() {
-  const selectedPayload = viewPayload(payload, state.area, state.target, state.view, state.comparisonModel);
-  const { record, points } = chartSeries(payload, state.area, state.target, state.view, state.comparisonModel);
+  const preference = comparisonPreference();
+  const selectedPayload = viewPayload(payload, state.area, state.target, state.view, preference);
   const comparing = state.view === "comparison";
   const previousKey = $("#forecast-previous-key");
-  const pairedModel = previousKey && selectedPayload?.alternateComparison ? selectedPayload.comparisonSource : null;
+  const selectedModel = comparing ? selectedPayload?.comparisonSource : null;
+  const showBoth = Boolean(previousKey && selectedPayload?.alternateComparison && (!previousToggle || state.showPrevious));
+  const { record, points } = chartSeries(payload, state.area, state.target, state.view, preference, showBoth);
   const status = comparing ? (record ? "ready" : "unavailable") : forecastState(selectedPayload);
   $("#forecast-status").dataset.status = status;
   if (comparing) {
@@ -138,12 +148,18 @@ function render() {
     ),
   );
   const modelPicker = $("#forecast-comparison-model");
-  if (modelPicker) modelPicker.hidden = !(comparing && selectedPayload?.comparisonHasPrevious);
+  const canCompare = comparing && selectedPayload?.comparisonHasPrevious;
+  if (previousToggle) {
+    $("#forecast-previous-option").hidden = !canCompare;
+    previousToggle.checked = Boolean(canCompare && state.showPrevious);
+  }
+  if (modelPicker) modelPicker.hidden = !(canCompare && (!previousToggle || showBoth));
   if (previousKey) {
-    previousKey.hidden = !pairedModel;
-    text("#forecast-model-picker-label", pairedModel ? "Model details" : "Show forecast");
-    text("#forecast-predicted-label", pairedModel ? windLabels.current : "Forecast");
-    text("#forecast-range-label", pairedModel ? `${windLabels[pairedModel]} range` : "Prediction range");
+    previousKey.hidden = !showBoth;
+    text("#forecast-model-picker-label", showBoth ? "Model details" : "Show forecast");
+    text("#forecast-predicted-label", showBoth ? windLabels.current : windLabels[selectedModel] || "Forecast");
+    $("#forecast-predicted-label").parentElement.classList.toggle("wind-previous", !showBoth && selectedModel === "previous");
+    text("#forecast-range-label", selectedModel ? `${windLabels[selectedModel]} range` : "Prediction range");
   }
   $$("[data-forecast-comparison-model]").forEach((button) =>
     button.setAttribute("aria-pressed", String(button.dataset.forecastComparisonModel === selectedPayload?.comparisonSource)));
@@ -152,10 +168,10 @@ function render() {
     comparisonNote.hidden = !comparing;
     const matched = matchedObservationCount(selectedPayload, state.area, state.target);
     const count = `${matched} matched observed ${matched === 1 ? "hour" : "hours"}`;
-    comparisonNote.textContent = selectedPayload?.pairedComparison
-      ? `Both models use the same reference hour · ${count}.${pairedModel ? " Select a model to highlight its line and see its statistics and range." : ""}`
+    comparisonNote.textContent = showBoth
+      ? `Both models use the same reference hour · ${count}. Select a model to highlight its line and see its statistics and range.`
       : selectedPayload?.comparisonSource === "previous"
-      ? `Historical comparison from the previous wind model · ${count}. The 48-hour outlook uses the current model.`
+      ? `Historical comparison from the previous wind model · ${count}.`
       : `${count}${matched < 2 ? ". Observations are shown as dots until a line can be drawn." : "."}`;
   }
   $("#forecast-empty").hidden = Boolean(record);
@@ -195,7 +211,7 @@ function render() {
             live?.forecastHours >= 24
               ? power(live.maeMW)
               : "Collecting outcomes",
-            paired ? `${paired.hours} paired forecast-hours · ${paired.distinctHours} distinct observed hours` : live?.forecastHours
+            paired ? `Last 7 days · ${paired.hours} paired forecast-hours · ${paired.distinctHours} distinct observed hours` : live?.forecastHours
               ? `${live.forecastHours} forecasted hours · ${live.origins} issued outlooks · last 7 days`
               : "Measured after forecasts are issued",
           ),
@@ -213,7 +229,7 @@ function render() {
   $("#forecast-range-toggle").disabled = !hasRange;
   $("#forecast-range-toggle").checked = state.range && hasRange;
   $("#forecast-range-key").hidden = !(state.range && hasRange);
-  $("#forecast-range-key").classList.toggle("wind-previous", pairedModel === "previous");
+  $("#forecast-range-key").classList.toggle("wind-previous", selectedModel === "previous");
   const rangeTarget = $("#forecast-range-target");
   if (rangeTarget) {
     rangeTarget.hidden = !hasRange;
@@ -238,7 +254,7 @@ function render() {
   $("#forecast-range-note").classList.toggle("undercoverage", undercoverage);
   $("#forecast-range-note").classList.toggle("uncalibrated", Boolean(record?.rangeUnavailableReason));
   renderExplanation(record);
-  draw(record, points, pairedModel);
+  draw(record, points, selectedModel, showBoth);
 }
 
 function weatherTiming(record) {
@@ -318,7 +334,7 @@ function renderExplanation(record) {
   }
 }
 
-function draw(record, points, pairedModel) {
+function draw(record, points, selectedModel, showBoth) {
   const svg = d3.select("#forecast-chart");
   svg.selectAll("*").remove();
   $("#forecast-tooltip").hidden = true;
@@ -339,10 +355,16 @@ function draw(record, points, pairedModel) {
   svg
     .append("title")
     .text(`${names[state.target]} · ${state.area} · hourly power in gigawatts`);
+  let forecastDescription = "Dashed green lines show predictions.";
+  if (showBoth) {
+    forecastDescription = "The dashed green line shows the current wind model and the dotted orange line shows the previous wind model.";
+  } else if (selectedModel === "previous") {
+    forecastDescription = "The dotted orange line shows the previous wind forecast.";
+  }
   svg
     .append("desc")
     .text(
-      `Solid lines and dots show recorded readings. ${pairedModel ? "The dashed green line shows the current wind model and the dotted orange line shows the previous wind model." : "Dashed green lines show predictions."}${transition ? " The faint dotted line is a visual transition between consecutive observed and forecast hours." : ""}${state.range ? " Shading shows the selected forecast’s experimental 80%-target hourly prediction range, where available." : ""} Points mark hour ends. Use arrow keys to inspect each hourly average.`,
+      `Solid lines and dots show recorded readings. ${forecastDescription}${transition ? " The faint dotted line is a visual transition between consecutive observed and forecast hours." : ""}${state.range ? " Shading shows the selected forecast’s experimental 80%-target hourly prediction range, where available." : ""} Points mark hour ends. Use arrow keys to inspect each hourly average.`,
     );
   const margin = { top: 24, right: 24, bottom: 48, left: 58 };
   const x = d3
@@ -401,7 +423,7 @@ function draw(record, points, pairedModel) {
       .datum(points)
       .attr("d", band)
       .attr("class", "forecast-range-band")
-      .classed("wind-previous", pairedModel === "previous");
+      .classed("wind-previous", selectedModel === "previous");
   }
   const origin = Date.parse(record.origin);
   if (origin > points[0].time && origin < points.at(-1).time) {
@@ -419,9 +441,9 @@ function draw(record, points, pairedModel) {
       .attr("class", "forecast-unit")
       .text("Outlook →");
   }
-  const predictions = pairedModel ? ["current", "previous"].map(model => ({
-    key: model === pairedModel ? "predicted" : "alternate", label: windLabels[model], model,
-  })) : [{key: "predicted", label: "Forecast"}];
+  const predictions = showBoth ? ["current", "previous"].map(model => ({
+    key: model === selectedModel ? "predicted" : "alternate", label: windLabels[model], model,
+  })) : [{key: "predicted", label: windLabels[selectedModel] || "Forecast", model: selectedModel}];
   const series = [{key: "observed", label: "Observed"}, ...predictions];
   for (const {key, label, model} of series) {
     const modelClass = model ? ` wind-${model}` : "";
@@ -441,7 +463,7 @@ function draw(record, points, pairedModel) {
       .attr("r", 4).attr("class", `forecast-point forecast-${key}-point${modelClass}`)
       .append("title").text(point => `${label}: ${power(point[key])} · ${hourInterval(point.time)}`);
   }
-  if (pairedModel) svg.select(".forecast-line.forecast-predicted").raise();
+  if (showBoth) svg.select(".forecast-line.forecast-predicted").raise();
   if (transition) {
     svg
       .append("path")
@@ -478,13 +500,13 @@ function draw(record, points, pairedModel) {
       hourInterval(point.time),
       ...series.map(({key, label}) => `${label}: ${power(point[key])}`),
     ];
-    if (pairedModel && usable(point.predicted) && usable(point.alternate)) {
-      const difference = pairedModel === "current" ? point.predicted - point.alternate : point.alternate - point.predicted;
+    if (showBoth && usable(point.predicted) && usable(point.alternate)) {
+      const difference = selectedModel === "current" ? point.predicted - point.alternate : point.alternate - point.predicted;
       const amount = Math.abs(difference) < 1 ? "less than 1 MW" : `${Math.round(Math.abs(difference))} MW`;
       lines.push(difference === 0 ? "Both forecasts agree." : `Current model is ${amount} ${difference > 0 ? "higher" : "lower"}.`);
     }
     if (state.range && hasPredictionRange(point)) {
-      const rangeLabel = pairedModel ? `${windLabels[pairedModel]} range` : "80% target range";
+      const rangeLabel = selectedModel ? `${windLabels[selectedModel]} range` : "80% target range";
       lines.push(
         `${rangeLabel}: ${power(point.lower)} – ${power(point.upper)}`,
       );
@@ -521,6 +543,11 @@ function draw(record, points, pairedModel) {
     }
   });
 }
+previousToggle?.addEventListener("change", () => {
+  state.showPrevious = previousToggle.checked;
+  state.comparisonModel = "current";
+  render();
+});
 $("#forecast-range-toggle").addEventListener("change", (event) => {
   state.range = event.target.checked;
   try {
@@ -551,7 +578,8 @@ $$("[data-forecast-comparison-model]").forEach((button) =>
     render();
   }));
 $("#forecast-download").onclick = () => {
-  const { record } = chartSeries(payload, state.area, state.target, state.view, state.comparisonModel);
+  const selected = viewPayload(payload, state.area, state.target, state.view, comparisonPreference());
+  const record = state.view === "comparison" ? selected?.comparison : selected?.latest;
   if (!record) return;
   const url = URL.createObjectURL(
     new Blob([JSON.stringify(record, null, 2)], { type: "application/json" }),

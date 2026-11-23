@@ -195,6 +195,21 @@ jobs:
           include-hidden-files: true
           path: .cache/wind-refinement/live/evidence/
           retention-days: 90
+      - name: Publish the 13 December wind model review
+        id: public-wind-review
+        continue-on-error: ${{ env.VALIDATE_DEPLOYMENT != 'true' }}
+        run: .cache/forecast-serving/main-env/bin/python -m forecast.wind_model_review
+      - name: Preserve the final wind review and its source snapshot
+        if: steps.public-wind-review.outputs.finalized == 'true'
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-wind-model-review
+          path: |
+            dist/data/wind-model-review.json
+            dist/data/forecast-state.json.gz
+          retention-days: 90
+          overwrite: true
       - name: Verify normalization and published data
         run: .cache/forecast-serving/main-env/bin/python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Publish freshness metadata
