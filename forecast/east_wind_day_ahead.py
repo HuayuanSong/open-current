@@ -2,13 +2,13 @@
 
 from datetime import date, timedelta
 import json
+import math
 import os
 
 import pandas as pd
 import requests
 
 from . import data
-from .observation_time import capture_time, valid_wind
 from .trial.ledger import canonical_hash
 
 FIRST_DAY = date(2026, 11, 24)
@@ -20,6 +20,10 @@ MODELS = ("openCurrent", "energinet", "halfAndHalf")
 WIND_TYPES = ("Onshore Wind", "Offshore Wind")
 SOURCE = "https://api.energidataservice.dk/dataset/Forecasts_Hour"
 REPORT_PATH = data.PUBLIC_PATH.with_name("east-wind-day-ahead.json")
+
+
+def valid_wind(value):
+    return type(value) in (int, float) and math.isfinite(value) and value >= 0
 
 
 def release(day):
@@ -138,9 +142,10 @@ def freeze_observations(days, hourly, at):
         stamp = end.tz_convert("UTC").isoformat()
         if stamp in slot["observations"] or stamp not in slot["issue"]["hours"]:
             continue
-        captured = capture_time(row, at, minimum=0.25)
-        if captured:
-            slot["observations"][stamp] = dict(mw=row["wind"], retrievedAt=captured)
+        captured = pd.to_datetime(row.get("retrievedAt"), errors="coerce")
+        if (isinstance(captured, pd.Timestamp) and captured.tzinfo is not None
+                and end + pd.Timedelta(minutes=15) <= captured <= at):
+            slot["observations"][stamp] = dict(mw=row["wind"], retrievedAt=captured.tz_convert("UTC").isoformat())
             changed = True
     return changed
 

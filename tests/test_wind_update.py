@@ -27,6 +27,13 @@ class WindUpdateTests(unittest.TestCase):
         self.rules = {area: dict(strength=1, halfLifeHours=2, trendWeight=1) for area in ["DK1", "DK2"]}
         self.protocol, self.selection, self.fingerprint = candidate.configuration()
 
+    def test_active_trial_can_resume_its_published_fingerprint(self):
+        revision = json.loads((candidate.HERE / "operational-revision.json").read_text())
+        trial = dict(version=self.protocol["version"], fingerprint=revision["to"],
+                     records=[], observations={"retained-hour": {"DK2": {"value": 150.0}}})
+        resumed = candidate.initialize({"windUpdate": trial}, self.protocol, self.fingerprint)
+        self.assertEqual(resumed["fingerprint"], revision["to"])
+
     def test_cutoff_uses_completed_intervals_and_future_values_cannot_change_features(self):
         before = recent_wind(self.raw, self.at)
         self.assertEqual(before["DK1"]["observationEnd"], "2026-11-17T10:20:00+00:00")
